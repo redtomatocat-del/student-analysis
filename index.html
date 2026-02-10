@@ -194,19 +194,32 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 </div>
 
+<!-- Class Setup -->
+<div class="card no-print" style="border:2px solid var(--blue);background:linear-gradient(135deg,#FAFBFF,#F0F4FF)">
+<div class="card-top"><div class="c-icon blue">🏫</div><div><div class="c-title">학급 설정</div><div class="c-desc">한 번 설정하면 학생 데이터가 이 학급에 누적됩니다</div></div></div>
+<div class="row r4">
+<div><label>학년</label><select id="sGrade"><option value="3">3학년</option><option value="2">2학년</option><option value="1">1학년</option></select></div>
+<div><label>반</label><select id="sClass"><option value="">선택</option></select></div>
+<div><label>담임교사</label><input type="text" id="sTeacher" placeholder="홍길동"/></div>
+<div><label>학교명</label><input type="text" id="sSchool" placeholder="○○고등학교"/></div>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-blue btn-sm" onclick="saveClassInfo()">💾 학급 저장</button>
+<button class="btn btn-ghost btn-sm" onclick="resetClass()" style="font-size:12px">🗑️ 학급 데이터 초기화</button>
+</div>
+<div id="classStatus" style="margin-top:8px;font-size:12px;font-weight:600"></div>
+</div>
+
 <!-- Student Info -->
 <div class="card no-print">
-<div class="card-top"><div class="c-icon green">👤</div><div><div class="c-title">학생 정보</div><div class="c-desc">학년반번호 · 이름 · 진로 · 동아리</div></div></div>
-<div class="row r5">
-<div><label>학년</label><select id="sGrade"><option value="3">3학년</option></select></div>
-<div><label>반</label><select id="sClass"><option value="">선택</option></select></div>
+<div class="card-top"><div class="c-icon green">👤</div><div><div class="c-title">학생 정보</div><div class="c-desc">PDF 업로드 시 자동 추출 · 수정 가능</div></div></div>
+<div class="row r4">
 <div><label>번호</label><select id="sNo"><option value="">선택</option></select></div>
 <div><label>이름</label><input type="text" id="sName" placeholder="홍길동"/></div>
 <div><label>희망 진로</label><input type="text" id="sCareer" placeholder="간호사"/></div>
-</div>
-<div class="row r2" style="margin-top:10px">
 <div><label>동아리명</label><input type="text" id="sClub" placeholder="과학탐구반"/></div>
-<div><label>학번 미리보기</label><div class="stu-id" id="stuIdPreview">3 - -- - --</div></div>
+</div>
+<div style="margin-top:8px"><label>학번 미리보기</label><div class="stu-id" id="stuIdPreview">3 - -- - --</div></div>
 </div>
 </div>
 
@@ -271,7 +284,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <div class="tc" id="tc-co"></div>
 </div>
 <div class="actions no-print">
-<button class="btn btn-green" onclick="dlPDF()" style="flex:1">📄 PDF 보고서</button>
+<button class="btn btn-green" onclick="dlPDF()" style="flex:1">📄 이 학생 PDF</button>
 <button class="btn btn-purple" onclick="dlXL()" style="flex:1">📊 엑셀 저장</button>
 <button class="btn btn-ghost" onclick="next()" style="flex:1">➡️ 다음 학생</button>
 </div>
@@ -281,13 +294,17 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <div class="card no-print">
 <div class="card-top"><div class="c-icon green">📋</div><div><div class="c-title">분석 완료 학생</div><div class="c-desc" id="stuCnt">0명 완료</div></div></div>
 <div class="sl" id="stuL"><div style="padding:20px;color:var(--g4);text-align:center;font-size:14px">아직 분석된 학생이 없습니다</div></div>
-<button class="btn btn-purple btn-sm btn-full" onclick="dlAll()" style="margin-top:12px">📊 전체 엑셀 다운로드</button>
+<div class="actions" style="margin-top:12px">
+<button class="btn btn-purple btn-sm" onclick="dlAll()" style="flex:1">📊 전체 엑셀</button>
+<button class="btn btn-green btn-sm" onclick="dlAllPDF()" style="flex:1">📄 전체 PDF 묶음</button>
+</div>
+<div style="font-size:11px;color:var(--g3);margin-top:8px;text-align:center">💡 학생 이름을 클릭하면 보고서를 다시 볼 수 있습니다</div>
 </div>
 
 </div>
 
 <script>
-let pdf='',key='',pri=['학업','진로','공동체'],selKW=[],stu={},cur=null;
+let pdf='',key='',pri=['학업','진로','공동체'],selKW=[],stu={},cur=null,classInfo={};
 const KW=['자기주도학습','비판적사고','데이터분석','리더십','협업','문제해결','발표력','봉사활동','융합사고','창의성','의사소통','글로벌역량','디지털리터러시','연구역량','진로탐색','멘토링','프로젝트기획','독서활동'];
 
 (function(){
@@ -301,7 +318,10 @@ const sn=document.getElementById('sNo');for(let i=1;i<=30;i++){const o=document.
 
 const g=document.getElementById('kwG');KW.forEach(k=>{const d=document.createElement('div');d.className='kw';d.textContent=k;d.onclick=()=>{d.classList.toggle('on');d.classList.contains('on')?selKW.push(k):selKW=selKW.filter(x=>x!==k)};g.appendChild(d)});
 const sv=localStorage.getItem('sgb_key');if(sv){key=sv;document.getElementById('apiKey').value=sv;apiOk()}
-const ss=localStorage.getItem('sgb_stu');if(ss)try{stu=JSON.parse(ss);rStu()}catch(e){}
+
+// 학급 정보 로드
+loadClassInfo();
+
 chk();setP('top');
 })();
 
@@ -310,7 +330,7 @@ const g=document.getElementById('sGrade').value;
 const c=document.getElementById('sClass').value;
 const n=document.getElementById('sNo').value;
 if(!c||!n)return'';
-return g+c+n; // e.g. 30101, 30530, 31024
+return g+c+n;
 }
 function updPreview(){
 const id=getStuId();
@@ -318,6 +338,117 @@ const g=document.getElementById('sGrade').value;
 const c=document.getElementById('sClass').value;
 const n=document.getElementById('sNo').value;
 document.getElementById('stuIdPreview').textContent=id?id:`${g} - ${c||'--'} - ${n||'--'}`;
+}
+
+// === 학급 관리 ===
+function getClassKey(){
+const g=document.getElementById('sGrade').value;
+const c=document.getElementById('sClass').value;
+return `sgb_class_${g}_${c}`;
+}
+
+function saveClassInfo(){
+const g=document.getElementById('sGrade').value;
+const c=document.getElementById('sClass').value;
+const t=document.getElementById('sTeacher').value.trim();
+const s=document.getElementById('sSchool').value.trim();
+if(!c){alert('반을 선택해주세요');return}
+classInfo={grade:g,cls:c,teacher:t,school:s};
+localStorage.setItem('sgb_classInfo',JSON.stringify(classInfo));
+// 해당 학급의 학생 데이터 로드
+loadClassStudents();
+const el=document.getElementById('classStatus');
+el.innerHTML=`<span style="color:var(--green)">✓ ${s||''} ${g}학년 ${parseInt(c)}반 ${t?'('+t+' 선생님)':''} 저장 완료</span>`;
+}
+
+function loadClassInfo(){
+try{
+const ci=localStorage.getItem('sgb_classInfo');
+if(ci){
+classInfo=JSON.parse(ci);
+document.getElementById('sGrade').value=classInfo.grade||'3';
+document.getElementById('sClass').value=classInfo.cls||'';
+document.getElementById('sTeacher').value=classInfo.teacher||'';
+document.getElementById('sSchool').value=classInfo.school||'';
+loadClassStudents();
+const el=document.getElementById('classStatus');
+el.innerHTML=`<span style="color:var(--green)">✓ ${classInfo.school||''} ${classInfo.grade}학년 ${parseInt(classInfo.cls)}반 로드됨</span>`;
+}
+}catch(e){console.warn('학급 정보 로드 실패')}
+}
+
+function loadClassStudents(){
+const k=getClassKey();
+try{
+const ss=localStorage.getItem(k);
+if(ss){stu=JSON.parse(ss);rStu()}else{stu={};rStu()}
+}catch(e){stu={};rStu()}
+}
+
+function saveClassStudents(){
+const k=getClassKey();
+try{localStorage.setItem(k,JSON.stringify(stu))}catch(e){console.warn('학생 데이터 저장 실패')}
+}
+
+function resetClass(){
+if(!confirm('정말로 이 학급의 모든 데이터를 삭제하시겠습니까?\n(되돌릴 수 없습니다)'))return;
+const k=getClassKey();
+localStorage.removeItem(k);
+stu={};rStu();
+document.getElementById('classStatus').innerHTML='<span style="color:var(--coral)">✓ 학급 데이터 초기화됨</span>';
+}
+
+// === 학생 클릭 → 보고서 재열람 ===
+function viewStudent(sid){
+const s=stu[sid];
+if(!s||!s.result)return;
+cur=s.result;
+// 학생 정보 채우기
+document.getElementById('sNo').value=sid.substring(3,5);
+document.getElementById('sName').value=s.name||'';
+document.getElementById('sCareer').value=s.career||'';
+document.getElementById('sClub').value=s.club||'';
+updPreview();
+// 결과 표시
+rR(cur);
+// 스크롤
+document.getElementById('resS').scrollIntoView({behavior:'smooth'});
+}
+
+// === 개별 학생 PDF (학생 목록에서) ===
+function dlStudentPDF(sid){
+const s=stu[sid];
+if(!s||!s.result||s.result._err)return;
+const prevCur=cur;
+cur=s.result;
+dlPDF();
+cur=prevCur;
+}
+
+// === 전체 학생 PDF 묶음 ===
+function dlAllPDF(){
+const students=Object.values(stu).filter(s=>s.result&&!s.result._err).sort((a,b)=>a.sid.localeCompare(b.sid));
+if(!students.length){alert('분석된 학생이 없습니다');return}
+const prevCur=cur;
+const w=window.open('','_blank');
+let allHtml='';
+students.forEach((s,i)=>{
+cur=s.result;
+const m=cur._m;
+allHtml+=buildPDFContent(cur);
+if(i<students.length-1)allHtml+='<div style="page-break-after:always"></div>';
+});
+cur=prevCur;
+const ci=classInfo;
+w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${ci.school||''} ${ci.grade||'3'}학년 ${parseInt(ci.cls)||''}반 생기부 전체 보고서</title>
+${getPDFStyles()}
+</head><body>
+<div class="cover"><h1>📊 생기부 성장분석 보고서</h1>
+<div class="sub">${ci.school||''} ${ci.grade||'3'}학년 ${parseInt(ci.cls)||''}반 · 담임: ${ci.teacher||''} · ${students.length}명</div></div>
+<div style="page-break-after:always"></div>
+${allHtml}
+</body></html>`);
+w.document.close();setTimeout(()=>w.print(),1000);
 }
 
 function saveKey(){
@@ -345,6 +476,8 @@ pdf=t;
 console.log('[PDF] 텍스트 추출 완료, 길이:',pdf.length);
 if(pdf.length<50){dz.querySelector('.dz-s').textContent='⚠️ 텍스트가 거의 추출되지 않았습니다. 스캔 PDF일 수 있습니다';return}
 dz.querySelector('.dz-s').textContent=`${p.numPages}p · ${pdf.length.toLocaleString()}자`;
+// 학생 정보 자동 추출
+autoFillStudent(t);
 document.getElementById('fI').classList.remove('hidden');
 document.getElementById('fI').textContent=`✓ ${f.name} · ${(f.size/1024).toFixed(0)}KB · ${p.numPages}페이지`;chk()
 }catch(e){dz.querySelector('.dz-s').textContent='✕ '+e.message}}
@@ -387,10 +520,10 @@ document.getElementById('pW').style.display='block';document.getElementById('goB
 showStatus('📄 PDF 분석 중...',10);
 
 try{
-showStatus('🤖 AI 분석 요청 중... (30초~1분 소요)',30);
+showStatus('🤖 AI 심층 분석 중... (1~3분 소요, 창을 닫지 마세요)',30);
 console.log('[analyze] API 호출 시작, pdf길이:',pdf.length,'key존재:',!!key);
 
-const body={model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929',max_tokens:8000,messages:[{role:'user',content:bp(nm,cr,cl,kw,me)}]};
+const body={model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929',max_tokens:16000,stream:true,messages:[{role:'user',content:bp(nm,cr,cl,kw,me)}]};
 console.log('[analyze] 요청 body model:',body.model);
 
 const r=await fetch('https://api.anthropic.com/v1/messages',{
@@ -412,18 +545,46 @@ try{const e=await r.json();errMsg=e.error?.message||errMsg;console.log('[analyze
 throw new Error(errMsg);
 }
 
-showStatus('📊 응답 처리 중...',70);
-const d=await r.json();
-console.log('[analyze] 응답 수신, content blocks:',d.content?.length);
-const tx=d.content.map(c=>c.text||'').join('');
-console.log('[analyze] 텍스트 길이:',tx.length);
+// 스트리밍 처리
+showStatus('🤖 AI 분석 중... 0자 수신',35);
+const reader=r.body.getReader();
+const decoder=new TextDecoder();
+let fullText='';
+let buffer='';
+
+while(true){
+const{done,value}=await reader.read();
+if(done)break;
+buffer+=decoder.decode(value,{stream:true});
+
+const lines=buffer.split('\n');
+buffer=lines.pop()||'';
+
+for(const line of lines){
+if(!line.startsWith('data:'))continue;
+const data=line.substring(5).trim();
+if(data==='[DONE]'||!data)continue;
+try{
+const evt=JSON.parse(data);
+if(evt.type==='content_block_delta'&&evt.delta?.text){
+fullText+=evt.delta.text;
+const pct=Math.min(35+Math.floor((fullText.length/8000)*55),90);
+const charCount=fullText.length.toLocaleString();
+showStatus(`🤖 AI 분석 중... ${charCount}자 수신`,pct);
+}
+}catch(pe){}
+}
+}
+
+const tx=fullText;
+console.log('[analyze] 스트리밍 완료, 텍스트 길이:',tx.length);
 
 showStatus('📋 보고서 생성 중...',90);
 cur=pr(tx,nm,cr,cl,sid,kw);
 if(cur._err){console.warn('[analyze] JSON 파싱 실패, raw 앞부분:',tx.substring(0,200))}
 
 stu[sid]={name:nm,career:cr,club:cl,sid,date:new Date().toLocaleDateString('ko-KR'),result:cur};
-try{localStorage.setItem('sgb_stu',JSON.stringify(stu))}catch(ex){console.warn('localStorage 저장 실패')}
+saveClassStudents();
 rR(cur);rStu();showStatus('✅ 분석 완료!',100);
 setTimeout(()=>{document.getElementById('pW').style.display='none';document.getElementById('goBtn').disabled=false},1500);
 
@@ -439,16 +600,175 @@ document.getElementById('goBtn').textContent='🔍 AI 종합 분석 시작 (재�
 function showStatus(t,p){document.getElementById('pF').style.width=p+'%';document.getElementById('pT').textContent=t;console.log('[status]',p+'%',t)}
 // sp는 showStatus로 대체됨
 
-function bp(nm,cr,cl,kw,me){return`당신은 한국 고등학교 생기부 전문 분석가입니다.
-[학생] 이름:${nm} 진로:${cr} 동아리:${cl} 키워드:${kw.join(',')||'없음'} ${me?'메모:'+me:''}
-[우선순위] 1순위:${pri[0]} 2순위:${pri[1]} 3순위:${pri[2]}
-[바이트] 자율:1500 진로:2100 동아리:1500 행발:1500 (한글1자=3바이트)
-[생기부]
-${pdf.substring(0,15000)}
-[출력: JSON만. 다른 텍스트 금지]
-{"overview":{"summary":"요약3-4문장","strengths":["강점1","강점2","강점3"],"improvements":["보완1","보완2"],"competencies":{"career":{"grade1":"","grade2":"","growth":""},"academic":{"grade1":"","grade2":"","growth":""},"community":{"grade1":"","grade2":"","growth":""},"character":{"grade1":"","grade2":"","growth":""}}},"jarhaeng":{"jayul":{"evaluation":"평가","option1":{"title":"${pri[0]}중심","text":"예시(1500B이내)","focus":"추천","supplement":"보완"},"option2":{"title":"${pri[1]}중심","text":"예시(1500B이내)","focus":"추천","supplement":"보완"}},"jinro":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"(2100B)","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"(2100B)","focus":"","supplement":""}},"dongari":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"(1500B)","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"(1500B)","focus":"","supplement":""}},"hangbal":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"(1500B)","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"(1500B)","focus":"","supplement":""}}},"setuk":{"direction":"방향","subjects":[{"name":"과목","theme":"주제","reason":"이유","keywords":["kw"]}]},"club":{"name":"동아리","goal":"목표","monthly":[{"month":"3월","activity":"활동","record":"기록"},{"month":"4월","activity":"","record":""},{"month":"5월","activity":"","record":""},{"month":"6월","activity":"","record":""},{"month":"7월","activity":"","record":""},{"month":"8월","activity":"","record":""},{"month":"9월","activity":"","record":""},{"month":"10월","activity":"","record":""},{"month":"11월","activity":"","record":""}]},"counsel":{"talk_points":["p1","p2","p3"],"questions":["q1","q2","q3"],"parent_points":["pp1","pp2"],"recommended_activities":["a1","a2","a3"]}}`}
+// PDF에서 학생 정보 자동 추출
+function autoFillStudent(txt){
+try{
+// 이름 추출 시도 (다양한 패턴)
+const namePatterns=[
+/성\s*명\s*[:\s]+([가-힣]{2,4})/,
+/이\s*름\s*[:\s]+([가-힣]{2,4})/,
+/학\s*생\s*[:\s]*([가-힣]{2,4})\s*(학생)?/,
+/([가-힣]{2,4})\s*학생의?\s*(성장|학교생활|생기부)/,
+];
+for(const p of namePatterns){
+const m=txt.match(p);
+if(m&&m[1]){
+const nameEl=document.getElementById('sName');
+if(nameEl&&!nameEl.value)nameEl.value=m[1];
+console.log('[autoFill] 이름:',m[1]);
+break;
+}
+}
+// 학년반번호 추출
+const gradeMatch=txt.match(/(\d)\s*학\s*년\s*(\d{1,2})\s*반\s*(\d{1,2})\s*번/);
+if(gradeMatch){
+const [_,g,c,n]=gradeMatch;
+const gc=document.getElementById('sClass');
+const gn=document.getElementById('sNo');
+if(gc)gc.value=String(parseInt(c)).padStart(2,'0');
+if(gn)gn.value=String(parseInt(n)).padStart(2,'0');
+updPreview();
+console.log('[autoFill] 학번:',g,c,n);
+}
+// 진로/희망 추출
+const careerPatterns=[
+/희망\s*진로\s*[:\s]+([^\n,]+)/,
+/진로\s*희망\s*[:\s]+([^\n,]+)/,
+/희망\s*학과\s*[:\s]+([^\n,]+)/,
+/장래\s*희망\s*[:\s]+([^\n,]+)/,
+];
+for(const p of careerPatterns){
+const m=txt.match(p);
+if(m&&m[1]){
+const careerEl=document.getElementById('sCareer');
+if(careerEl&&!careerEl.value)careerEl.value=m[1].trim().substring(0,20);
+console.log('[autoFill] 진로:',m[1].trim());
+break;
+}
+}
+// 동아리 추출
+const clubPatterns=[
+/동아리\s*[:\s]+([가-힣A-Za-z\s]+?)[\s,\n]/,
+/동아리명\s*[:\s]+([가-힣A-Za-z\s]+?)[\s,\n]/,
+];
+for(const p of clubPatterns){
+const m=txt.match(p);
+if(m&&m[1]){
+const clubEl=document.getElementById('sClub');
+if(clubEl&&!clubEl.value)clubEl.value=m[1].trim().substring(0,15);
+console.log('[autoFill] 동아리:',m[1].trim());
+break;
+}
+}
+chk();
+}catch(e){console.warn('[autoFill] 자동추출 실패:',e)}
+}
 
-function pr(tx,nm,cr,cl,sid,kw){try{let c=tx.replace(/```json\s*/g,'').replace(/```\s*/g,'').trim();const s=c.indexOf('{'),e=c.lastIndexOf('}');if(s>=0&&e>s)c=c.substring(s,e+1);const o=JSON.parse(c);o._m={nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')};return o}catch(e){return{_m:{nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')},_raw:tx,_err:true}}}
+function bp(nm,cr,cl,kw,me){return`당신은 대한민국 고등학교 학교생활기록부(생기부) 전문 컨설턴트이자 입학사정관 출신 분석가입니다.
+15년 이상의 경력을 바탕으로, 학생의 1~2학년 생기부를 심층 분석하여 3학년 전략을 수립하는 최고 수준의 보고서를 작성합니다.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[학생 정보]
+- 이름: ${nm}
+- 희망 진로: ${cr}
+- 동아리: ${cl}
+- 핵심 키워드: ${kw.join(', ')||'미지정'}
+${me?'- 담임 메모: '+me:''}
+- 보고서 우선순위: 1순위 ${pri[0]} → 2순위 ${pri[1]} → 3순위 ${pri[2]}
+
+[바이트 제한 - 반드시 준수]
+- 자율활동: 1500바이트 (한글 1자=3바이트, 영문/숫자=1바이트)
+- 진로활동: 2100바이트
+- 동아리활동: 1500바이트
+- 행동특성및종합의견: 1500바이트
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[학생 생기부 원문]
+${pdf.substring(0,30000)}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[분석 지침 - 매우 중요]
+
+1. **종합 분석(overview)**
+   - summary: 학생의 전체적인 성장 서사를 4~6문장으로 풍부하게 요약. "이 학생은 1학년에서 ~~, 2학년에서 ~~로 발전했으며, ~~라는 점에서 주목할 만하다" 수준의 구체적 서술
+   - strengths: 생기부에서 실제로 확인되는 구체적 활동/성과를 근거로 3~5개 강점 서술 (각 강점을 2~3문장으로 구체적으로)
+   - improvements: 현재 생기부에서 부족하거나 3학년에서 보완해야 할 점 2~3개 (구체적 대안 포함)
+   - competencies: 4대 역량(진로/학업/공동체/인성) 각각에 대해:
+     * grade1: 1학년 때의 역량 수준을 구체적 활동 사례와 함께 3~4문장으로 서술
+     * grade2: 2학년 때의 역량 수준을 구체적 활동 사례와 함께 3~4문장으로 서술
+     * growth: 1→2학년 성장 과정과 의미를 3~4문장으로 분석
+
+2. **자율/진로/동아리/행발(jarhaeng)** - 이것이 가장 중요!
+   - evaluation: 현재 해당 영역의 기록 수준 평가 및 3학년 방향 (3~4문장)
+   - option1, option2: 각각 서로 다른 관점(우선순위 기반)에서 작성한 **실제 생기부 기재 예시문**
+     * text: 반드시 바이트 제한에 맞는 **완성된 생기부 문장**을 작성. 교사가 바로 복사해서 쓸 수 있는 수준.
+       - 구체적 활동명, 역할, 과정, 결과, 성장을 포함
+       - "~함", "~을 보임" 등 생기부 문체 사용
+       - 학생의 실제 1,2학년 활동과 연계하여 3학년 활동을 자연스럽게 이어가는 서사
+       - 추상적 표현 금지. 구체적 수치, 활동명, 이론명, 도구명 등을 반드시 포함
+     * title: 이 기재문의 핵심 방향 (예: "학업역량 중심 서술", "진로탐구 심화 서술")
+     * focus: 이 기재문의 강점 포인트 (1~2문장)
+     * supplement: 이 기재문에서 더 보완하면 좋을 점 (1~2문장)
+
+3. **세특 방향(setuk)**
+   - direction: 3학년 세특의 전체적 방향성 (3~4문장, 1,2학년 흐름과 연계)
+   - subjects: 3~5개 과목별로:
+     * name: 과목명
+     * theme: 구체적 탐구 주제 (예: "행동경제학의 넛지 이론을 활용한 교내 에너지 절약 캠페인 효과 분석")
+     * reason: 왜 이 주제가 이 학생에게 적합한지 (2~3문장, 1,2학년 활동과의 연계성 설명)
+     * keywords: 핵심 키워드 3~5개
+
+4. **동아리 계획(club)**
+   - name: 동아리명
+   - goal: 동아리 활동의 핵심 목표 (3~4문장, 학생의 진로와 연계)
+   - monthly: 3~11월 각 월별로:
+     * activity: 해당 월의 구체적 활동 내용 (2~3문장)
+     * record: 생기부에 기록할 포인트 (1~2문장)
+
+5. **상담 가이드(counsel)**
+   - talk_points: 담임이 이 학생과 상담 시 다뤄야 할 핵심 포인트 3~5개 (각 2문장 이상)
+   - questions: 학생에게 던질 구체적 상담 질문 3~5개
+   - parent_points: 학부모 상담 시 전달할 핵심 내용 2~3개 (각 2문장 이상)
+   - recommended_activities: 3학년에서 추천하는 구체적 활동 3~5개 (각 활동의 목적과 방법 포함)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[필수 출력 규칙]
+- 반드시 JSON만 출력. 다른 텍스트, 설명, 마크다운 코드블록(백틱) 절대 금지
+- 모든 텍스트 필드는 풍부하고 구체적으로 작성 (빈 문자열 "" 절대 금지)
+- jarhaeng의 text 필드는 반드시 바이트 제한을 준수하면서도 내용이 풍부해야 함
+- 학생의 실제 생기부에 언급된 활동, 과목, 성과를 반드시 참조하여 작성
+
+[JSON 구조]
+{"overview":{"summary":"","strengths":["","",""],"improvements":["",""],"competencies":{"career":{"grade1":"","grade2":"","growth":""},"academic":{"grade1":"","grade2":"","growth":""},"community":{"grade1":"","grade2":"","growth":""},"character":{"grade1":"","grade2":"","growth":""}}},"jarhaeng":{"jayul":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"","focus":"","supplement":""}},"jinro":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"","focus":"","supplement":""}},"dongari":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"","focus":"","supplement":""}},"hangbal":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"","focus":"","supplement":""}}},"setuk":{"direction":"","subjects":[{"name":"","theme":"","reason":"","keywords":[]}]},"club":{"name":"","goal":"","monthly":[{"month":"3월","activity":"","record":""},{"month":"4월","activity":"","record":""},{"month":"5월","activity":"","record":""},{"month":"6월","activity":"","record":""},{"month":"7월","activity":"","record":""},{"month":"8월","activity":"","record":""},{"month":"9월","activity":"","record":""},{"month":"10월","activity":"","record":""},{"month":"11월","activity":"","record":""}]},"counsel":{"talk_points":[],"questions":[],"parent_points":[],"recommended_activities":[]}}`}
+
+function pr(tx,nm,cr,cl,sid,kw){try{
+let c=tx.replace(/```json\s*/gi,'').replace(/```\s*/g,'').replace(/^\s*json\s*/i,'').trim();
+// JSON 블록만 추출
+const s=c.indexOf('{'),e=c.lastIndexOf('}');
+if(s<0||e<=s)throw new Error('JSON 블록 없음');
+c=c.substring(s,e+1);
+// 줄바꿈/탭 정리
+c=c.replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ');
+const o=JSON.parse(c);
+o._m={nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')};
+return o;
+}catch(e){
+console.error('[pr] JSON 파싱 실패:',e.message);
+// 2차 시도: 좀 더 공격적으로 정리
+try{
+let c2=tx.replace(/```[a-z]*\s*/gi,'').replace(/```/g,'').trim();
+const s2=c2.indexOf('{'),e2=c2.lastIndexOf('}');
+if(s2>=0&&e2>s2){
+c2=c2.substring(s2,e2+1).replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ');
+// 제어문자 제거
+c2=c2.replace(/[\x00-\x1F\x7F]/g,'');
+const o2=JSON.parse(c2);
+o2._m={nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')};
+console.log('[pr] 2차 파싱 성공');
+return o2;
+}
+}catch(e2){console.error('[pr] 2차 파싱도 실패:',e2.message)}
+return{_m:{nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')},_raw:tx,_err:true}}}
 
 function rR(r){document.getElementById('resS').style.display='block';
 if(r._err){document.getElementById('tc-ov').innerHTML=`<div class="rb"><h4>⚠ 파싱 실패</h4><pre style="white-space:pre-wrap;font-size:12px;color:var(--g3)">${esc(r._raw||'')}</pre></div>`;return}
@@ -479,47 +799,250 @@ function bl(s){return new Blob([s||'']).size}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function st(id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.tc').forEach(t=>t.classList.remove('on'));document.querySelector(`.tab[onclick="st('${id}')"]`).classList.add('on');document.getElementById('tc-'+id).classList.add('on')}
 
-function dlPDF(){if(!cur)return;const m=cur._m,w=window.open('','_blank');
-w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${m.nm} 생기부 분석</title>
-<style>body{font-family:'Noto Sans KR',-apple-system,sans-serif;max-width:780px;margin:0 auto;padding:30px;color:#191F28;line-height:1.7;font-size:13px}h1{font-size:1.6em;text-align:center;color:#3182F6;padding-bottom:14px;border-bottom:2px solid #3182F6;font-weight:800}h2{font-size:1.1em;color:#3182F6;margin-top:20px;font-weight:700}.info{background:#F2F4F6;padding:12px 16px;border-radius:12px;margin:14px 0;font-size:12px}.opt{background:#F8F9FA;border-radius:12px;padding:14px;margin:8px 0;border:1px solid #E5E8EB}.opt-t{font-weight:700;color:#3182F6;font-size:12px;margin-bottom:4px}.meta{font-size:11px;color:#8B95A1;margin-top:4px}table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}th,td{border:1px solid #E5E8EB;padding:8px}th{background:#F2F4F6;font-weight:700}.footer{text-align:center;margin-top:24px;font-size:11px;color:#8B95A1;border-top:1px solid #E5E8EB;padding-top:10px}@media print{body{padding:10px}}</style></head><body>
-<h1>📊 생기부 성장분석 보고서</h1><div class="info"><strong>${m.sid} ${m.nm}</strong> · 진로: ${m.cr} · 동아리: ${m.cl} · ${m.dt}<br>우선순위: ${m.pri.map((p,i)=>['①','②','③'][i]+p).join(' → ')}</div>
-${document.getElementById('resS').querySelector('.card').innerHTML}<div class="footer">생기부 성장분석기 · ${m.dt}</div></body></html>`);
-w.document.close();setTimeout(()=>w.print(),500)}
+function getPDFStyles(){return`<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;max-width:860px;margin:0 auto;padding:40px 32px;color:#191F28;line-height:1.7;font-size:13px;background:#fff}
+.cover{text-align:center;padding:40px 0 30px;border-bottom:3px solid #3182F6;margin-bottom:30px}
+.cover h1{font-size:28px;font-weight:900;color:#3182F6;letter-spacing:-1px}
+.cover .sub{font-size:14px;color:#8B95A1;margin-top:8px}
+.info-bar{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;padding:16px 20px;background:linear-gradient(135deg,#EBF4FF,#F0EDFF);border-radius:14px}
+.info-item{font-size:13px;font-weight:600;color:#333D4B}.info-item span{color:#3182F6}
+.section{margin:28px 0;page-break-inside:avoid}
+h2{font-size:18px;font-weight:800;color:#191F28;margin:30px 0 16px;padding-bottom:8px;border-bottom:2px solid #E5E8EB;display:flex;align-items:center;gap:8px}
+h3{font-size:15px;font-weight:700;color:#333D4B;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.byte-tag{font-size:11px;background:#F2F4F6;color:#8B95A1;padding:2px 8px;border-radius:100px;font-weight:600}
+.summary{font-size:14px;line-height:1.85;color:#333D4B;padding:18px 20px;background:#F8F9FA;border-radius:12px;border-left:4px solid #3182F6;margin:12px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip-good{padding:8px 14px;background:#E8FAF0;color:#00C471;border-radius:10px;font-size:12px;font-weight:600}
+.chip-imp{padding:8px 14px;background:#FFF0F0;color:#FF6B6B;border-radius:10px;font-size:12px;font-weight:600}
+.comp-card{background:#FAFBFC;border-radius:12px;padding:16px 18px;margin:10px 0}
+.comp-title{font-size:14px;font-weight:800;margin-bottom:8px}
+.comp-tbl{width:100%;font-size:12px;line-height:1.7}
+.comp-tbl th{text-align:left;padding:6px 10px;color:#8B95A1;font-weight:600;vertical-align:top}
+.comp-tbl td{padding:6px 10px;color:#4E5968}
+.eval{font-size:13px;color:#4E5968;line-height:1.7;padding:10px 14px;background:#FAFBFC;border-radius:8px;margin-bottom:12px}
+.opt-grid{display:grid;gap:10px}
+.opt-box{border-radius:12px;padding:16px;border:1px solid #E5E8EB;background:#fff}
+.opt-hdr{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.opt-badge{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;color:#fff}
+.opt-badge.blue{background:#3182F6}.opt-badge.purple{background:#7B61FF}
+.byte-count{font-size:11px;font-weight:600;color:#8B95A1;margin-left:auto}.byte-count.over{color:#FF6B6B}
+.opt-body{font-size:13px;color:#333D4B;line-height:1.8;white-space:pre-wrap;padding:12px 14px;background:#F8F9FA;border-radius:8px}
+.opt-meta{font-size:11px;color:#8B95A1;margin-top:8px;font-weight:500}
+.setuk-card{padding:14px 16px;background:#FAFBFC;border-radius:10px;margin:8px 0;border:1px solid #E5E8EB}
+.setuk-name{font-size:14px;font-weight:800;color:#3182F6}
+.setuk-theme{font-size:13px;font-weight:600;color:#333D4B;margin:6px 0}
+.setuk-reason{font-size:12px;color:#4E5968;line-height:1.7}
+.setuk-kws{margin-top:8px}.kw-tag{display:inline-block;padding:3px 10px;background:#EBF4FF;color:#3182F6;border-radius:100px;font-size:11px;font-weight:600;margin:2px}
+.club-tbl{width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid #E5E8EB;font-size:12px}
+.club-tbl th{padding:10px 14px;background:#F2F4F6;font-weight:700;text-align:left;color:#4E5968}
+.club-tbl td{padding:10px 14px;border-top:1px solid #E5E8EB;color:#333D4B;line-height:1.65}
+.co-sec{margin:14px 0;padding:14px 16px;background:#FAFBFC;border-radius:10px}
+.co-sec h4{font-size:13px;font-weight:700;margin-bottom:8px;color:#333D4B}
+.co-sec p{font-size:12px;color:#4E5968;line-height:1.7;margin:4px 0}
+.footer{text-align:center;margin-top:40px;padding-top:16px;border-top:2px solid #E5E8EB;font-size:11px;color:#B0B8C1}
+@media print{body{padding:20px 16px;font-size:12px}.cover{padding:20px 0 16px}.comp-card,.opt-box,.setuk-card{break-inside:avoid}}
+</style>`}
 
-function dlXL(){if(!cur||cur._err)return;const r=cur,m=r._m,wb=XLSX.utils.book_new();
-const s1=[['AI 분석 - '+m.sid+' '+m.nm,'','','',''],['진로:'+m.cr,'동아리:'+m.cl,m.dt,'우선순위:'+m.pri.join('→'),''],[''],['영역','구분','내용','바이트','제한']];
-const jh=r.jarhaeng||{};[{k:'jayul',l:'자율',lm:1500},{k:'jinro',l:'진로',lm:2100},{k:'dongari',l:'동아리',lm:1500},{k:'hangbal',l:'행발',lm:1500}].forEach(a=>{
+function buildPDFContent(result){
+const r=result,m=r._m||{},ov=r.overview||{},cp=ov.competencies||{},jh=r.jarhaeng||{},se=r.setuk||{},cl=r.club||{},co=r.counsel||{};
+const compLabels={career:'진로역량',academic:'학업역량',community:'공동체역량',character:'인성역량'};
+const compColors={career:'#3182F6',academic:'#7B61FF',community:'#00C471',character:'#FF9F43'};
+let compHtml='';
+['career','academic','community','character'].forEach(k=>{
+const c=cp[k]||{};
+compHtml+=`<div class="comp-card" style="border-left:4px solid ${compColors[k]}">
+<div class="comp-title" style="color:${compColors[k]}">${compLabels[k]}</div>
+<table class="comp-tbl"><tr><th style="width:80px">1학년</th><td>${c.grade1||'-'}</td></tr>
+<tr><th>2학년</th><td>${c.grade2||'-'}</td></tr>
+<tr><th style="color:${compColors[k]}">성장</th><td style="font-weight:600">${c.growth||'-'}</td></tr></table></div>`;
+});
+let jhHtml='';
+[{k:'jayul',l:'자율활동',lm:1500},{k:'jinro',l:'진로활동',lm:2100},{k:'dongari',l:'동아리활동',lm:1500},{k:'hangbal',l:'행동특성및종합의견',lm:1500}].forEach(a=>{
+const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{},b1=bl(o1.text||''),b2=bl(o2.text||'');
+jhHtml+=`<div class="section"><h3>${a.l} <span class="byte-tag">${a.lm}B</span></h3>
+<p class="eval">${d.evaluation||''}</p>
+<div class="opt-grid"><div class="opt-box">
+<div class="opt-hdr"><span class="opt-badge blue">1안</span> ${o1.title||''} <span class="byte-count ${b1>a.lm?'over':''}">${b1}/${a.lm}B</span></div>
+<div class="opt-body">${o1.text||''}</div>
+<div class="opt-meta">✓ ${o1.focus||''} · → ${o1.supplement||''}</div></div>
+<div class="opt-box"><div class="opt-hdr"><span class="opt-badge purple">2안</span> ${o2.title||''} <span class="byte-count ${b2>a.lm?'over':''}">${b2}/${a.lm}B</span></div>
+<div class="opt-body">${o2.text||''}</div>
+<div class="opt-meta">✓ ${o2.focus||''} · → ${o2.supplement||''}</div></div></div></div>`;
+});
+let seHtml=(se.subjects||[]).map(s=>`<div class="setuk-card"><div class="setuk-name">${s.name||''}</div>
+<div class="setuk-theme">📌 ${s.theme||''}</div><div class="setuk-reason">${s.reason||''}</div>
+<div class="setuk-kws">${(s.keywords||[]).map(k=>`<span class="kw-tag">${k}</span>`).join(' ')}</div></div>`).join('');
+let clHtml=(cl.monthly||[]).map(m=>`<tr><td style="font-weight:700;color:#3182F6;width:60px">${m.month}</td><td>${m.activity||''}</td><td style="font-size:11px;color:#8B95A1">${m.record||''}</td></tr>`).join('');
+let coHtml=`<div class="co-sec"><h4>💬 상담 포인트</h4>${(co.talk_points||[]).map(s=>`<p>• ${s}</p>`).join('')}</div>
+<div class="co-sec"><h4>❓ 질문 예시</h4>${(co.questions||[]).map(s=>`<p>"${s}"</p>`).join('')}</div>
+<div class="co-sec"><h4>👨‍👩‍👧 학부모 상담</h4>${(co.parent_points||[]).map(s=>`<p>• ${s}</p>`).join('')}</div>
+<div class="co-sec"><h4>🚀 추천 활동</h4>${(co.recommended_activities||[]).map(s=>`<p>✦ ${s}</p>`).join('')}</div>`;
+
+return`<div class="info-bar">
+<div class="info-item">📋 <span>${m.sid||''}</span> ${m.nm||''}</div>
+<div class="info-item">🎯 진로: <span>${m.cr||''}</span></div>
+<div class="info-item">🏫 동아리: <span>${m.cl||''}</span></div>
+<div class="info-item">📅 <span>${m.dt||''}</span></div>
+<div class="info-item">⚡ <span>${(m.pri||[]).map((p,i)=>['①','②','③'][i]+p).join(' → ')}</span></div>
+</div>
+<h2>📊 종합 분석</h2><div class="summary">${ov.summary||''}</div>
+<div class="chips">${(ov.strengths||[]).map(s=>`<div class="chip-good">✦ ${s}</div>`).join('')}</div>
+<div class="chips">${(ov.improvements||[]).map(s=>`<div class="chip-imp">→ ${s}</div>`).join('')}</div>
+<h2>💪 4대 역량 분석</h2>${compHtml}
+<h2>📝 자율·진로·동아리·행발 기재 예시</h2>${jhHtml}
+<h2>🎯 3학년 세특 방향</h2><div class="summary">${se.direction||''}</div>${seHtml}
+<h2>🏫 동아리 월별 계획</h2><div class="summary">${cl.goal||''}</div>
+<table class="club-tbl"><tr><th>월</th><th>활동 내용</th><th>기록 포인트</th></tr>${clHtml}</table>
+<h2>💬 상담 가이드</h2>${coHtml}
+<div class="footer">생기부 성장분석기 · AI Powered · ${m.dt||''}</div>`;
+}
+
+function dlPDF(){if(!cur)return;
+const w=window.open('','_blank');
+const m=cur._m||{};
+w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${m.nm||''} 생기부 성장분석 보고서</title>
+${getPDFStyles()}</head><body>
+<div class="cover"><h1>📊 생기부 성장분석 보고서</h1><div class="sub">AI 기반 학생부 종합 분석 리포트</div></div>
+${buildPDFContent(cur)}
+</body></html>`);
+w.document.close();setTimeout(()=>w.print(),800)}
+
+function dlXL(){if(!cur||cur._err)return;const r=cur,m=r._m,jh=r.jarhaeng||{};
+// SheetJS로 엑셀 생성
+const wb=XLSX.utils.book_new();
+const areas=[{k:'jayul',l:'자율활동',lm:1500},{k:'jinro',l:'진로활동',lm:2100},{k:'dongari',l:'동아리활동',lm:1500},{k:'hangbal',l:'행동특성및종합의견',lm:1500}];
+
+// ===== 시트1: 학생별 상세 (좌: AI예시 / 우: 교사기입) =====
+const s1=[];
+// 헤더
+s1.push(['생기부 성장분석 - 개인별 상담 기록지','','','','','','']);
+s1.push(['학교명','','학년','반','번호','성명','희망진로']);
+s1.push(['','',(m.sid||'').substring(0,1),(m.sid||'').substring(1,3),(m.sid||'').substring(3,5),m.nm,m.cr]);
+s1.push([]);
+s1.push(['영역','바이트제한','AI 생성 예시 (1안)','Byte','AI 생성 예시 (2안)','Byte','교사 직접 기입란','Byte']);
+
+areas.forEach(a=>{
 const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{};
-s1.push([a.l,'평가',d.evaluation||'','','']);s1.push([a.l,'1안:'+(o1.title||''),o1.text||'',bl(o1.text||''),a.lm]);
-s1.push(['','✓추천',o1.focus||'','',''],['','→보완',o1.supplement||'','','']);
-s1.push([a.l,'2안:'+(o2.title||''),o2.text||'',bl(o2.text||''),a.lm]);
-s1.push(['','✓추천',o2.focus||'','',''],['','→보완',o2.supplement||'','','']);s1.push([])});
-s1.push([],['세특','','','','']);(r.setuk?.subjects||[]).forEach(s=>s1.push([s.name,s.theme,s.reason,(s.keywords||[]).join(','),'']));
-const w1=XLSX.utils.aoa_to_sheet(s1);w1['!cols']=[{wch:12},{wch:16},{wch:60},{wch:8},{wch:6}];XLSX.utils.book_append_sheet(wb,w1,'AI분석');
-const s2=[['상담기록 - '+m.sid+' '+m.nm,'','',''],['영역','바이트','참고','작성란'],['자율활동','1500','',''],['진로활동','2100','',''],['동아리활동','1500','',''],['행발','1500','','']];
-const w2=XLSX.utils.aoa_to_sheet(s2);w2['!cols']=[{wch:16},{wch:8},{wch:40},{wch:60}];XLSX.utils.book_append_sheet(wb,w2,'작성용');
+const t1=o1.text||'',t2=o2.text||'';
+s1.push([a.l,a.lm,t1,bl(t1),t2,bl(t2),'',0]);
+});
+
+s1.push([]);
+s1.push(['※ 왼쪽 AI 예시를 참고하여 오른쪽 교사 기입란에 직접 작성해주세요.']);
+s1.push(['※ 바이트 제한을 초과하면 해당 셀의 바이트 수가 빨간색으로 표시됩니다.']);
+s1.push(['※ 이 곳에 필요한 내용을 입력하고 반드시 선택한 후 복사해서 검토용으로 사용하시면 됩니다.']);
+s1.push(['※ 출력물에 나오게 하고 싶지 않은 문자내용은 글자색을 인쇄로 설정하면 됩니다.']);
+
+const ws1=XLSX.utils.aoa_to_sheet(s1);
+
+// 컬럼 너비
+ws1['!cols']=[{wch:14},{wch:8},{wch:55},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
+
+// 셀 스타일링 (SheetJS 무료버전 한계 내에서)
+// 머지: 타이틀
+ws1['!merges']=[
+{s:{r:0,c:0},e:{r:0,c:7}}, // 타이틀
+{s:{r:9,c:0},e:{r:9,c:7}}, // 안내1
+{s:{r:10,c:0},e:{r:10,c:7}}, // 안내2
+{s:{r:11,c:0},e:{r:11,c:7}}, // 안내3
+{s:{r:12,c:0},e:{r:12,c:7}}, // 안내4
+];
+
+// 행 높이 설정 (데이터 행은 높게)
+ws1['!rows']=[{hpt:30},{hpt:22},{hpt:22},{hpt:10},{hpt:22},{hpt:180},{hpt:200},{hpt:180},{hpt:180}];
+
+XLSX.utils.book_append_sheet(wb,ws1,'개인상담');
+
+// ===== 시트2: 전체 학생 일람표 =====
+const s2=[];
+s2.push(['생기부 전체 학생 일람표 - 교사용','','','','','','','','']);
+s2.push(['번호','이름','자율활동 (1500B)','Byte','진로활동 (2100B)','Byte','동아리활동 (1500B)','Byte','행발 (1500B)','Byte']);
+
+// 현재 학생 데이터 + 나머지 빈 행
+const allStu=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
+for(let i=1;i<=30;i++){
+const num=String(i).padStart(2,'0');
+const found=allStu.find(s=>s.sid&&s.sid.endsWith(num));
+if(found&&found.result&&!found.result._err){
+const fj=found.result.jarhaeng||{};
+const ja=fj.jayul?.option1?.text||'';
+const ji=fj.jinro?.option1?.text||'';
+const dg=fj.dongari?.option1?.text||'';
+const hb=fj.hangbal?.option1?.text||'';
+s2.push([num,found.name||'',ja,bl(ja),ji,bl(ji),dg,bl(dg),hb,bl(hb)]);
+}else{
+s2.push([num,'','',0,'',0,'',0,'',0]);
+}
+}
+
+const ws2=XLSX.utils.aoa_to_sheet(s2);
+ws2['!cols']=[{wch:6},{wch:8},{wch:55},{wch:6},{wch:60},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
+ws2['!merges']=[{s:{r:0,c:0},e:{r:0,c:9}}];
+ws2['!rows']=[{hpt:28},{hpt:22},...Array(30).fill({hpt:160})];
+
+XLSX.utils.book_append_sheet(wb,ws2,'전체일람');
+
 XLSX.writeFile(wb,`생기부_${m.sid}_${m.nm}.xlsx`)}
 
 function dlAll(){if(!Object.keys(stu).length){alert('분석된 학생이 없습니다');return}
 const wb=XLSX.utils.book_new();
-const l=[['학번','이름','진로','동아리','분석일']];
-Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid)).forEach(s=>l.push([s.sid,s.name,s.career,s.club,s.date]));
-const wl=XLSX.utils.aoa_to_sheet(l);wl['!cols']=[{wch:8},{wch:10},{wch:15},{wch:15},{wch:12}];XLSX.utils.book_append_sheet(wb,wl,'목록');
-const rc=[['학번','이름','자율(1500B)','진로(2100B)','동아리(1500B)','행발(1500B)']];
-Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid)).forEach(s=>rc.push([s.sid,s.name||'','','','','']));
-const wr=XLSX.utils.aoa_to_sheet(rc);wr['!cols']=[{wch:8},{wch:10},{wch:50},{wch:60},{wch:50},{wch:50}];XLSX.utils.book_append_sheet(wb,wr,'상담기록');
-Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid)).forEach(s=>{
-if(!s.result||s.result._err)return;const r=s.result,jh=r.jarhaeng||{};
-const d=[[s.sid+' '+s.name],['영역','1안','2안','추천','보완']];
-['jayul','jinro','dongari','hangbal'].forEach(k=>{const ar=jh[k]||{},o1=ar.option1||{},o2=ar.option2||{};
-d.push([{jayul:'자율',jinro:'진로',dongari:'동아리',hangbal:'행발'}[k],o1.text||'',o2.text||'',o1.focus||'',o1.supplement||''])});
-const ws=XLSX.utils.aoa_to_sheet(d);ws['!cols']=[{wch:10},{wch:50},{wch:50},{wch:25},{wch:25}];XLSX.utils.book_append_sheet(wb,ws,s.sid+'_'+s.name)});
+
+// 전체 일람표
+const s1=[];
+s1.push(['생기부 전체 학생 일람표','','','','','','','','','']);
+s1.push(['번호','이름','진로','자율활동 (1500B)','Byte','진로활동 (2100B)','Byte','동아리활동 (1500B)','Byte','행발 (1500B)','Byte']);
+const allStu=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
+for(let i=1;i<=30;i++){
+const num=String(i).padStart(2,'0');
+const found=allStu.find(s=>s.sid&&s.sid.endsWith(num));
+if(found&&found.result&&!found.result._err){
+const fj=found.result.jarhaeng||{};
+const ja=fj.jayul?.option1?.text||'';
+const ji=fj.jinro?.option1?.text||'';
+const dg=fj.dongari?.option1?.text||'';
+const hb=fj.hangbal?.option1?.text||'';
+s1.push([num,found.name||'',found.career||'',ja,bl(ja),ji,bl(ji),dg,bl(dg),hb,bl(hb)]);
+}else{
+s1.push([num,'','','',0,'',0,'',0,'',0]);
+}
+}
+const ws1=XLSX.utils.aoa_to_sheet(s1);
+ws1['!cols']=[{wch:6},{wch:8},{wch:12},{wch:55},{wch:6},{wch:60},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
+ws1['!merges']=[{s:{r:0,c:0},e:{r:0,c:10}}];
+ws1['!rows']=[{hpt:28},{hpt:22},...Array(30).fill({hpt:160})];
+XLSX.utils.book_append_sheet(wb,ws1,'전체일람');
+
+// 개별 학생 시트
+allStu.forEach(s=>{
+if(!s.result||s.result._err)return;
+const r=s.result,jh=r.jarhaeng||{};
+const d=[['생기부 개인 상담 기록 - '+s.sid+' '+s.name,'','','','','',''],
+['영역','제한','AI 1안','Byte','AI 2안','Byte','교사 기입란','Byte']];
+[{k:'jayul',l:'자율활동',lm:1500},{k:'jinro',l:'진로활동',lm:2100},{k:'dongari',l:'동아리활동',lm:1500},{k:'hangbal',l:'행발',lm:1500}].forEach(a=>{
+const ar=jh[a.k]||{},o1=ar.option1||{},o2=ar.option2||{};
+d.push([a.l,a.lm,o1.text||'',bl(o1.text||''),o2.text||'',bl(o2.text||''),'',0]);
+});
+const ws=XLSX.utils.aoa_to_sheet(d);
+ws['!cols']=[{wch:14},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
+ws['!merges']=[{s:{r:0,c:0},e:{r:0,c:7}}];
+ws['!rows']=[{hpt:28},{hpt:22},{hpt:180},{hpt:200},{hpt:180},{hpt:180}];
+const sheetName=(s.sid+'_'+s.name).substring(0,31);
+XLSX.utils.book_append_sheet(wb,ws,sheetName);
+});
+
 XLSX.writeFile(wb,'생기부_전체.xlsx')}
 
 function rStu(){const l=document.getElementById('stuL'),e=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
 document.getElementById('stuCnt').textContent=e.length+'명 완료';
 if(!e.length){l.innerHTML='<div style="padding:20px;color:var(--g4);text-align:center;font-size:14px">아직 분석된 학생이 없습니다</div>';return}
-l.innerHTML=e.map(s=>`<div class="si"><span><span class="num">${s.sid}</span>${s.name}</span><span class="meta">${s.career} · ${s.date} ✓</span></div>`).join('')}
+l.innerHTML=e.map(s=>`<div class="si" style="cursor:pointer" onclick="viewStudent('${s.sid}')">
+<span><span class="num">${s.sid}</span><strong>${s.name}</strong></span>
+<span style="display:flex;align-items:center;gap:8px">
+<span class="meta">${s.career} · ${s.date}</span>
+<button class="btn btn-sm" style="padding:4px 10px;font-size:11px;background:var(--green-bg);color:var(--green);border:none;border-radius:6px;cursor:pointer" onclick="event.stopPropagation();dlStudentPDF('${s.sid}')">PDF</button>
+</span></div>`).join('')}
 
 function next(){document.getElementById('resS').style.display='none';['sName','sCareer','sClub','memo'].forEach(id=>document.getElementById(id).value='');
 pdf='';const d=document.getElementById('dz');d.classList.remove('done');d.querySelector('.dz-i').textContent='📁';
