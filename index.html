@@ -3,41 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>생기부 성장 분석 전문 보고서 v15</title>
+    <title>학생 성장 분석 및 3학년 활동 제언 최종 보고서 v17</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
-        :root { --blue: #1e40af; --light-blue: #eff6ff; --border: #e2e8f0; --text: #1e293b; }
+        :root { --blue: #1e40af; --light-blue: #eff6ff; --border: #cbd5e1; --text: #1e293b; }
         body { font-family: 'Pretendard', sans-serif; background: #f1f5f9; color: var(--text); padding: 40px 20px; margin: 0; line-height: 1.6; }
         .wrap { max-width: 900px; margin: 0 auto; }
         
         /* 입력 카드 스타일 */
-        .input-card { background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .upload-zone { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 30px; text-align: center; cursor: pointer; background: #f8fafc; margin: 15px 0; transition: 0.3s; }
-        .upload-zone:hover { border-color: var(--blue); background: var(--light-blue); }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 14px; }
+        .input-card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 30px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .upload-zone { border: 2px dashed #94a3b8; border-radius: 10px; padding: 30px; text-align: center; cursor: pointer; background: #f8fafc; margin: 15px 0; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 14px; font-family: inherit; }
         .btn-main { width: 100%; padding: 20px; background: var(--blue); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1.2rem; }
+        label { font-size: 12px; color: #64748b; font-weight: 700; margin-bottom: 5px; display: block; }
 
         /* 전문 보고서 양식 (White Academic Style) */
-        .report-view { background: white; padding: 60px; border: 1px solid var(--border); min-height: 1000px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; }
-        .report-header { border-bottom: 2px solid var(--blue); padding-bottom: 20px; margin-bottom: 35px; }
-        .report-header h2 { margin: 0; font-size: 1.6rem; text-align: center; color: var(--blue); }
-        .section-title { font-size: 1.3rem; font-weight: 800; color: var(--blue); margin: 40px 0 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .report-view { background: white; padding: 80px 60px; border: 1px solid var(--border); min-height: 1000px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; }
+        .report-header { border-bottom: 3px solid var(--blue); padding-bottom: 25px; margin-bottom: 40px; text-align: center; }
+        .report-header h1 { margin: 0; font-size: 1.8rem; color: var(--blue); font-weight: 900; }
         
-        /* 학생 정보 및 키워드 */
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.95rem; margin-bottom: 20px; }
-        .keyword-wrap { text-align: center; margin: 30px 0; }
-        .k-badge { display: inline-block; padding: 6px 16px; background: var(--light-blue); border: 1px solid var(--blue); color: var(--blue); border-radius: 25px; font-weight: 700; font-size: 0.9rem; margin: 5px; }
+        .keyword-container { text-align: center; margin: 30px 0; padding: 20px; border-radius: 12px; background: #fafafa; border: 1px solid var(--light-blue); }
+        .k-badge { display: inline-block; padding: 8px 18px; background: var(--light-blue); border: 1px solid var(--blue); color: var(--blue); border-radius: 30px; font-weight: 800; font-size: 0.9rem; margin: 6px; }
 
-        /* 테이블 및 프로젝트 */
-        table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
-        th, td { border: 1px solid #cbd5e1; padding: 15px; text-align: left; vertical-align: top; font-size: 13px; }
-        th { background: #f8fafc; font-weight: 700; color: var(--blue); text-align: center; }
+        .section-title { font-size: 1.4rem; font-weight: 900; color: var(--blue); margin: 50px 0 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; table-layout: fixed; }
+        th, td { border: 1px solid #cbd5e1; padding: 15px; text-align: left; vertical-align: top; font-size: 13.5px; }
+        th { background: #f8fafc; color: var(--blue); font-weight: 800; text-align: center; }
         
-        .p-card { background: #f8fafc; padding: 20px; border-radius: 10px; border-left: 6px solid var(--blue); margin-bottom: 20px; }
-        .v-box { background: var(--light-blue); padding: 30px; border-radius: 12px; text-align: center; font-size: 1.1rem; font-weight: 600; margin-top: 40px; border: 1px dashed var(--blue); }
+        .p-item { background: #f9fafb; padding: 20px; border-radius: 8px; border-left: 6px solid var(--blue); margin-bottom: 20px; }
+        .vision-container { background: var(--light-blue); padding: 40px; border-radius: 15px; text-align: center; font-size: 1.1rem; font-weight: 700; margin-top: 50px; border: 2px dashed var(--blue); }
         
-        #loading { display: none; text-align: center; padding: 60px; }
-        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--blue); border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        #loading { display: none; text-align: center; padding: 80px 20px; }
+        .spinner { border: 5px solid #f3f3f3; border-top: 5px solid var(--blue); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
@@ -45,59 +42,69 @@
 
 <div class="wrap">
     <div class="input-card" id="input-ui">
-        <h2 style="text-align:center; color: var(--blue);">생기부 성장 분석기 v15</h2>
-        <input type="password" id="apiKey" placeholder="Google Gemini API Key 입력 (AIzaSy...)" style="background:#fffdec">
+        <h2 style="text-align:center; color: var(--blue); margin-bottom:25px;">Gemini 3 Pro 생기부 성장 분석기</h2>
+        <label>🔑 API KEY</label>
+        <input type="password" id="apiKey" placeholder="AIzaSy... (Gemini 3 모델 지원 키)">
+        
+        <label>👤 학생 기본 정보</label>
         <div style="display:flex; gap:10px;">
             <input type="text" id="name" placeholder="학생 성명">
-            <input type="text" id="major" placeholder="희망 진로/전공">
+            <input type="text" id="major" placeholder="희망 진로/학과">
         </div>
+
+        <label>💡 상담 추가 정보 & 키워드 (복구됨)</label>
+        <textarea id="extraInfo" rows="4" placeholder="학생의 최근 관심사, 보완 필요 점, 강조하고 싶은 키워드 등을 입력하세요."></textarea>
+
         <div id="drop-zone" class="upload-zone">
-            <div id="status-text">📄 생기부 PDF를 여기에 드래그하거나 클릭하세요</div>
+            <div id="status-text">📄 생기부 PDF를 드래그하거나 클릭하여 업로드하세요</div>
             <input type="file" id="file-input" accept=".pdf" style="display: none;">
         </div>
         <textarea id="rawText" style="display:none;"></textarea>
-        <button class="btn-main" onclick="analyze()">🔍 전문 보고서 생성 및 분석</button>
+        
+        <button class="btn-main" onclick="analyze()">🔍 전문 보고서 양식으로 분석 및 생성</button>
     </div>
 
     <div id="loading">
         <div class="spinner"></div>
-        <p>Gemini 1.5 Pro가 생기부 서사를 심층 분석 중입니다...</p>
+        <p style="font-weight:700; color:var(--blue)">Gemini 3 Pro가 학생의 서사를 학술적으로 분석 중입니다...</p>
     </div>
 
     <div id="report" class="report-view">
         <div class="report-header">
-            <h2>학생 성장 분석 및 3학년 활동 제언 최종 보고서</h2>
+            <h1>학생 성장 분석 및 3학년 활동 방향 제언 최종 보고서</h1>
         </div>
 
-        <div class="info-grid">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:30px; font-weight:600;">
             <div id="out-name">| 1. 검토 대상 학생: </div>
-            <div id="out-major">| 2. 희망 진로: </div>
+            <div id="out-purpose">| 2. 검토 목적: 학생의 역량 극대화 및 학문적 성장 완성 제언</div>
         </div>
 
-        <div class="keyword-wrap" id="out-keywords"></div>
+        <div class="keyword-container">
+            <div style="font-size:0.8rem; color:#64748b; margin-bottom:10px; font-weight:700;">CORE GROWTH KEYWORDS</div>
+            <div id="out-keywords"></div>
+        </div>
 
         <div class="section-title">| 3. 1학년 대비 2학년 주요 역량 성장 분석</div>
         <table>
-            <thead><tr><th style="width:18%">평가 역량</th><th>1학년 (기초 형성)</th><th>2학년 (역량 심화)</th><th style="width:25%">주요 성장 특징</th></tr></thead>
+            <thead><tr><th style="width:18%">평가 역량</th><th>1학년 (기초 형성)</th><th>2학년 (역량 심화)</th><th style="width:25%">주요 성장 내용 및 특징</th></tr></thead>
             <tbody id="out-table"></tbody>
         </table>
 
         <div class="section-title">| 4. 3학년 '블루오션' 활동 방향 제언</div>
         <div id="out-projects"></div>
 
-        <div class="section-title">| 5. 자율·진로·동아리 심화 보완 전략</div>
+        <div class="section-title">| 5. 자율·진로·동아리 심화 보완 및 기재 전략</div>
         <div id="out-guides"></div>
 
-        <div id="out-vision" class="v-box"></div>
+        <div id="out-vision" class="vision-container"></div>
     </div>
 </div>
 
 <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
-    
+
     dropZone.onclick = () => fileInput.click();
     fileInput.onchange = (e) => handleFile(e.target.files[0]);
     dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.background = "#eff6ff"; };
@@ -105,28 +112,28 @@
 
     async function handleFile(file) {
         if (!file || file.type !== 'application/pdf') return;
-        document.getElementById('status-text').innerText = "⏳ 텍스트 추출 중...";
-        try {
-            const pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
-            let text = '';
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                text += (await page.getTextContent()).items.map(t => t.str).join(' ') + '\n';
-            }
-            document.getElementById('rawText').value = text;
-            document.getElementById('status-text').innerText = `✅ ${file.name} 준비 완료!`;
-        } catch (e) { alert("PDF 추출 실패"); }
+        document.getElementById('status-text').innerText = "⏳ 고해상도 텍스트 추출 중...";
+        const pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            text += (await page.getTextContent()).items.map(t => t.str).join(' ') + '\n';
+        }
+        document.getElementById('rawText').value = text;
+        document.getElementById('status-text').innerText = `✅ ${file.name} 분석 준비 완료`;
     }
 
     async function analyze() {
         const key = document.getElementById('apiKey').value.trim();
         const text = document.getElementById('rawText').value.trim();
-        if(!key || !text) return alert("API 키와 PDF 데이터를 확인해주세요.");
+        const extra = document.getElementById('extraInfo').value.trim();
+        if(!key || !text) return alert("필수 데이터를 확인하세요.");
 
         document.getElementById('loading').style.display = 'block';
         document.getElementById('input-ui').style.display = 'none';
 
-        const prompt = `당신은 입시 전문가입니다. 고3 담임교사를 위한 분석 보고서를 작성하세요. 
+        // Gemini 3 Pro-preview 모델을 명시적으로 호출
+        const prompt = `당신은 입시 전문가입니다. 제공된 학생 데이터와 상담 추가 정보를 분석하여 3학년 완결 로드맵을 작성하세요.
         반드시 JSON으로만 응답하며 다음 구조를 지키세요: 
         {
           "keywords": ["키워드1", "키워드2", "키워드3", "키워드4", "키워드5"],
@@ -135,31 +142,26 @@
           "guides": [{"cat": "자율활동", "strategy": "...", "point": "...", "book": "..."}, {"cat": "진로활동", "strategy": "...", "point": "...", "book": "..."}, {"cat": "동아리활동", "strategy": "...", "point": "...", "book": "..."}],
           "vision": "최종 완성 모습 요약"
         }
-        데이터: ${text}`;
+        [상담 추가 정보]: ${extra}
+        [데이터]: ${text}`;
 
         try {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${key}`, {
+            // Gemini 3 Pro 모델 타겟팅
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-3-pro-preview:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     contents: [{parts: [{text: prompt}]}],
-                    generationConfig: { response_mime_type: "application/json" }
+                    generationConfig: { response_mime_type: "application/json", temperature: 0.1 }
                 })
             });
 
             const data = await resp.json();
+            if (data.error) throw new Error(data.error.message);
             
-            // 상세 에러 확인용 로직 추가
-            if (data.error) {
-                throw new Error(`[API 에러] ${data.error.message} (코드: ${data.error.code})`);
-            }
-            
-            const result = JSON.parse(data.candidates[0].content.parts[0].text);
-            render(result);
-
+            render(JSON.parse(data.candidates[0].content.parts[0].text));
         } catch (e) {
-            console.error(e);
-            alert(`분석 실패 사유: ${e.message}\n\n* API 키가 유효한지, 혹은 무료 할당량이 끝났는지 확인해주세요.`);
+            alert(`분석 실패: ${e.message}`);
             document.getElementById('loading').style.display = 'none';
             document.getElementById('input-ui').style.display = 'block';
         }
@@ -168,35 +170,33 @@
     function render(res) {
         document.getElementById('report').style.display = 'block';
         document.getElementById('loading').style.display = 'none';
+        window.scrollTo(0, 0);
 
         document.getElementById('out-name').innerText = `| 1. 검토 대상 학생: ${document.getElementById('name').value}`;
-        document.getElementById('out-major').innerText = `| 2. 희망 진로: ${document.getElementById('major').value}`;
-        
         document.getElementById('out-keywords').innerHTML = (res.keywords || []).map(k => `<span class="k-badge"># ${k}</span>`).join('');
-        
         document.getElementById('out-table').innerHTML = (res.table || []).map(i => `
             <tr><th>${i.cat}</th><td>${i.g1}</td><td>${i.g2}</td><td><b>${i.growth}</b></td></tr>
         `).join('');
 
         document.getElementById('out-projects').innerHTML = (res.projects || []).map(p => `
-            <div class="p-card">
+            <div class="p-item">
                 <h4 style="margin:0; color:var(--blue)">${p.title}</h4>
-                <p style="font-size:0.85rem; color:#64748b; margin:5px 0;">${p.concept}</p>
-                <div style="font-size:0.8rem;"><b>실행 방안:</b> ${p.steps}</div>
-                <div style="font-size:0.8rem; color:var(--blue); margin-top:8px;">🎯 <b>기대 역량:</b> ${p.comp}</div>
+                <p style="font-size:0.85rem; color:#64748b; margin:8px 0;">${p.concept}</p>
+                <div style="font-size:0.85rem;"><strong>실행 로드맵:</strong> ${p.steps}</div>
+                <div style="font-size:0.85rem; color:var(--blue); margin-top:8px;">🎯 <strong>기대 역량:</strong> ${p.comp}</div>
             </div>
         `).join('');
 
         document.getElementById('out-guides').innerHTML = (res.guides || []).map(g => `
-            <div style="margin-bottom:25px; padding-bottom:15px; border-bottom:1px solid #e2e8f0;">
-                <h4 style="color:var(--blue); margin-bottom:10px;">[${g.cat}]</h4>
-                <p style="font-size:0.9rem;"><strong>심화 전략:</strong> ${g.strategy}</p>
-                <p style="font-size:0.85rem; background:#f8fafc; padding:10px; border-radius:5px;">💡 <strong>추가 보완 내용:</strong> ${g.point}</p>
-                <p style="font-size:0.85rem;">📚 <strong>추천 심화 도서:</strong> ${g.book}</p>
+            <div style="margin-bottom:30px; padding-bottom:20px; border-bottom:1px solid #f1f5f9;">
+                <h4 style="color:var(--blue); margin-bottom:12px;">[${g.cat} 심화 가이드]</h4>
+                <p style="font-size:0.9rem; margin-bottom:8px;"><strong>심화 전략:</strong> ${g.strategy}</p>
+                <p style="font-size:0.85rem; background:#f9fafb; padding:15px; border-radius:8px; border-left:4px solid #94a3b8;">💡 <strong>보완 내용:</strong> ${g.point}</p>
+                <p style="font-size:0.85rem; color:var(--blue); font-weight:700;">📚 추천 심화 도서: ${g.book}</p>
             </div>
         `).join('');
 
-        document.getElementById('out-vision').innerText = `기대되는 성장 완성 모습:\n"${res.vision}"`;
+        document.getElementById('out-vision').innerText = `"${res.vision}"`;
     }
 </script>
 </body>
