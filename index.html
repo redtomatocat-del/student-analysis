@@ -1,110 +1,349 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학생 성장 분석 및 3학년 전략 보고서 v20</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <style>
-        :root { --blue: #1e40af; --light-blue: #eff6ff; --border: #cbd5e1; --text: #1e293b; }
-        body { font-family: 'Pretendard', sans-serif; background: #f1f5f9; color: var(--text); padding: 40px 20px; margin: 0; line-height: 1.6; }
-        .wrap { max-width: 900px; margin: 0 auto; }
-        .card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 25px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { font-size: 2.2rem; text-align: center; color: var(--blue); font-weight: 800; margin-bottom: 25px; }
-        .upload-zone { border: 2px dashed #94a3b8; border-radius: 10px; padding: 30px; text-align: center; cursor: pointer; background: #f8fafc; margin: 15px 0; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 14px; font-family: inherit; }
-        .btn-main { width: 100%; padding: 20px; background: var(--blue); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1.2rem; }
-        label { font-size: 12px; color: #64748b; font-weight: 700; margin-bottom: 5px; display: block; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생기부 성장 분석기 | AI 프롬프트 생성기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:#080b14;color:#e2e8f0;min-height:100vh;overflow-x:hidden}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-        /* 전문 보고서 양식 (이승은 학생 PDF 스타일 재현) */
-        .report-view { background: white; padding: 70px 60px; border: 1px solid var(--border); min-height: 1000px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; }
-        .report-header { border-bottom: 3px solid var(--blue); padding-bottom: 25px; margin-bottom: 40px; text-align: center; }
-        .k-badge { display: inline-block; padding: 7px 16px; background: var(--light-blue); border: 1px solid var(--blue); color: var(--blue); border-radius: 30px; font-weight: 800; font-size: 0.85rem; margin: 5px; }
-        .section-title { font-size: 1.35rem; font-weight: 900; color: var(--blue); margin: 45px 0 18px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; table-layout: fixed; }
-        th, td { border: 1px solid #cbd5e1; padding: 14px; text-align: left; vertical-align: top; font-size: 13.5px; }
-        th { background: #f8fafc; color: var(--blue); font-weight: 800; text-align: center; }
-        .vision-box { background: var(--light-blue); padding: 30px; border-radius: 12px; text-align: center; font-weight: 700; margin-top: 40px; border: 2px dashed var(--blue); }
-        #loading { display: none; text-align: center; padding: 80px 20px; }
-        .spinner { border: 5px solid #f3f3f3; border-top: 5px solid var(--blue); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
+.bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 25% 0%,rgba(99,102,241,0.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 75% 100%,rgba(16,185,129,0.05) 0%,transparent 60%),
+             radial-gradient(ellipse at 50% 50%,rgba(139,92,246,0.03) 0%,transparent 70%)}
+.bg::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+
+.wrap{max-width:760px;margin:0 auto;padding:40px 20px 100px;position:relative;z-index:1}
+
+.hdr{text-align:center;margin-bottom:36px;animation:fadeUp .5s ease both}
+.hdr-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border-radius:40px;
+  background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);margin-bottom:16px;
+  font-size:11px;font-weight:600;color:#a5b4fc;letter-spacing:2px;text-transform:uppercase}
+.hdr h1{font-family:'Outfit',sans-serif;font-size:34px;font-weight:800;color:#f8fafc;margin-bottom:8px;letter-spacing:-1px}
+.hdr h1 em{font-style:normal;background:linear-gradient(135deg,#818cf8,#c084fc,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr p{font-size:13px;color:rgba(255,255,255,0.35);line-height:1.6}
+
+.flow{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:32px;animation:fadeUp .5s ease .1s both;flex-wrap:wrap}
+.flow-step{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4)}
+.flow-step.active{background:rgba(99,102,241,0.1);border-color:rgba(99,102,241,0.3);color:#a5b4fc}
+.flow-step.done{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.25);color:#6ee7b7}
+.flow-arrow{color:rgba(255,255,255,0.15);font-size:14px}
+
+.cd{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:16px;
+  padding:24px;margin-bottom:16px;transition:all .3s;animation:fadeUp .5s ease both}
+.cd:hover{border-color:rgba(255,255,255,0.1)}
+
+.sl{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sl .ic{font-size:16px}.sl .tx{font-size:14px;font-weight:700;color:#f1f5f9}
+.sl .sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:1px}
+
+input,textarea{width:100%;padding:11px 14px;border-radius:10px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);color:#e2e8f0;font-size:13px;font-family:'Noto Sans KR',sans-serif;
+  transition:all .2s;outline:none}
+input:focus,textarea:focus{border-color:rgba(99,102,241,0.4);background:rgba(255,255,255,0.06)}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.2)}
+textarea{resize:vertical;line-height:1.8}
+label{font-size:11px;color:rgba(255,255,255,0.4);font-weight:500;margin-bottom:5px;display:block}
+
+.upload{text-align:center;cursor:pointer;padding:32px 20px;border:1.5px dashed rgba(139,92,246,0.25);
+  border-radius:16px;background:rgba(139,92,246,0.03);transition:all .3s;position:relative}
+.upload:hover{border-color:rgba(139,92,246,0.45);background:rgba(139,92,246,0.06)}
+.upload.dragging{border-color:rgba(99,102,241,0.7)!important;background:rgba(99,102,241,0.1)!important;transform:scale(1.01)}
+.upload.done{border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.04);cursor:default}
+
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:640px){.g3{grid-template-columns:1fr}}
+
+.btn-main{width:100%;padding:16px;border-radius:14px;border:none;font-size:16px;font-weight:700;
+  cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .3s;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);color:#fff;
+  box-shadow:0 4px 20px rgba(99,102,241,0.3)}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,0.4)}
+
+.btn-copy{width:100%;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;
+  cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .3s;display:flex;
+  align-items:center;justify-content:center;gap:8px}
+.btn-copy.idle{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 4px 20px rgba(16,185,129,0.3)}
+.btn-copy.idle:hover{transform:translateY(-2px)}
+.btn-copy.copied{background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3)}
+
+.btn-sm{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;transition:all .2s;border:none;display:inline-flex;align-items:center;gap:5px}
+
+.ai-links{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.ai-link{padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;transition:all .2s;text-decoration:none;display:inline-flex;
+  align-items:center;gap:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.6)}
+.ai-link:hover{background:rgba(255,255,255,0.06);color:#e2e8f0}
+.ai-link.claude{border-color:rgba(217,119,87,0.3);color:#d97757}.ai-link.claude:hover{background:rgba(217,119,87,0.08)}
+.ai-link.gpt{border-color:rgba(16,163,127,0.3);color:#10a37f}.ai-link.gpt:hover{background:rgba(16,163,127,0.08)}
+.ai-link.gemini{border-color:rgba(66,133,244,0.3);color:#4285f4}.ai-link.gemini:hover{background:rgba(66,133,244,0.08)}
+
+.prompt-box{background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:12px;
+  padding:16px;font-size:12px;line-height:1.8;color:rgba(255,255,255,0.5);font-family:'Noto Sans KR',monospace;
+  max-height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin-bottom:12px}
+
+.type-sel{display:flex;gap:6px;flex-wrap:wrap}
+.type-btn{padding:8px 16px;border-radius:10px;font-size:12px;font-weight:500;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;transition:all .2s;border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02);color:rgba(255,255,255,0.4)}
+.type-btn.on{border-color:rgba(99,102,241,0.4);background:rgba(99,102,241,0.12);color:#a5b4fc}
+
+.spinner{width:40px;height:40px;border-radius:50%;border:3px solid rgba(99,102,241,0.12);
+  border-top-color:#6366f1;animation:spin .8s linear infinite;margin:0 auto 16px}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+.err{padding:10px 14px;border-radius:10px;margin-bottom:14px;background:rgba(239,68,68,0.08);
+  border:1px solid rgba(239,68,68,0.2);color:#fca5a5;font-size:13px}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.06),transparent);margin:8px 0 16px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);
+  padding:12px 24px;border-radius:12px;background:rgba(16,185,129,0.95);color:#fff;
+  font-size:14px;font-weight:600;z-index:9999;opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
 </head>
 <body>
+<div class="bg"></div>
 <div class="wrap">
-    <div class="card" id="input-ui">
-        <h1>생기부 성장 분석기 v20</h1>
-        <label>🔑 Gemini API Key (Gemini 3 Pro 지원)</label>
-        <input type="password" id="apiKey" placeholder="AIzaSy...">
-        <div style="display:flex; gap:10px;">
-            <div style="flex:1;"><label>👤 학생 성명</label><input type="text" id="name" placeholder="학생 성명"></div>
-            <div style="flex:1;"><label>🎯 희망 진로/학과</label><input type="text" id="major" placeholder="경영학 등"></div>
-        </div>
-        <label>💡 상담 추가 정보 (학생의 강점, 보완점, 동아리 특이사항 등)</label>
-        <textarea id="extraInfo" rows="4" placeholder="상담 시 강조할 내용이나 학생의 특이사항을 입력하세요."></textarea>
-        <div id="drop-zone" class="upload-zone">
-            <div id="status-text">📄 생기부 PDF를 여기에 드래그하거나 클릭하세요</div>
-            <input type="file" id="file-input" accept=".pdf" style="display: none;">
-        </div>
-        <textarea id="rawText" style="display:none;"></textarea>
-        <button class="btn-main" onclick="analyze()">🔍 전문 보고서 양식으로 분석 시작</button>
+
+  <div class="hdr">
+    <div class="hdr-tag">🎓 3학년 담임을 위한 AI 생기부 컨설팅</div>
+    <h1>생기부 <em>성장 분석기</em></h1>
+    <p>생기부 PDF 업로드 → 맞춤 AI 프롬프트 자동 생성 → 내 AI에 붙여넣기<br>
+    <span style="color:rgba(255,255,255,0.5)">ChatGPT · Claude · Gemini 어디든 사용 가능 | API 키 불필요</span></p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step active" id="f1"><span>①</span> PDF 업로드</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" id="f2"><span>②</span> 정보 입력</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" id="f3"><span>③</span> 프롬프트 생성</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" id="f4"><span>④</span> AI에 붙여넣기</div>
+  </div>
+
+  <!-- INPUT -->
+  <div id="S-input">
+    <div id="upload-area" class="upload cd"
+         onclick="document.getElementById('pdf-file').click()"
+         ondragover="event.preventDefault();event.stopPropagation();this.classList.add('dragging')"
+         ondragenter="event.preventDefault();event.stopPropagation();this.classList.add('dragging')"
+         ondragleave="event.preventDefault();event.stopPropagation();this.classList.remove('dragging')"
+         ondrop="handleDrop(event)">
+      <input type="file" id="pdf-file" accept=".pdf" style="display:none" onchange="handleFile(this.files[0])">
+      <div id="upload-idle">
+        <div style="font-size:40px;margin-bottom:8px">📄</div>
+        <div style="font-size:16px;font-weight:700;color:#e2e8f0;margin-bottom:4px">생기부 PDF 업로드</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.35)">클릭하거나 PDF를 여기에 <strong style="color:rgba(255,255,255,0.6)">드래그 & 드롭</strong></div>
+        <div style="display:inline-block;margin-top:12px;padding:8px 22px;border-radius:8px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:#c4b5fd;font-size:13px;font-weight:600">PDF 선택</div>
+      </div>
+      <div id="upload-spin" class="hidden" style="padding:12px">
+        <div class="spinner" style="border-top-color:#a78bfa"></div>
+        <div id="upload-status" style="font-size:14px;font-weight:600;color:#c4b5fd">PDF 텍스트 추출 중...</div>
+      </div>
+      <div id="upload-ok" class="hidden">
+        <div style="font-size:32px;margin-bottom:4px">✅</div>
+        <div style="font-size:16px;font-weight:700;color:#10b981">PDF 추출 완료!</div>
+        <div id="upload-info" style="font-size:12px;color:rgba(255,255,255,0.45);margin-top:4px"></div>
+        <div style="margin-top:10px;padding:6px 14px;border-radius:6px;font-size:11px;color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.08);cursor:pointer;display:inline-block" onclick="event.stopPropagation();resetUpload()">🔄 다른 PDF</div>
+      </div>
     </div>
-    <div id="loading"><div class="spinner"></div><p style="font-weight:700; color:var(--blue)">Gemini 3 Pro가 서사를 분석 중입니다...</p></div>
-    <div id="report" class="report-view">
-        <div class="report-header"><h1>학생 성장 분석 및 3학년 활동 제언 최종 보고서</h1></div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:30px; font-weight:700;">
-            <div id="out-name">| 1. 검토 대상 학생: </div>
-            <div id="out-purpose">| 2. 검토 목적: 성장 분석 및 활동 방향 제언</div>
-        </div>
-        <div style="text-align:center; margin-bottom:30px;" id="out-keywords"></div>
-        <div class="section-title">| 3. 1학년 대비 2학년 주요 역량 성장 분석</div>
-        <table><thead><tr><th style="width:18%">평가 역량</th><th>1학년 (기초 성취)</th><th>2학년 (심화 발전)</th><th style="width:25%">주요 성장 내용</th></tr></thead><tbody id="out-table"></tbody></table>
-        <div class="section-title">| 4. 3학년 '블루오션' 활동 방향 제언</div><div id="out-projects"></div>
-        <div class="section-title">| 5. 자율·진로·동아리 심화 보완 전략</div><div id="out-guides"></div>
-        <div id="out-vision" class="vision-box"></div>
+
+    <details id="text-fallback" style="margin-bottom:16px">
+      <summary style="font-size:12px;color:rgba(255,255,255,0.25);cursor:pointer;text-align:center;padding:8px">📝 PDF 대신 텍스트로 직접 입력하기</summary>
+      <div class="cd" style="margin-top:8px">
+        <div class="sl"><span class="ic">📋</span><div><div class="tx">생기부 전체 텍스트</div><div class="sub">1,2학년 세특+자율+진로+행발 전체를 붙여넣으세요</div></div></div>
+        <textarea id="i-text" rows="10" placeholder="생기부 전체 내용을 여기에 붙여넣으세요..."></textarea>
+        <div style="text-align:right;margin-top:4px;font-size:11px;color:rgba(255,255,255,0.2)"><span id="text-count">0</span>자</div>
+      </div>
+    </details>
+
+    <div class="cd">
+      <div class="sl"><span class="ic">👤</span><div><div class="tx">학생 기본 정보</div><div class="sub">이름은 PDF에서 자동 추출됩니다</div></div></div>
+      <div class="g3">
+        <div><label>학생 이름</label><input id="i-name" placeholder="홍길동"></div>
+        <div><label>희망 진로 / 학과</label><input id="i-major" placeholder="경영학과, 컴퓨터공학 등"></div>
+        <div><label>3학년 동아리명</label><input id="i-club" placeholder="블루오션, 경제탐구반 등"></div>
+      </div>
     </div>
+
+    <div class="cd">
+      <div class="sl"><span class="ic">💡</span><div><div class="tx">상담 추가 정보 & 키워드</div><div class="sub">입력하면 프롬프트가 더욱 맞춤화됩니다 (선택)</div></div></div>
+      <textarea id="i-extra" rows="4" placeholder="예시:&#10;• 학생이 최근 데이터 분석에 관심을 보이고 있음&#10;• 리더십이 강하지만 발표력은 보완 필요&#10;• ESG 경영, 행동경제학 키워드 강조 희망&#10;• 수학 성적 하락 추세, 자신감 회복 필요"></textarea>
+    </div>
+
+    <div class="cd">
+      <div class="sl"><span class="ic">📑</span><div><div class="tx">분석 유형 선택</div><div class="sub">필요한 분석을 선택하세요 (복수 가능)</div></div></div>
+      <div class="type-sel">
+        <button class="type-btn on" data-id="full" onclick="toggleType(this)">📊 종합 분석</button>
+        <button class="type-btn" data-id="competency" onclick="toggleType(this)">🧭 4대 역량</button>
+        <button class="type-btn" data-id="autonomy" onclick="toggleType(this)">📋 자율·진로·행발</button>
+        <button class="type-btn" data-id="strategy" onclick="toggleType(this)">🎯 세특 전략</button>
+        <button class="type-btn" data-id="club" onclick="toggleType(this)">🏫 동아리 계획</button>
+        <button class="type-btn" data-id="counsel" onclick="toggleType(this)">💬 상담 가이드</button>
+      </div>
+    </div>
+
+    <div id="err" class="err hidden"></div>
+    <button class="btn-main" onclick="generate()">✨ AI 프롬프트 생성</button>
+    <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,0.2)">PDF 업로드 또는 텍스트 입력 후 생성하세요</div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="S-result" class="hidden">
+    <div class="cd" style="text-align:center">
+      <div style="font-size:28px;margin-bottom:6px">🎉</div>
+      <div style="font-size:18px;font-weight:800;color:#f1f5f9;margin-bottom:4px">프롬프트 생성 완료!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4)">아래 프롬프트를 복사하여 사용 중인 AI에 붙여넣으세요</div>
+    </div>
+
+    <button id="copy-main" class="btn-copy idle" onclick="copyPrompt()">📋 프롬프트 전체 복사</button>
+
+    <div class="ai-links">
+      <a href="https://claude.ai/new" target="_blank" class="ai-link claude">🟠 Claude 열기</a>
+      <a href="https://chatgpt.com" target="_blank" class="ai-link gpt">🟢 ChatGPT 열기</a>
+      <a href="https://gemini.google.com" target="_blank" class="ai-link gemini">🔵 Gemini 열기</a>
+    </div>
+
+    <div class="divider" style="margin-top:20px"></div>
+
+    <div class="cd">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div class="sl" style="margin-bottom:0"><span class="ic">📝</span><div><div class="tx">생성된 프롬프트</div></div></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn-sm" style="background:rgba(99,102,241,0.1);color:#a5b4fc" onclick="copyPrompt()">📋 복사</button>
+          <button class="btn-sm" style="background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.4)" onclick="downloadPrompt()">💾 저장</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;color:rgba(255,255,255,0.3)">
+        <span>총 <strong id="prompt-chars">0</strong>자</span>
+        <span id="char-warning" class="hidden" style="color:#f59e0b"></span>
+      </div>
+      <div class="prompt-box" id="prompt-display"></div>
+    </div>
+
+    <div class="cd">
+      <div class="sl"><span class="ic">📖</span><div><div class="tx">사용 방법</div></div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:2">
+        <div style="display:flex;gap:10px;margin-bottom:8px"><div style="min-width:24px;height:24px;border-radius:8px;background:rgba(99,102,241,0.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a5b4fc">1</div><div>위의 <strong style="color:#6ee7b7">"프롬프트 전체 복사"</strong> 버튼 클릭</div></div>
+        <div style="display:flex;gap:10px;margin-bottom:8px"><div style="min-width:24px;height:24px;border-radius:8px;background:rgba(99,102,241,0.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a5b4fc">2</div><div>Claude / ChatGPT / Gemini 중 하나를 열기</div></div>
+        <div style="display:flex;gap:10px;margin-bottom:8px"><div style="min-width:24px;height:24px;border-radius:8px;background:rgba(99,102,241,0.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a5b4fc">3</div><div>대화창에 <strong style="color:#a5b4fc">Ctrl+V</strong> (또는 ⌘+V) 로 붙여넣기 → 전송</div></div>
+        <div style="display:flex;gap:10px"><div style="min-width:24px;height:24px;border-radius:8px;background:rgba(16,185,129,0.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#10b981">✓</div><div>AI가 종합 분석 보고서를 생성합니다!</div></div>
+      </div>
+      <div style="margin-top:14px;padding:10px 14px;border-radius:10px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7">
+        💡 <strong style="color:#fbbf24">팁:</strong> Claude를 사용하면 가장 상세한 결과를 얻을 수 있습니다. 텍스트가 길면 "이어서 작성해줘"라고 추가 요청하세요.
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
+      <button class="btn-sm" style="background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.4);padding:10px 20px" onclick="resetAll()">← 새 분석</button>
+    </div>
+  </div>
 </div>
+
+<div class="toast" id="toast">✅ 클립보드에 복사되었습니다!</div>
+
 <script>
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    const dropZone = document.getElementById('drop-zone'), fileInput = document.getElementById('file-input'), textArea = document.getElementById('rawText');
-    dropZone.onclick = () => fileInput.click();
-    fileInput.onchange = (e) => handleFile(e.target.files[0]);
-    dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.background = "#eff6ff"; };
-    dropZone.ondrop = async (e) => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); };
-    async function handleFile(file) {
-        if (!file || file.type !== 'application/pdf') return;
-        document.getElementById('status-text').innerText = "⏳ 텍스트 추출 중...";
-        const pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
-        let text = '';
-        for (let i = 1; i <= pdf.numPages; i++) { const page = await pdf.getPage(i); text += (await page.getTextContent()).items.map(t => t.str).join(' ') + '\n'; }
-        textArea.value = text; document.getElementById('status-text').innerText = `✅ ${file.name} 준비 완료!`;
-    }
-    async function analyze() {
-        const key = document.getElementById('apiKey').value.trim(), text = textArea.value.trim(), extra = document.getElementById('extraInfo').value.trim();
-        if(!key || !text) return alert("필수 정보를 입력하세요.");
-        document.getElementById('loading').style.display = 'block'; document.getElementById('input-ui').style.display = 'none';
-        const prompt = `입시 전문가로서 다음 데이터를 분석해 보고서를 JSON으로 작성하세요. [상담 정보]: ${extra} [데이터]: ${text}
-        { "keywords": ["#키워드1", "#키워드2", "#키워드3", "#키워드4", "#키워드5"], "table": [{"cat": "진로역량", "g1": "...", "g2": "...", "growth": "..."}, {"cat": "학업역량", "g1": "...", "g2": "...", "growth": "..."}, {"cat": "공동체역량", "g1": "...", "g2": "...", "growth": "..."}, {"cat": "인성역량", "g1": "...", "g2": "...", "growth": "..."}], "projects": [{"title": "...", "concept": "...", "steps": "...", "comp": "..."}], "guides": [{"cat": "자율활동", "strategy": "...", "point": "...", "book": "..."}, {"cat": "진로활동", "strategy": "...", "point": "...", "book": "..."}, {"cat": "동아리활동", "strategy": "...", "point": "...", "book": "..."}], "vision": "기대되는 성장 완성 모습" }`;
-        try {
-            // v1beta 주소로 수정하여 response_mime_type 오류 해결
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=${key}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{parts: [{text: prompt}]}], generationConfig: { response_mime_type: "application/json", temperature: 0.1 } })
-            });
-            const data = await resp.json();
-            if (data.error) throw new Error(data.error.message);
-            render(JSON.parse(data.candidates[0].content.parts[0].text));
-        } catch (e) { alert(`분석 실패: ${e.message}`); document.getElementById('loading').style.display = 'none'; document.getElementById('input-ui').style.display = 'block'; }
-    }
-    function render(res) {
-        document.getElementById('report').style.display = 'block'; document.getElementById('loading').style.display = 'none';
-        document.getElementById('out-name').innerText = `| 1. 검토 대상 학생: ${document.getElementById('name').value}`;
-        document.getElementById('out-keywords').innerHTML = (res.keywords || []).map(k => `<span class="k-badge">${k}</span>`).join('');
-        document.getElementById('out-table').innerHTML = (res.table || []).map(i => `<tr><th>${i.cat}</th><td>${i.g1}</td><td>${i.g2}</td><td><b>${i.growth}</b></td></tr>`).join('');
-        document.getElementById('out-projects').innerHTML = (res.projects || []).map(p => `<div style="background:#f9fafb; padding:15px; border-radius:8px; border-left:5px solid var(--blue); margin-bottom:15px;"><h4 style="margin:0; color:var(--blue)">${p.title}</h4><p style="font-size:0.85rem; margin:5px 0;">${p.concept}</p><div style="font-size:0.8rem;"><b>로드맵:</b> ${p.steps}</div><div style="font-size:0.8rem; color:var(--blue); margin-top:5px;">🎯 <b>역량:</b> ${p.comp}</div></div>`).join('');
-        document.getElementById('out-guides').innerHTML = (res.guides || []).map(g => `<div style="margin-bottom:20px; border-bottom:1px solid #f1f5f9; padding-bottom:15px;"><h4 style="color:var(--blue); margin-bottom:8px;">[${g.cat}]</h4><p style="font-size:0.9rem;">${g.strategy}</p><p style="font-size:0.85rem; background:#f9fafb; padding:10px; border-radius:5px;">💡 <b>보완:</b> ${g.point}</p><p style="font-size:0.85rem;">📚 추천 도서: ${g.book}</p></div>`).join('');
-        document.getElementById('out-vision').innerText = `"${res.vision}"`;
-    }
+if(window.pdfjsLib)pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const $=id=>document.getElementById(id);
+let D={pdfText:'',prompt:'',types:['full']};
+$('i-text')?.addEventListener('input',e=>{$('text-count').textContent=e.target.value.length.toLocaleString()});
+
+function setFlow(n){for(let i=1;i<=4;i++){const e=$('f'+i);e.classList.remove('active','done');if(i<n)e.classList.add('done');else if(i===n)e.classList.add('active')}}
+
+function toggleType(btn){
+  const id=btn.dataset.id;
+  if(id==='full'){document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');D.types=['full']}
+  else{document.querySelector('.type-btn[data-id="full"]').classList.remove('on');btn.classList.toggle('on');
+    D.types=Array.from(document.querySelectorAll('.type-btn.on')).map(b=>b.dataset.id);
+    if(!D.types.length){document.querySelector('.type-btn[data-id="full"]').classList.add('on');D.types=['full']}}
+}
+
+function handleDrop(e){e.preventDefault();e.stopPropagation();e.currentTarget.classList.remove('dragging');
+  const f=e.dataTransfer?.files?.[0];if(f&&(f.type==='application/pdf'||f.name.endsWith('.pdf')))handleFile(f);else showErr('PDF 파일만 업로드 가능합니다.')}
+
+async function handleFile(file){
+  if(!file)return;hideErr();
+  $('upload-idle').classList.add('hidden');$('upload-ok').classList.add('hidden');
+  $('upload-spin').classList.remove('hidden');$('upload-area').classList.remove('done');
+  try{
+    const buf=await file.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+    let text='';
+    for(let i=1;i<=pdf.numPages;i++){
+      $('upload-status').textContent=`추출 중... (${i}/${pdf.numPages}페이지)`;
+      const pg=await pdf.getPage(i);const ct=await pg.getTextContent();
+      text+=ct.items.map(it=>it.str).join(' ')+'\n\n'}
+    D.pdfText=text.trim();
+    if(D.pdfText.length<50)throw new Error('텍스트 추출 부족');
+    const nm=D.pdfText.match(/성명[:\s]*([가-힣]{2,4})/);if(nm)$('i-name').value=nm[1];
+    $('upload-spin').classList.add('hidden');$('upload-ok').classList.remove('hidden');$('upload-area').classList.add('done');
+    $('upload-info').textContent=`${$('i-name').value||'학생'} | ${D.pdfText.length.toLocaleString()}자 | ${pdf.numPages}페이지`;
+    setFlow(2);
+  }catch(err){console.error(err);$('upload-spin').classList.add('hidden');$('upload-idle').classList.remove('hidden');
+    showErr('PDF 추출 실패 → 아래에서 텍스트를 직접 입력해주세요.');$('text-fallback').open=true}}
+
+function resetUpload(){D.pdfText='';$('upload-area').classList.remove('done');$('upload-idle').classList.remove('hidden');
+  $('upload-ok').classList.add('hidden');$('upload-spin').classList.add('hidden');$('pdf-file').value='';setFlow(1)}
+
+function generate(){
+  const content=D.pdfText||($('i-text')?$('i-text').value.trim():'');
+  if(!content||content.length<50){showErr('생기부 내용이 필요합니다.');return}
+  hideErr();
+  const name=$('i-name').value||'(미입력)',major=$('i-major').value,club=$('i-club').value,extra=$('i-extra').value;
+  const t=D.types,isFull=t.includes('full');
+
+  let p=`# 생기부 종합 분석 요청\n\n당신은 한국 고등학교 3학년 담임교사를 위한 **전문 생기부 컨설팅 AI**입니다.\n아래 학생의 1,2학년 학교생활기록부를 분석하여, 3학년 담임이 바로 활용할 수 있는 **구체적이고 실전적인** 컨설팅 보고서를 작성해주세요.\n\n---\n\n## 학생 기본 정보\n- **이름**: ${name}\n`;
+  if(major)p+=`- **희망 진로/학과**: ${major}\n`;else p+=`- **희망 진로/학과**: (기록에서 추정해주세요)\n`;
+  if(club)p+=`- **3학년 동아리**: ${club}\n`;
+  if(extra)p+=`\n## 담임 선생님의 추가 정보 (반드시 반영)\n${extra}\n`;
+
+  p+=`\n---\n\n## 분석 요청 항목\n\n`;
+
+  if(isFull||t.includes('competency'))p+=`### 1. 4대 역량 성장 분석\n각 역량별로 분석해주세요:\n- **진로역량**: 1학년 분석(4~5문장) → 2학년 분석(4~5문장) → 성장 포인트(3~4문장) → 등급(A+/A/B+/B/C)\n- **학업역량**: 동일 구조\n- **공동체역량**: 동일 구조\n- **인성역량**: 동일 구조\n\n`;
+  if(isFull||t.includes('autonomy'))p+=`### 2. 자율·진로·행동특성 평가 및 3학년 예시 문구\n각 영역별로:\n- **현재 평가**: 1,2학년 기록 분석 (4~5문장) + 등급\n- **3학년 방향**: 기록 방향 제안 (3~4문장)\n- **3학년 예시 문구**: 실제 생기부에 바로 기재 가능한 수준\n  - 자율활동: 250~350자\n  - 진로활동: 250~350자\n  - 행동특성및종합의견: 400~500자 (1~2학년 성장 서사 연결)\n\n`;
+  if(isFull||t.includes('strategy'))p+=`### 3. 3학년 세특 전략\n- **전체 전략**: 3학년 세특 큰 방향 (4~5문장)\n- **과목별 방향**: 주요 과목 각각에 대해\n  - 방향 제안 (4~5문장)\n  - 추천 탐구주제 3개\n  - 기재 예시 문구 (2~3문장)\n\n`;
+  if(isFull||t.includes('club'))p+=`### 4. 동아리 활동 계획\n- **동아리명 제안**: 2개\n- **활동 목표** (3~4문장)\n- **월별 활동 계획** (3~11월): 활동명 + 상세 (2~3문장)\n- **프로젝트 제안**: 2~3개 (제목, 컨셉, 실행단계 5개, 기대역량)\n- **동아리 기록 전략** (4~5문장)\n\n`;
+  if(isFull||t.includes('counsel'))p+=`### 5. 상담 가이드\n- **학생 강점** 3개 (근거 포함)\n- **보완 영역** 3개 (조언 포함)\n- **상담 시작 질문** 3개\n- **추천 활동** 3개\n- **학부모 상담 포인트** 3개\n\n`;
+  if(isFull)p+=`### 6. 종합 결론\n학생의 성장 궤적과 3학년 핵심 포인트 종합 정리 (5~6문장)\n\n`;
+
+  p+=`---\n\n## 분석 시 주의사항\n1. 학생의 **실제 기록**에서 드러나는 관심사, 강점, 성장 패턴을 정확히 파악\n2. 예시 문구는 **실제 생기부에 바로 기재 가능한 수준**으로 작성\n3. 3학년 방향은 **1~2학년 성장 서사와 자연스럽게 연결**\n4. **추상적 표현을 피하고** 구체적인 활동명, 주제, 키워드 사용\n5. 동아리/프로젝트 계획은 **실현 가능하고 진로와 연계**\n`;
+  if(extra)p+=`6. **담임 선생님의 추가 정보를 반드시 반영**\n`;
+
+  p+=`\n---\n\n## 학교생활기록부 전문\n\n${content}`;
+
+  D.prompt=p;
+  $('S-input').classList.add('hidden');$('S-result').classList.remove('hidden');
+  $('prompt-display').textContent=p;$('prompt-chars').textContent=p.length.toLocaleString();
+  if(p.length>30000){$('char-warning').classList.remove('hidden');$('char-warning').textContent='⚠️ 텍스트가 길어 일부 AI에서 잘릴 수 있습니다. Claude 권장';}
+  else $('char-warning').classList.add('hidden');
+  setFlow(3);window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function copyPrompt(){
+  navigator.clipboard.writeText(D.prompt).then(()=>{
+    const b=$('copy-main');b.className='btn-copy copied';b.innerHTML='✅ 복사 완료! AI에 붙여넣으세요';setFlow(4);showToast();
+    setTimeout(()=>{b.className='btn-copy idle';b.innerHTML='📋 프롬프트 전체 복사'},3000);
+  }).catch(()=>{const ta=document.createElement('textarea');ta.value=D.prompt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast()})}
+
+function showToast(){const t=$('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function downloadPrompt(){const b=new Blob([D.prompt],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(b);
+  const a=document.createElement('a');a.href=u;a.download=`${$('i-name').value||'학생'}_생기부_프롬프트.txt`;a.click();URL.revokeObjectURL(u)}
+function showErr(m){$('err').innerHTML='⚠️ '+m;$('err').classList.remove('hidden')}
+function hideErr(){$('err').classList.add('hidden')}
+function resetAll(){D={pdfText:'',prompt:'',types:['full']};$('S-result').classList.add('hidden');$('S-input').classList.remove('hidden');
+  resetUpload();$('i-name').value='';$('i-major').value='';$('i-club').value='';$('i-extra').value='';
+  if($('i-text'))$('i-text').value='';$('text-fallback').open=false;
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelector('.type-btn[data-id="full"]').classList.add('on');hideErr();setFlow(1)}
 </script>
 </body>
 </html>
