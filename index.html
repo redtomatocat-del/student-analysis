@@ -174,6 +174,11 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <div class="card no-print">
 <div class="card-top"><div class="c-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2a4 4 0 014 4v2h1a3 3 0 013 3v8a3 3 0 01-3 3H7a3 3 0 01-3-3v-8a3 3 0 013-3h1V6a4 4 0 014-4zm0 2a2 2 0 00-2 2v2h4V6a2 2 0 00-2-2z" fill="#3182F6"/></svg></div><div><div class="c-title">API 연결</div><div class="c-desc">Anthropic API Key</div></div></div>
 <div class="api-row"><div class="f"><input type="password" id="apiKey" placeholder="sk-ant-..."/></div><button class="btn btn-blue btn-sm" onclick="saveKey()">저장</button></div>
+<div style="margin-top:8px"><label>모델 선택</label><select id="modelSel" style="font-size:13px">
+<option value="claude-sonnet-4-5-20250514">Sonnet 4.5 (추천)</option>
+<option value="claude-sonnet-4-20250514">Sonnet 4</option>
+<option value="claude-haiku-4-5-20251001">Haiku 4.5 (빠름/저렴)</option>
+</select></div>
 <div class="api-st" id="apiSt"></div>
 </div>
 
@@ -247,6 +252,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <!-- Go -->
 <button class="btn btn-blue btn-full no-print" id="goBtn" onclick="analyze()" disabled style="margin-top:14px;padding:16px;font-size:16px;border-radius:var(--r)">🔍 AI 종합 분석 시작</button>
 <div class="pw no-print" id="pW"><div class="ptr"><div class="pfl" id="pF"></div></div><div class="ptx" id="pT"></div></div>
+<div id="errMsg" style="display:none;margin:10px 0;padding:14px 18px;background:#FFF0F0;border:1.5px solid #FF6B6B;border-radius:12px;color:#FF6B6B;font-size:14px;font-weight:600" class="no-print"></div>
 
 <!-- Results -->
 <div class="result-section" id="resS">
@@ -314,7 +320,13 @@ const n=document.getElementById('sNo').value;
 document.getElementById('stuIdPreview').textContent=id?id:`${g} - ${c||'--'} - ${n||'--'}`;
 }
 
-function saveKey(){key=document.getElementById('apiKey').value.trim();if(!key){document.getElementById('apiSt').innerHTML='<span class="api-no">키를 입력해주세요</span>';return}localStorage.setItem('sgb_key',key);apiOk();chk()}
+function saveKey(){
+key=document.getElementById('apiKey').value.trim();
+if(!key){document.getElementById('apiSt').innerHTML='<span class="api-no">키를 입력해주세요</span>';return}
+if(!key.startsWith('sk-ant-')){document.getElementById('apiSt').innerHTML='<span class="api-no">⚠️ sk-ant-로 시작하는 키를 입력해주세요</span>';return}
+localStorage.setItem('sgb_key',key);apiOk();chk();
+console.log('[saveKey] 키 저장 완료, 길이:',key.length);
+}
 function apiOk(){document.getElementById('apiSt').innerHTML='<span class="api-ok">✓ 저장 완료</span>'}
 
 const dz=document.getElementById('dz'),fi=document.getElementById('fi');
@@ -329,7 +341,10 @@ dz.classList.add('done');dz.querySelector('.dz-i').textContent='✅';
 dz.querySelector('.dz-m').textContent=f.name;dz.querySelector('.dz-s').textContent='추출 중...';
 try{const b=await f.arrayBuffer();const p=await pdfjsLib.getDocument({data:b}).promise;let t='';
 for(let i=1;i<=p.numPages;i++){const pg=await p.getPage(i);const tc=await pg.getTextContent();t+=tc.items.map(x=>x.str).join(' ')+'\n'}
-pdf=t;dz.querySelector('.dz-s').textContent=`${p.numPages}p · ${pdf.length.toLocaleString()}자`;
+pdf=t;
+console.log('[PDF] 텍스트 추출 완료, 길이:',pdf.length);
+if(pdf.length<50){dz.querySelector('.dz-s').textContent='⚠️ 텍스트가 거의 추출되지 않았습니다. 스캔 PDF일 수 있습니다';return}
+dz.querySelector('.dz-s').textContent=`${p.numPages}p · ${pdf.length.toLocaleString()}자`;
 document.getElementById('fI').classList.remove('hidden');
 document.getElementById('fI').textContent=`✓ ${f.name} · ${(f.size/1024).toFixed(0)}KB · ${p.numPages}페이지`;chk()
 }catch(e){dz.querySelector('.dz-s').textContent='✕ '+e.message}}
@@ -340,26 +355,89 @@ else if(t==='mid'){pri=['진로','학업','공동체'];const el=document.getElem
 else{const el=document.getElementById('pCus');el.classList.add('on');el.style.borderColor='#4E5968';el.style.background='#F2F4F6';el.querySelector('.tx').style.color='#4E5968';document.getElementById('cusP').classList.remove('hidden');upP()}rPr()}
 function upP(){const a=document.getElementById('p1').value,b=document.getElementById('p2').value,c=['학업','진로','공동체'].find(x=>x!==a&&x!==b)||'공동체';document.getElementById('p3').innerHTML=`<option>${c}</option>`;pri=[a,b,c];rPr()}
 function rPr(){document.getElementById('t1').textContent='1순위 '+pri[0];document.getElementById('t2').textContent='2순위 '+pri[1];document.getElementById('t3').textContent='3순위 '+pri[2]}
-function chk(){document.getElementById('goBtn').disabled=!(key&&pdf)}
+function chk(){
+const ready=!!(key&&pdf);
+const btn=document.getElementById('goBtn');
+btn.disabled=!ready;
+console.log('[chk] key:',!!key,'pdf:',!!pdf,'ready:',ready);
+if(!ready){
+let msg=[];
+if(!key)msg.push('API Key 필요');
+if(!pdf)msg.push('PDF 업로드 필요');
+btn.textContent='⚠️ '+msg.join(' + ');
+}else{
+btn.textContent='🔍 AI 종합 분석 시작';
+}
+}
 
 async function analyze(){
+console.log('[analyze] 시작');
 const sid=getStuId()||'30101';
 const nm=document.getElementById('sName').value.trim()||'학생';
 const cr=document.getElementById('sCareer').value.trim()||'미정';
 const cl=document.getElementById('sClub').value.trim()||'미정';
 const me=document.getElementById('memo').value.trim();
 const kw=[...selKW];const kc=document.getElementById('kwC').value.trim();if(kc)kw.push(...kc.split(',').map(s=>s.trim()).filter(Boolean));
-document.getElementById('pW').style.display='block';document.getElementById('goBtn').disabled=true;sp(10,'PDF 분석 중...');
-try{sp(30,'AI 분석 요청 중...');
-const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-5-20250514',max_tokens:8000,messages:[{role:'user',content:bp(nm,cr,cl,kw,me)}]})});
-sp(70,'응답 처리 중...');if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API 오류')}
-const d=await r.json();const tx=d.content.map(c=>c.text||'').join('');sp(90,'보고서 생성 중...');
+
+// 사전 검증
+if(!key){alert('❌ API Key를 먼저 입력해주세요');return}
+if(!pdf){alert('❌ PDF를 먼저 업로드해주세요');return}
+
+document.getElementById('pW').style.display='block';document.getElementById('goBtn').disabled=true;
+showStatus('📄 PDF 분석 중...',10);
+
+try{
+showStatus('🤖 AI 분석 요청 중... (30초~1분 소요)',30);
+console.log('[analyze] API 호출 시작, pdf길이:',pdf.length,'key존재:',!!key);
+
+const body={model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250514',max_tokens:8000,messages:[{role:'user',content:bp(nm,cr,cl,kw,me)}]};
+console.log('[analyze] 요청 body model:',body.model);
+
+const r=await fetch('https://api.anthropic.com/v1/messages',{
+method:'POST',
+headers:{
+'Content-Type':'application/json',
+'x-api-key':key,
+'anthropic-version':'2023-06-01',
+'anthropic-dangerous-direct-browser-access':'true'
+},
+body:JSON.stringify(body)
+});
+
+console.log('[analyze] 응답 status:',r.status);
+
+if(!r.ok){
+let errMsg='API 오류 ('+r.status+')';
+try{const e=await r.json();errMsg=e.error?.message||errMsg;console.log('[analyze] 에러 상세:',e)}catch(ex){}
+throw new Error(errMsg);
+}
+
+showStatus('📊 응답 처리 중...',70);
+const d=await r.json();
+console.log('[analyze] 응답 수신, content blocks:',d.content?.length);
+const tx=d.content.map(c=>c.text||'').join('');
+console.log('[analyze] 텍스트 길이:',tx.length);
+
+showStatus('📋 보고서 생성 중...',90);
 cur=pr(tx,nm,cr,cl,sid,kw);
+if(cur._err){console.warn('[analyze] JSON 파싱 실패, raw 앞부분:',tx.substring(0,200))}
+
 stu[sid]={name:nm,career:cr,club:cl,sid,date:new Date().toLocaleDateString('ko-KR'),result:cur};
-localStorage.setItem('sgb_stu',JSON.stringify(stu));rR(cur);rStu();sp(100,'✓ 완료!');
-setTimeout(()=>{document.getElementById('pW').style.display='none';document.getElementById('goBtn').disabled=false},1500)
-}catch(e){sp(0,'✕ '+e.message);document.getElementById('goBtn').disabled=false}}
-function sp(p,t){document.getElementById('pF').style.width=p+'%';document.getElementById('pT').textContent=t}
+try{localStorage.setItem('sgb_stu',JSON.stringify(stu))}catch(ex){console.warn('localStorage 저장 실패')}
+rR(cur);rStu();showStatus('✅ 분석 완료!',100);
+setTimeout(()=>{document.getElementById('pW').style.display='none';document.getElementById('goBtn').disabled=false},1500);
+
+}catch(e){
+console.error('[analyze] 에러:',e);
+showStatus('❌ 오류: '+e.message,0);
+// 에러 알림도 표시
+const errDiv=document.getElementById('errMsg');
+if(errDiv){errDiv.textContent='⚠️ '+e.message;errDiv.style.display='block'}
+document.getElementById('goBtn').disabled=false;
+document.getElementById('goBtn').textContent='🔍 AI 종합 분석 시작 (재시도)';
+}}
+function showStatus(t,p){document.getElementById('pF').style.width=p+'%';document.getElementById('pT').textContent=t;console.log('[status]',p+'%',t)}
+// sp는 showStatus로 대체됨
 
 function bp(nm,cr,cl,kw,me){return`당신은 한국 고등학교 생기부 전문 분석가입니다.
 [학생] 이름:${nm} 진로:${cr} 동아리:${cl} 키워드:${kw.join(',')||'없음'} ${me?'메모:'+me:''}
