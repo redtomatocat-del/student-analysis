@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -21,12 +22,12 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--bg);co
 /* Class Banner - 최상단 */
 .class-banner{
 background:linear-gradient(135deg,#0F3A8C 0%,#1B5BD6 40%,#3182F6 70%,#22B8CF 100%);
-border-radius:var(--r);padding:20px 24px;margin:0 0 12px;
+border-radius:var(–r);padding:20px 24px;margin:0 0 12px;
 display:flex;align-items:center;gap:20px;
 color:#fff;position:relative;overflow:hidden;
 box-shadow:0 4px 20px rgba(49,130,246,0.3);
 }
-.class-banner::before{content:'';position:absolute;top:-50px;right:-30px;width:180px;height:180px;background:rgba(255,255,255,0.05);border-radius:50%}
+.class-banner::before{content:’’;position:absolute;top:-50px;right:-30px;width:180px;height:180px;background:rgba(255,255,255,0.05);border-radius:50%}
 .cb-main{flex:1;min-width:0;z-index:1}
 .cb-class{font-size:30px;font-weight:900;letter-spacing:-1px;line-height:1.1}
 .cb-meta{font-size:13px;font-weight:500;margin-top:4px;opacity:0.85;display:flex;align-items:center;gap:0}
@@ -46,9 +47,9 @@ box-shadow:0 4px 20px rgba(49,130,246,0.3);
 .cb-meta{font-size:12px}
 }
 .class-banner-empty{
-background:var(--g7);border:2px dashed var(--g5);border-radius:var(--r);
+background:var(–g7);border:2px dashed var(–g5);border-radius:var(–r);
 padding:20px 24px;margin:0 0 12px;display:flex;align-items:center;gap:14px;
-color:var(--g2);font-size:14px;
+color:var(–g2);font-size:14px;
 }
 
 /* Title Row */
@@ -57,17 +58,17 @@ display:flex;align-items:center;justify-content:space-between;
 padding:16px 0 10px;
 }
 .title-left{display:flex;align-items:baseline;gap:8px}
-.title-left h1{font-size:24px;font-weight:900;letter-spacing:-1px;color:var(--black)}
-.title-sub{font-size:12px;color:var(--g3);font-weight:500;letter-spacing:-.2px}
-.title-ver{background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700}
+.title-left h1{font-size:24px;font-weight:900;letter-spacing:-1px;color:var(–black)}
+.title-sub{font-size:12px;color:var(–g3);font-weight:500;letter-spacing:-.2px}
+.title-ver{background:var(–blue-bg);color:var(–blue);padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700}
 
 /* Feature Icons */
 .feat-icons{display:flex;gap:6px}
 .fi{display:flex;flex-direction:column;align-items:center;gap:2px;
-padding:6px 10px;border-radius:10px;background:var(--g7);
+padding:6px 10px;border-radius:10px;background:var(–g7);
 font-size:18px;cursor:default;transition:transform .15s}
 .fi:hover{transform:translateY(-2px)}
-.fi span{font-size:9px;font-weight:600;color:var(--g3)}
+.fi span{font-size:9px;font-weight:600;color:var(–g3)}
 @media(max-width:600px){
 .title-row{flex-direction:column;align-items:flex-start;gap:8px}
 .feat-icons{gap:4px}
@@ -77,179 +78,181 @@ font-size:18px;cursor:default;transition:transform .15s}
 /* Compact Row - API + PDF */
 .compact-row{display:grid;grid-template-columns:1fr 1.3fr;gap:10px;margin-bottom:10px}
 @media(max-width:600px){.compact-row{grid-template-columns:1fr}}
-.compact-card{background:var(--white);border-radius:var(--rm);padding:14px 16px;box-shadow:var(--sh)}
-.cc-hdr{font-size:13px;font-weight:700;color:var(--g1);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.compact-card{background:var(–white);border-radius:var(–rm);padding:14px 16px;box-shadow:var(–sh)}
+.cc-hdr{font-size:13px;font-weight:700;color:var(–g1);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .cc-icon{font-size:16px}
 .cc-body{font-size:12px}
 .dz-mini{padding:12px 16px;border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer;
-border:2px dashed var(--g5);background:var(--g7);transition:border-color .2s}
-.dz-mini:hover{border-color:var(--blue)}
+border:2px dashed var(–g5);background:var(–g7);transition:border-color .2s}
+.dz-mini:hover{border-color:var(–blue)}
 .dz-mini .dz-i{font-size:24px;flex-shrink:0}
-.dz-mini .dz-m{font-size:12px;font-weight:600;color:var(--g2)}
-.dz-mini.done{border-color:var(--green);background:var(--green-bg)}
-.dz-mini.done .dz-m{color:var(--green)}
+.dz-mini .dz-m{font-size:12px;font-weight:600;color:var(–g2)}
+.dz-mini.done{border-color:var(–green);background:var(–green-bg)}
+.dz-mini.done .dz-m{color:var(–green)}
 
 /* 2-col layout for wide screens */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:760px){.grid2{grid-template-columns:1fr}}
 
 /* Card */
-.card{background:var(--white);border-radius:var(--r);padding:24px;margin-top:14px;box-shadow:var(--sh);transition:box-shadow .3s}
-.card:hover{box-shadow:var(--sh2)}
+.card{background:var(–white);border-radius:var(–r);padding:24px;margin-top:14px;box-shadow:var(–sh);transition:box-shadow .3s}
+.card:hover{box-shadow:var(–sh2)}
 .card-top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.c-icon{width:44px;height:44px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.c-icon.blue{background:var(--blue-bg)}.c-icon.coral{background:var(--coral-bg)}.c-icon.green{background:var(--green-bg)}.c-icon.purple{background:var(--purple-bg)}.c-icon.orange{background:var(--orange-bg)}.c-icon.teal{background:var(--teal-bg)}
+.c-icon{width:44px;height:44px;border-radius:var(–rs);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.c-icon.blue{background:var(–blue-bg)}.c-icon.coral{background:var(–coral-bg)}.c-icon.green{background:var(–green-bg)}.c-icon.purple{background:var(–purple-bg)}.c-icon.orange{background:var(–orange-bg)}.c-icon.teal{background:var(–teal-bg)}
 .c-title{font-size:17px;font-weight:800;letter-spacing:-.3px}
-.c-desc{font-size:13px;color:var(--g3)}
+.c-desc{font-size:13px;color:var(–g3)}
 
 /* Form */
-label{font-size:13px;font-weight:600;color:var(--g2);display:block;margin-bottom:5px}
-input[type=text],input[type=password],textarea,select{width:100%;padding:12px 14px;background:var(--g7);border:1.5px solid transparent;border-radius:var(--rx);font-size:15px;color:var(--black);font-family:inherit;transition:all .2s;-webkit-appearance:none}
-input::placeholder,textarea::placeholder{color:var(--g4);font-weight:400}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(49,130,246,.1)}
+label{font-size:13px;font-weight:600;color:var(–g2);display:block;margin-bottom:5px}
+input[type=text],input[type=password],textarea,select{width:100%;padding:12px 14px;background:var(–g7);border:1.5px solid transparent;border-radius:var(–rx);font-size:15px;color:var(–black);font-family:inherit;transition:all .2s;-webkit-appearance:none}
+input::placeholder,textarea::placeholder{color:var(–g4);font-weight:400}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(–blue);background:var(–white);box-shadow:0 0 0 3px rgba(49,130,246,.1)}
 textarea{resize:vertical;min-height:72px}
-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238B95A1' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+select{cursor:pointer;background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘12’ fill=’%238B95A1’ viewBox=‘0 0 16 16’%3E%3Cpath d=‘M8 11L3 6h10z’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
 .row{display:grid;gap:10px}.r2{grid-template-columns:1fr 1fr}.r3{grid-template-columns:1fr 1fr 1fr}.r4{grid-template-columns:1fr 1fr 1fr 1fr}.r5{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
 @media(max-width:600px){.r4,.r5{grid-template-columns:1fr 1fr}}
-.stu-id{font-size:14px;font-weight:800;color:var(--blue);background:var(--blue-bg);padding:10px 16px;border-radius:var(--rx);text-align:center;margin-top:8px;letter-spacing:1px}
+.stu-id{font-size:14px;font-weight:800;color:var(–blue);background:var(–blue-bg);padding:10px 16px;border-radius:var(–rx);text-align:center;margin-top:8px;letter-spacing:1px}
 
 /* Btn */
-.btn{padding:14px 24px;border:none;border-radius:var(--rs);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn{padding:14px 24px;border:none;border-radius:var(–rs);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn:active{transform:scale(.97)}
-.btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{background:#2272E6}
-.btn-blue:disabled{background:var(--g6);color:var(--g4);cursor:not-allowed;transform:none}
-.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:#00B065}
-.btn-purple{background:var(--purple);color:#fff}.btn-purple:hover{background:#6B50EE}
-.btn-ghost{background:var(--g7);color:var(--g1);font-weight:600}.btn-ghost:hover{background:var(--g6)}
-.btn-sm{padding:10px 16px;font-size:13px;border-radius:var(--rx)}
+.btn-blue{background:var(–blue);color:#fff}.btn-blue:hover{background:#2272E6}
+.btn-blue:disabled{background:var(–g6);color:var(–g4);cursor:not-allowed;transform:none}
+.btn-green{background:var(–green);color:#fff}.btn-green:hover{background:#00B065}
+.btn-purple{background:var(–purple);color:#fff}.btn-purple:hover{background:#6B50EE}
+.btn-ghost{background:var(–g7);color:var(–g1);font-weight:600}.btn-ghost:hover{background:var(–g6)}
+.btn-sm{padding:10px 16px;font-size:13px;border-radius:var(–rx)}
 .btn-full{width:100%}
 
 /* API */
 .api-row{display:flex;gap:8px;align-items:end}.api-row .f{flex:1}
-.api-st{font-size:12px;font-weight:600;margin-top:6px}.api-ok{color:var(--green)}.api-no{color:var(--coral)}
+.api-st{font-size:12px;font-weight:600;margin-top:6px}.api-ok{color:var(–green)}.api-no{color:var(–coral)}
 
 /* Dropzone */
-.dz{border:2px dashed var(--g5);border-radius:var(--r);padding:40px 20px;text-align:center;cursor:pointer;transition:all .3s;background:var(--g7)}
-.dz:hover,.dz.drag{border-color:var(--blue);background:var(--blue-bg)}
-.dz.done{border-color:var(--green);background:var(--green-bg);border-style:solid}
+.dz{border:2px dashed var(–g5);border-radius:var(–r);padding:40px 20px;text-align:center;cursor:pointer;transition:all .3s;background:var(–g7)}
+.dz:hover,.dz.drag{border-color:var(–blue);background:var(–blue-bg)}
+.dz.done{border-color:var(–green);background:var(–green-bg);border-style:solid}
 .dz-i{font-size:40px;margin-bottom:10px}
 .dz-m{font-size:15px;font-weight:700}
-.dz-s{font-size:13px;color:var(--g3);margin-top:4px}
+.dz-s{font-size:13px;color:var(–g3);margin-top:4px}
 .file-input{display:none}
-.f-info{margin-top:10px;padding:12px 14px;background:var(--green-bg);border-radius:var(--rx);font-size:13px;color:var(--green);font-weight:600}
+.f-info{margin-top:10px;padding:12px 14px;background:var(–green-bg);border-radius:var(–rx);font-size:13px;color:var(–green);font-weight:600}
 
 /* Preset */
 .presets{display:flex;gap:8px}
-.pre{flex:1;padding:14px;border:2px solid var(--g6);border-radius:var(--rs);background:var(--white);cursor:pointer;text-align:center;transition:all .2s}
-.pre:hover{border-color:var(--g5);background:var(--g7)}
-.pre.on{border-color:var(--ac,var(--blue));background:var(--abg,var(--blue-bg))}
+.pre{flex:1;padding:14px;border:2px solid var(–g6);border-radius:var(–rs);background:var(–white);cursor:pointer;text-align:center;transition:all .2s}
+.pre:hover{border-color:var(–g5);background:var(–g7)}
+.pre.on{border-color:var(–ac,var(–blue));background:var(–abg,var(–blue-bg))}
 .pre .em{font-size:24px;display:block;margin-bottom:6px}
-.pre .tx{font-size:13px;font-weight:700;color:var(--g2)}.pre.on .tx{color:var(--ac,var(--blue))}
+.pre .tx{font-size:13px;font-weight:700;color:var(–g2)}.pre.on .tx{color:var(–ac,var(–blue))}
 .ptags{display:flex;gap:6px;align-items:center;margin-top:12px;flex-wrap:wrap}
 .ptag{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:700}
-.pt1{background:var(--blue-bg);color:var(--blue)}.pt2{background:var(--purple-bg);color:var(--purple)}.pt3{background:var(--g7);color:var(--g3)}
-.pt-a{color:var(--g4);font-size:12px}
+.pt1{background:var(–blue-bg);color:var(–blue)}.pt2{background:var(–purple-bg);color:var(–purple)}.pt3{background:var(–g7);color:var(–g3)}
+.pt-a{color:var(–g4);font-size:12px}
 
 /* KW */
 .kws{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.kw{padding:8px 16px;border:1.5px solid var(--g6);border-radius:100px;font-size:13px;font-weight:500;color:var(--g2);cursor:pointer;transition:all .2s;user-select:none;background:var(--white)}
-.kw:hover{border-color:var(--g4)}.kw.on{border-color:var(--blue);background:var(--blue-bg);color:var(--blue);font-weight:600}
+.kw{padding:8px 16px;border:1.5px solid var(–g6);border-radius:100px;font-size:13px;font-weight:500;color:var(–g2);cursor:pointer;transition:all .2s;user-select:none;background:var(–white)}
+.kw:hover{border-color:var(–g4)}.kw.on{border-color:var(–blue);background:var(–blue-bg);color:var(–blue);font-weight:600}
 
 /* Progress */
 .pw{margin:16px 0;display:none}
-.ptr{width:100%;height:6px;background:var(--g6);border-radius:3px;overflow:hidden}
-.pfl{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:3px;transition:width .6s;width:0}
-.ptx{text-align:center;font-size:14px;color:var(--g3);margin-top:10px;font-weight:600}
+.ptr{width:100%;height:6px;background:var(–g6);border-radius:3px;overflow:hidden}
+.pfl{height:100%;background:linear-gradient(90deg,var(–blue),var(–purple));border-radius:3px;transition:width .6s;width:0}
+.ptx{text-align:center;font-size:14px;color:var(–g3);margin-top:10px;font-weight:600}
 
 /* Tabs */
-.tabs{display:flex;gap:4px;background:var(--g7);border-radius:var(--rs);padding:4px;margin-bottom:20px;overflow-x:auto}
-.tab{padding:11px 16px;cursor:pointer;font-size:13px;font-weight:500;color:var(--g3);border-radius:var(--rx);white-space:nowrap;transition:all .2s;text-align:center;flex:1}
-.tab:hover{color:var(--g2)}.tab.on{background:var(--white);color:var(--black);font-weight:700;box-shadow:var(--sh)}
+.tabs{display:flex;gap:4px;background:var(–g7);border-radius:var(–rs);padding:4px;margin-bottom:20px;overflow-x:auto}
+.tab{padding:11px 16px;cursor:pointer;font-size:13px;font-weight:500;color:var(–g3);border-radius:var(–rx);white-space:nowrap;transition:all .2s;text-align:center;flex:1}
+.tab:hover{color:var(–g2)}.tab.on{background:var(–white);color:var(–black);font-weight:700;box-shadow:var(–sh)}
 .tc{display:none}.tc.on{display:block}
 
 /* Report */
-.rb{background:var(--g7);border-radius:var(--rs);padding:18px;margin-bottom:10px}
+.rb{background:var(–g7);border-radius:var(–rs);padding:18px;margin-bottom:10px}
 .rb h4{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.rb p{font-size:14px;color:var(--g2);line-height:1.75}
-.opt{border-radius:var(--rs);padding:18px;margin:10px 0;background:var(--white);box-shadow:var(--sh);border:1px solid var(--g6);transition:all .3s}
-.opt:hover{box-shadow:var(--sh2);transform:translateY(-1px)}
+.rb p{font-size:14px;color:var(–g2);line-height:1.75}
+.opt{border-radius:var(–rs);padding:18px;margin:10px 0;background:var(–white);box-shadow:var(–sh);border:1px solid var(–g6);transition:all .3s}
+.opt:hover{box-shadow:var(–sh2);transform:translateY(-1px)}
 .oh{font-weight:700;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.ob{font-size:13px;color:var(--g2);line-height:1.8;white-space:pre-wrap}
+.ob{font-size:13px;color:var(–g2);line-height:1.8;white-space:pre-wrap}
 .of{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
-.of span{font-size:12px;color:var(--g3);font-weight:500}
+.of span{font-size:12px;color:var(–g3);font-weight:500}
 .badge{display:inline-flex;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:700}
-.b-bl{background:var(--blue-bg);color:var(--blue)}.b-pu{background:var(--purple-bg);color:var(--purple)}
-.b-gr{background:var(--green-bg);color:var(--green)}.b-co{background:var(--coral-bg);color:var(--coral)}
-.b-or{background:var(--orange-bg);color:var(--orange)}.b-gy{background:var(--g7);color:var(--g3)}
+.b-bl{background:var(–blue-bg);color:var(–blue)}.b-pu{background:var(–purple-bg);color:var(–purple)}
+.b-gr{background:var(–green-bg);color:var(–green)}.b-co{background:var(–coral-bg);color:var(–coral)}
+.b-or{background:var(–orange-bg);color:var(–orange)}.b-gy{background:var(–g7);color:var(–g3)}
 .cg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:600px){.cg{grid-template-columns:1fr}}
-.ci{padding:16px;border-radius:var(--rs);background:var(--white);box-shadow:var(--sh);border:1px solid var(--g6)}
+.ci{padding:16px;border-radius:var(–rs);background:var(–white);box-shadow:var(–sh);border:1px solid var(–g6)}
 .ci strong{font-size:13px;display:block;margin-bottom:8px}
-.ci p{font-size:12px;color:var(--g2);line-height:1.65;margin:4px 0}
-.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;border-radius:var(--rx);overflow:hidden;border:1px solid var(--g6)}
-.tbl th{padding:10px 14px;background:var(--g7);color:var(--g2);font-weight:700;text-align:left}
-.tbl td{padding:10px 14px;border-top:1px solid var(--g6);color:var(--g2)}
-.tbl tr:hover td{background:var(--g7)}
+.ci p{font-size:12px;color:var(–g2);line-height:1.65;margin:4px 0}
+.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;border-radius:var(–rx);overflow:hidden;border:1px solid var(–g6)}
+.tbl th{padding:10px 14px;background:var(–g7);color:var(–g2);font-weight:700;text-align:left}
+.tbl td{padding:10px 14px;border-top:1px solid var(–g6);color:var(–g2)}
+.tbl tr:hover td{background:var(–g7)}
 
 /* Student list */
-.sl{max-height:240px;overflow-y:auto;border-radius:var(--rx);margin-top:10px}
-.si{padding:12px 4px;display:flex;justify-content:space-between;align-items:center;font-size:14px;border-bottom:1px solid var(--g6)}
+.sl{max-height:240px;overflow-y:auto;border-radius:var(–rx);margin-top:10px}
+.si{padding:12px 4px;display:flex;justify-content:space-between;align-items:center;font-size:14px;border-bottom:1px solid var(–g6)}
 .si:last-child{border:none}
-.si .num{font-weight:800;color:var(--blue);margin-right:8px;font-size:13px;background:var(--blue-bg);padding:3px 8px;border-radius:6px}
-.si .meta{color:var(--g3);font-size:12px;font-weight:500}
+.si .num{font-weight:800;color:var(–blue);margin-right:8px;font-size:13px;background:var(–blue-bg);padding:3px 8px;border-radius:6px}
+.si .meta{color:var(–g3);font-size:12px;font-weight:500}
 
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
 .result-section{display:none;margin-top:14px}
-.res-header{background:linear-gradient(135deg,#EBF4FF,#F0EDFF);border-radius:var(--r);padding:24px;margin-bottom:16px}
-.res-header h2{font-size:22px;font-weight:900;color:var(--blue);margin-bottom:8px;letter-spacing:-.5px}
-.res-info{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:600;color:var(--g1)}
-.res-info span{color:var(--blue)}
-.res-sec{background:var(--white);border-radius:var(--r);padding:24px;margin-bottom:14px;box-shadow:var(--sh)}
-.res-sec h3{font-size:17px;font-weight:800;color:var(--black);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--g6);display:flex;align-items:center;gap:8px}
-.res-summary{font-size:14px;line-height:1.85;color:var(--g1);padding:16px 20px;background:var(--g7);border-radius:12px;border-left:4px solid var(--blue);margin-bottom:14px}
+.res-header{background:linear-gradient(135deg,#EBF4FF,#F0EDFF);border-radius:var(–r);padding:24px;margin-bottom:16px}
+.res-header h2{font-size:22px;font-weight:900;color:var(–blue);margin-bottom:8px;letter-spacing:-.5px}
+.res-info{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:600;color:var(–g1)}
+.res-info span{color:var(–blue)}
+.res-sec{background:var(–white);border-radius:var(–r);padding:24px;margin-bottom:14px;box-shadow:var(–sh)}
+.res-sec h3{font-size:17px;font-weight:800;color:var(–black);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(–g6);display:flex;align-items:center;gap:8px}
+.res-summary{font-size:14px;line-height:1.85;color:var(–g1);padding:16px 20px;background:var(–g7);border-radius:12px;border-left:4px solid var(–blue);margin-bottom:14px}
 .res-chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
 .chip-s{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:600;line-height:1.6}
-.chip-s.green{background:var(--green-bg);color:var(--green)}.chip-s.coral{background:var(--coral-bg);color:var(--coral)}
+.chip-s.green{background:var(–green-bg);color:var(–green)}.chip-s.coral{background:var(–coral-bg);color:var(–coral)}
 .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:600px){.comp-grid{grid-template-columns:1fr}}
-.comp-card{border-radius:12px;padding:16px 18px;background:var(--g7);border-left:4px solid var(--blue)}
-.comp-card.purple{border-left-color:var(--purple)}.comp-card.green-c{border-left-color:var(--green)}.comp-card.orange{border-left-color:var(--orange)}
+.comp-card{border-radius:12px;padding:16px 18px;background:var(–g7);border-left:4px solid var(–blue)}
+.comp-card.purple{border-left-color:var(–purple)}.comp-card.green-c{border-left-color:var(–green)}.comp-card.orange{border-left-color:var(–orange)}
 .comp-label{font-size:14px;font-weight:800;margin-bottom:10px}
-.comp-row{display:flex;gap:8px;margin:5px 0;font-size:13px;line-height:1.7;color:var(--g2)}
-.comp-row .tag{min-width:48px;font-weight:700;color:var(--g3);flex-shrink:0}
+.comp-row{display:flex;gap:8px;margin:5px 0;font-size:13px;line-height:1.7;color:var(–g2)}
+.comp-row .tag{min-width:48px;font-weight:700;color:var(–g3);flex-shrink:0}
 .opt-area-title{font-size:15px;font-weight:800;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
-.opt-eval{font-size:13px;color:var(--g2);line-height:1.7;padding:10px 14px;background:var(--g7);border-radius:8px;margin-bottom:10px}
+.opt-eval{font-size:13px;color:var(–g2);line-height:1.7;padding:10px 14px;background:var(–g7);border-radius:8px;margin-bottom:10px}
 .opt-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:700px){.opt-pair{grid-template-columns:1fr}}
-.opt-box{border:1.5px solid var(--g6);border-radius:12px;padding:16px;background:#fff}
+.opt-box{border:1.5px solid var(–g6);border-radius:12px;padding:16px;background:#fff}
 .opt-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:13px;font-weight:700}
 .opt-badge{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;color:#fff}
-.opt-badge.b1{background:var(--blue)}.opt-badge.b2{background:var(--purple)}
-.byte-info{font-size:11px;font-weight:600;color:var(--g3);margin-left:auto}
-.byte-info.over{color:var(--coral)}
-.opt-text{font-size:13px;color:var(--g1);line-height:1.85;white-space:pre-wrap;padding:12px 14px;background:var(--g7);border-radius:8px}
-.opt-tip{font-size:11px;color:var(--g3);margin-top:8px;font-weight:500}
-.setuk-card{padding:14px 16px;background:var(--g7);border-radius:10px;margin:8px 0;border:1px solid var(--g6)}
-.setuk-name{font-size:14px;font-weight:800;color:var(--blue)}
-.setuk-theme{font-size:13px;font-weight:600;color:var(--g1);margin:6px 0}
-.setuk-reason{font-size:12px;color:var(--g2);line-height:1.7}
+.opt-badge.b1{background:var(–blue)}.opt-badge.b2{background:var(–purple)}
+.byte-info{font-size:11px;font-weight:600;color:var(–g3);margin-left:auto}
+.byte-info.over{color:var(–coral)}
+.opt-text{font-size:13px;color:var(–g1);line-height:1.85;white-space:pre-wrap;padding:12px 14px;background:var(–g7);border-radius:8px}
+.opt-tip{font-size:11px;color:var(–g3);margin-top:8px;font-weight:500}
+.setuk-card{padding:14px 16px;background:var(–g7);border-radius:10px;margin:8px 0;border:1px solid var(–g6)}
+.setuk-name{font-size:14px;font-weight:800;color:var(–blue)}
+.setuk-theme{font-size:13px;font-weight:600;color:var(–g1);margin:6px 0}
+.setuk-reason{font-size:12px;color:var(–g2);line-height:1.7}
 .setuk-kws{margin-top:8px}
-.kw-tag{display:inline-block;padding:3px 10px;background:var(--blue-bg);color:var(--blue);border-radius:100px;font-size:11px;font-weight:600;margin:2px}
-.club-tbl{width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid var(--g6);font-size:12px}
-.club-tbl th{padding:10px 14px;background:var(--g7);font-weight:700;text-align:left;color:var(--g2)}
-.club-tbl td{padding:10px 14px;border-top:1px solid var(--g6);color:var(--g1);line-height:1.65}
-.co-card{margin:10px 0;padding:14px 16px;background:var(--g7);border-radius:10px}
-.co-card h4{font-size:13px;font-weight:700;margin-bottom:8px;color:var(--g1)}
-.co-card p{font-size:12px;color:var(--g2);line-height:1.7;margin:4px 0}
-.byte-badge{font-size:11px;background:var(--g7);color:var(--g3);padding:2px 8px;border-radius:100px;font-weight:600}
+.kw-tag{display:inline-block;padding:3px 10px;background:var(–blue-bg);color:var(–blue);border-radius:100px;font-size:11px;font-weight:600;margin:2px}
+.club-tbl{width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid var(–g6);font-size:12px}
+.club-tbl th{padding:10px 14px;background:var(–g7);font-weight:700;text-align:left;color:var(–g2)}
+.club-tbl td{padding:10px 14px;border-top:1px solid var(–g6);color:var(–g1);line-height:1.65}
+.co-card{margin:10px 0;padding:14px 16px;background:var(–g7);border-radius:10px}
+.co-card h4{font-size:13px;font-weight:700;margin-bottom:8px;color:var(–g1)}
+.co-card p{font-size:12px;color:var(–g2);line-height:1.7;margin:4px 0}
+.byte-badge{font-size:11px;background:var(–g7);color:var(–g3);padding:2px 8px;border-radius:100px;font-weight:600}
 .hidden{display:none}
 @media print{body{background:#fff}.no-print{display:none!important}.card{box-shadow:none;border:1px solid #eee}}
 </style>
+
 </head>
 <body>
 <div class="wrap">
 
-<!-- ① 학급 배너 (최상단) -->
+<!-- ① 학급 배너 (설정 완료 후 최상단에 표시) -->
+
 <div class="class-banner" id="classBanner" style="display:none">
 <div class="cb-main">
 <div class="cb-class" id="cbClass">3학년 2반</div>
@@ -263,13 +266,8 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <button class="cb-edit" onclick="toggleClassSetup()">⚙️</button>
 </div>
 
-<!-- 학급 미설정 시 -->
-<div class="class-banner-empty" id="classBannerEmpty" style="display:none">
-<div style="font-size:24px">🏫</div>
-<div><strong>학급을 먼저 설정해주세요</strong><br><span style="font-size:12px;opacity:.7">아래에서 학교, 학년, 반, 담임교사를 입력하세요</span></div>
-</div>
-
 <!-- ② 타이틀 + 기능 아이콘 -->
+
 <div class="title-row">
 <div class="title-left">
 <h1>세공사</h1>
@@ -286,25 +284,13 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 </div>
 </div>
 
-<!-- 학급 설정 (토글) -->
-<div class="card no-print" id="classSetupCard" style="border:2px solid var(--blue);background:linear-gradient(135deg,#FAFBFF,#F0F4FF)">
-<div class="card-top"><div class="c-icon blue">🏫</div><div><div class="c-title">학급 설정</div><div class="c-desc">한 번 설정하면 학생 데이터가 이 학급에 누적됩니다</div></div></div>
-<div class="row r4">
-<div><label>학년</label><select id="sGrade"><option value="3">3학년</option><option value="2">2학년</option><option value="1">1학년</option></select></div>
-<div><label>반</label><select id="sClass"><option value="">선택</option></select></div>
-<div><label>담임교사</label><input type="text" id="sTeacher" placeholder="홍길동"/></div>
-<div><label>학교명</label><input type="text" id="sSchool" placeholder="○○고등학교"/></div>
-</div>
-<div style="display:flex;gap:8px;margin-top:10px">
-<button class="btn btn-blue btn-sm" onclick="saveClassInfo()">💾 학급 저장</button>
-<button class="btn btn-ghost btn-sm" onclick="resetClass()" style="font-size:12px">🗑️ 초기화</button>
-</div>
-<div id="classStatus" style="margin-top:8px;font-size:12px;font-weight:600"></div>
-</div>
+<!-- ③ 초기 설정 영역 (API → 학급 순서) -->
 
-<!-- ③ API + PDF 업로드 (한줄, 작게) -->
-<div class="compact-row no-print">
-<div class="compact-card">
+<div id="setupArea" class="no-print">
+
+<!-- API 연결 (먼저) -->
+
+<div class="compact-card" id="apiCard" style="margin-bottom:10px">
 <div class="cc-hdr"><span class="cc-icon">🔑</span> API 연결</div>
 <div class="cc-body">
 <div class="api-row"><div class="f"><input type="password" id="apiKey" placeholder="sk-ant-..." style="font-size:12px;padding:8px 10px"/></div><button class="btn btn-blue btn-sm" onclick="saveKey()" style="padding:8px 12px;font-size:11px">저장</button></div>
@@ -314,6 +300,45 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <option value="claude-haiku-4-5-20251001">Haiku 4.5 (빠름)</option>
 </select></div>
 <div class="api-st" id="apiSt"></div>
+</div>
+</div>
+
+<!-- 학급 설정 (API 다음) -->
+
+<div class="card" id="classSetupCard" style="border:2px solid var(--blue);background:linear-gradient(135deg,#FAFBFF,#F0F4FF)">
+<div class="card-top"><div class="c-icon blue">🏫</div><div><div class="c-title">학급 설정</div><div class="c-desc">한 번 설정하면 학생 데이터가 이 학급에 누적됩니다</div></div></div>
+<div class="row r4">
+<div><label>학년</label><select id="sGrade"><option value="3">3학년</option><option value="2">2학년</option><option value="1">1학년</option></select></div>
+<div><label>반</label><select id="sClass"><option value="">선택</option></select></div>
+<div><label>담임교사</label><input type="text" id="sTeacher" placeholder="홍길동"/></div>
+<div><label>학교명</label><input type="text" id="sSchool" placeholder="○○고등학교"/></div>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-blue btn-sm" onclick="saveClassInfo()">💾 학급 저장</button>
+<button class="btn btn-ghost btn-sm" onclick="resetClass()" style="font-size:12px">🗑️ 학급 초기화</button>
+<button class="btn btn-ghost btn-sm" onclick="resetAll()" style="font-size:12px;color:var(--coral)">⚠️ 전체 리셋</button>
+</div>
+<div id="classStatus" style="margin-top:8px;font-size:12px;font-weight:600"></div>
+</div>
+
+</div>
+
+<!-- ④ 작업 영역 (학급 설정 완료 후 표시) -->
+
+<div id="workArea" style="display:none">
+
+<!-- API + PDF 업로드 (한줄) -->
+
+<div class="compact-row no-print">
+<div class="compact-card">
+<div class="cc-hdr"><span class="cc-icon">🔑</span> API <span id="apiMiniStatus" style="font-size:11px;color:var(--green);margin-left:6px">✓</span></div>
+<div class="cc-body">
+<div class="api-row"><div class="f"><input type="password" id="apiKey2" placeholder="sk-ant-..." style="font-size:12px;padding:8px 10px"/></div><button class="btn btn-blue btn-sm" onclick="saveKey2()" style="padding:8px 12px;font-size:11px">저장</button></div>
+<div style="margin-top:6px"><select id="modelSel2" style="font-size:11px;padding:6px 8px;width:100%">
+<option value="claude-sonnet-4-5-20250929" selected>Sonnet 4.5</option>
+<option value="claude-sonnet-4-20250514">Sonnet 4</option>
+<option value="claude-haiku-4-5-20251001">Haiku 4.5 (빠름)</option>
+</select></div>
 </div>
 </div>
 <div class="compact-card" style="flex:1.2">
@@ -328,7 +353,8 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 </div>
 </div>
 
-<!-- ④ 학생 정보 -->
+<!-- 학생 정보 -->
+
 <div class="card no-print">
 <div class="card-top"><div class="c-icon green">👤</div><div><div class="c-title">학생 정보</div><div class="c-desc">PDF 업로드 시 자동 추출 · 수정 가능</div></div></div>
 <div class="row r4">
@@ -342,6 +368,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 </div>
 
 <!-- Priority + KW side by side on wide -->
+
 <div class="grid2">
 
 <div class="card no-print">
@@ -375,17 +402,21 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 </div>
 
 <!-- Memo -->
+
 <div class="card no-print">
 <div class="card-top"><div class="c-icon teal">💡</div><div><div class="c-title">상담 메모</div><div class="c-desc">선택 · 추가 정보</div></div></div>
 <textarea id="memo" placeholder="학생 특이사항, 강조 포인트, 보완할 점 등"></textarea>
 </div>
 
 <!-- Go -->
+
 <button class="btn btn-blue btn-full no-print" id="goBtn" onclick="analyze()" disabled style="margin-top:14px;padding:16px;font-size:16px;border-radius:var(--r)">🔍 AI 종합 분석 시작</button>
+
 <div class="pw no-print" id="pW"><div class="ptr"><div class="pfl" id="pF"></div></div><div class="ptx" id="pT"></div></div>
 <div id="errMsg" style="display:none;margin:10px 0;padding:14px 18px;background:#FFF0F0;border:1.5px solid #FF6B6B;border-radius:12px;color:#FF6B6B;font-size:14px;font-weight:600" class="no-print"></div>
 
 <!-- Results -->
+
 <div class="result-section" id="resS">
 <div id="resContent"></div>
 <div class="actions no-print" style="margin-top:16px">
@@ -396,6 +427,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 </div>
 
 <!-- Student Summary -->
+
 <div class="card no-print">
 <div class="card-top"><div class="c-icon green">📋</div><div><div class="c-title">분석 완료 학생</div><div class="c-desc" id="stuCnt">0명 완료</div></div></div>
 <div class="sl" id="stuL"><div style="padding:20px;color:var(--g4);text-align:center;font-size:14px">아직 분석된 학생이 없습니다</div></div>
@@ -427,7 +459,7 @@ const sc=document.getElementById('sClass');for(let i=1;i<=10;i++){const o=docume
 // 번호 01~30
 const sn=document.getElementById('sNo');for(let i=1;i<=30;i++){const o=document.createElement('option');o.value=String(i).padStart(2,'0');o.textContent=i+'번';sn.appendChild(o)}
 // 학번 미리보기 업데이트
-['sGrade','sClass','sNo'].forEach(id=>document.getElementById(id).addEventListener('change',updPreview));
+['sNo','sName','sCareer','sClub'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('change',()=>{updPreview();chk()})});
 
 const g=document.getElementById('kwG');KW.forEach(k=>{const d=document.createElement('div');d.className='kw';d.textContent=k;d.onclick=()=>{d.classList.toggle('on');d.classList.contains('on')?selKW.push(k):selKW=selKW.filter(x=>x!==k)};g.appendChild(d)});
 const sv=localStorage.getItem('sgb_key');if(sv){key=sv;document.getElementById('apiKey').value=sv;apiOk()}
@@ -439,18 +471,23 @@ chk();setP('top');
 })();
 
 function getStuId(){
-const g=document.getElementById('sGrade').value;
-const c=document.getElementById('sClass').value;
+const g=classInfo.grade||'3';
+const c=classInfo.cls||'';
 const n=document.getElementById('sNo').value;
 if(!c||!n)return'';
-return g+c+n;
+// 3학년 2반 2번 → 3202, 3학년 10반 21번 → 31021
+return g+parseInt(c)+String(parseInt(n)).padStart(2,'0');
 }
 function updPreview(){
 const id=getStuId();
-const g=document.getElementById('sGrade').value;
-const c=document.getElementById('sClass').value;
+const g=classInfo.grade||'3';
+const c=classInfo.cls||'';
 const n=document.getElementById('sNo').value;
-document.getElementById('stuIdPreview').textContent=id?id:`${g} - ${c||'--'} - ${n||'--'}`;
+if(id){
+document.getElementById('stuIdPreview').textContent=`${id}  (${g}학년 ${parseInt(c)}반 ${parseInt(n)}번)`;
+}else{
+document.getElementById('stuIdPreview').textContent=`${g}학년 ${c?parseInt(c)+'반':'--반'} ${n?parseInt(n)+'번':'--번'}`;
+}
 }
 
 // === 학급 관리 ===
@@ -470,20 +507,52 @@ classInfo={grade:g,cls:c,teacher:t,school:s};
 localStorage.setItem('sgb_classInfo',JSON.stringify(classInfo));
 loadClassStudents();
 updateBanner();
-document.getElementById('classSetupCard').style.display='none';
+switchToWorkMode();
+}
+
+function switchToWorkMode(){
+// 초기 설정 영역 숨기고 작업 영역 표시
+document.getElementById('setupArea').style.display='none';
+document.getElementById('workArea').style.display='';
+// API 키/모델 동기화 (setupArea → workArea)
+const k=document.getElementById('apiKey').value;
+const m=document.getElementById('modelSel').value;
+document.getElementById('apiKey2').value=k;
+document.getElementById('modelSel2').value=m;
+if(key)document.getElementById('apiMiniStatus').textContent='✓ 연결됨';
+}
+
+function switchToSetupMode(){
+document.getElementById('setupArea').style.display='';
+document.getElementById('workArea').style.display='none';
+document.getElementById('classBanner').style.display='none';
+}
+
+function saveKey2(){
+key=document.getElementById('apiKey2').value.trim();
+if(!key||!key.startsWith('sk-ant-'))return;
+localStorage.setItem('sgb_key',key);
+document.getElementById('apiKey').value=key;
+document.getElementById('apiMiniStatus').textContent='✓ 연결됨';
+chk();
+}
+
+function getModel(){
+// 작업 모드면 modelSel2, 아니면 modelSel
+const wa=document.getElementById('workArea');
+if(wa&&wa.style.display!=='none'){
+return document.getElementById('modelSel2')?.value||'claude-sonnet-4-5-20250929';
+}
+return document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929';
 }
 
 function updateBanner(){
 const banner=document.getElementById('classBanner');
-const empty=document.getElementById('classBannerEmpty');
 if(!classInfo.cls){
 banner.style.display='none';
-empty.style.display='flex';
-document.getElementById('classSetupCard').style.display='';
 return;
 }
 banner.style.display='flex';
-empty.style.display='none';
 document.getElementById('cbSchool').textContent=classInfo.school||'학교명 미설정';
 document.getElementById('cbClass').textContent=`${classInfo.grade}학년 ${parseInt(classInfo.cls)}반`;
 document.getElementById('cbTeacher').textContent=classInfo.teacher||'미설정';
@@ -492,8 +561,13 @@ document.getElementById('cbCount').textContent=cnt;
 }
 
 function toggleClassSetup(){
-const card=document.getElementById('classSetupCard');
-card.style.display=card.style.display==='none'?'':'none';
+// 배너의 ⚙️ 클릭 시: 설정 모드로 전환
+switchToSetupMode();
+// 현재 값 채우기
+document.getElementById('sGrade').value=classInfo.grade||'3';
+document.getElementById('sClass').value=classInfo.cls||'';
+document.getElementById('sTeacher').value=classInfo.teacher||'';
+document.getElementById('sSchool').value=classInfo.school||'';
 }
 
 function loadClassInfo(){
@@ -507,15 +581,9 @@ document.getElementById('sTeacher').value=classInfo.teacher||'';
 document.getElementById('sSchool').value=classInfo.school||'';
 loadClassStudents();
 updateBanner();
-if(classInfo.cls)document.getElementById('classSetupCard').style.display='none';
-}else{
-// 학급 미설정
-document.getElementById('classBannerEmpty').style.display='flex';
+if(classInfo.cls)switchToWorkMode();
 }
-}catch(e){
-console.warn('학급 정보 로드 실패');
-document.getElementById('classBannerEmpty').style.display='flex';
-}
+}catch(e){console.warn('학급 정보 로드 실패')}
 }
 
 function loadClassStudents(){
@@ -532,11 +600,25 @@ try{localStorage.setItem(k,JSON.stringify(stu))}catch(e){console.warn('학생 �
 }
 
 function resetClass(){
-if(!confirm('정말로 이 학급의 모든 데이터를 삭제하시겠습니까?\n(되돌릴 수 없습니다)'))return;
+if(!confirm('이 학급의 학생 데이터를 삭제하시겠습니까?\n(학급 설정은 유지됩니다)'))return;
 const k=getClassKey();
 localStorage.removeItem(k);
-stu={};rStu();
+stu={};rStu();updateBanner();
 document.getElementById('classStatus').innerHTML='<span style="color:var(--coral)">✓ 학급 데이터 초기화됨</span>';
+}
+
+function resetAll(){
+if(!confirm('⚠️ 모든 데이터를 완전히 삭제하시겠습니까?\n\n- API 키\n- 학급 설정\n- 모든 학생 분석 결과\n\n이 작업은 되돌릴 수 없습니다.'))return;
+// sgb_ 로 시작하는 모든 localStorage 삭제
+const keys=[];
+for(let i=0;i<localStorage.length;i++){
+const k=localStorage.key(i);
+if(k&&k.startsWith('sgb_'))keys.push(k);
+}
+keys.forEach(k=>localStorage.removeItem(k));
+// 상태 초기화
+key='';classInfo={};stu={};cur=null;pdf='';
+location.reload();
 }
 
 // === 학생 클릭 → 보고서 재열람 ===
@@ -664,14 +746,14 @@ try{
 showStatus('🤖 AI 심층 분석 중... (1~3분 소요, 창을 닫지 마세요)',30);
 console.log('[analyze] API 호출 시작, pdf길이:',pdf.length,'key존재:',!!key);
 
-const model=document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929';
-const msgs=[{role:'user',content:bp(nm,cr,cl,kw,me)}];
+const model=getModel();
+const prompt=bp(nm,cr,cl,kw,me);
+console.log('[analyze] model:',model,'prompt길이:',prompt.length);
 
-// 1차: 일반 요청 (안정적)
-const body={model,max_tokens:16000,messages:msgs};
-console.log('[analyze] 요청 model:',model);
+let tx='';
 
-showStatus('🤖 AI 분석 요청 중...',35);
+showStatus('🤖 AI 분석 요청 중...',30);
+
 const r=await fetch('https://api.anthropic.com/v1/messages',{
 method:'POST',
 headers:{
@@ -680,22 +762,49 @@ headers:{
 'anthropic-version':'2023-06-01',
 'anthropic-dangerous-direct-browser-access':'true'
 },
-body:JSON.stringify(body)
+body:JSON.stringify({
+model:model,
+max_tokens:16000,
+stream:true,
+messages:[{role:'user',content:prompt}]
+})
 });
 
-console.log('[analyze] 응답 status:',r.status);
-
 if(!r.ok){
-let errMsg='API 오류 ('+r.status+')';
-try{const e=await r.json();errMsg=e.error?.message||errMsg;console.log('[analyze] 에러 상세:',e)}catch(ex){}
-throw new Error(errMsg);
+const errBody=await r.text();
+console.error('[analyze] API 에러:',r.status,errBody);
+let em='API 오류 ('+r.status+')';
+try{const ej=JSON.parse(errBody);em=ej.error?.message||em}catch(x){}
+throw new Error(em);
 }
 
-showStatus('🤖 AI 응답 수신 중...',60);
-const d=await r.json();
-console.log('[analyze] 응답 수신, content blocks:',d.content?.length,'stop_reason:',d.stop_reason);
-const tx=d.content.map(c=>c.text||'').join('');
-console.log('[analyze] 텍스트 길이:',tx.length,'앞200자:',tx.substring(0,200));
+// 스트리밍 수신
+showStatus('🤖 AI 분석 중... 0자 수신',35);
+const reader=r.body.getReader();
+const decoder=new TextDecoder();
+let buf='';
+while(true){
+const{done,value}=await reader.read();
+if(done)break;
+buf+=decoder.decode(value,{stream:true});
+const lines=buf.split('\n');buf=lines.pop()||'';
+for(const line of lines){
+if(!line.startsWith('data:'))continue;
+const dd=line.substring(5).trim();
+if(dd==='[DONE]'||!dd)continue;
+try{
+const evt=JSON.parse(dd);
+if(evt.type==='content_block_delta'&&evt.delta?.text){
+tx+=evt.delta.text;
+const pct=Math.min(35+Math.floor((tx.length/8000)*55),90);
+showStatus('🤖 AI 분석 중... '+tx.length.toLocaleString()+'자 수신',pct);
+}
+}catch(pe){}
+}
+}
+
+console.log('[analyze] 스트리밍 완료, 텍스트 길이:',tx.length);
+showStatus('📋 보고서 생성 중... ('+tx.length.toLocaleString()+'자)',92);
 
 showStatus('📋 보고서 생성 중... (응답 '+tx.length.toLocaleString()+'자)',90);
 cur=pr(tx,nm,cr,cl,sid,kw);
@@ -706,11 +815,10 @@ if(!cur._err&&cur.student_info){
 const si=cur.student_info;
 console.log('[analyze] AI 추출 student_info:',si);
 if(si.name&&!document.getElementById('sName').value)document.getElementById('sName').value=si.name;
-if(si.class_num&&!document.getElementById('sClass').value){
-document.getElementById('sClass').value=String(parseInt(si.class_num)).padStart(2,'0');
-}
+// 학년/반은 classInfo에서 이미 설정됨 - 덮어쓰지 않음
 if(si.student_num&&!document.getElementById('sNo').value){
-document.getElementById('sNo').value=String(parseInt(si.student_num)).padStart(2,'0');
+const noVal=parseInt(si.student_num);
+if(noVal>=1&&noVal<=30)document.getElementById('sNo').value=String(noVal).padStart(2,'0');
 }
 if(si.career_hope&&!document.getElementById('sCareer').value)document.getElementById('sCareer').value=si.career_hope;
 // 동아리는 자동채움하지 않음 (교사가 직접 입력)
@@ -745,21 +853,14 @@ function autoFillStudent(txt){
 try{
 console.log('[autoFill] PDF 텍스트 앞 500자:', txt.substring(0,500));
 
-// === 이름 추출 (다양한 나이스/생기부 패턴) ===
+// === 이름 추출 ===
 const namePatterns=[
-// 나이스 형식
 /성\s*명\s*[:\s]*([가-힣]{2,4})/,
 /이\s*름\s*[:\s]*([가-힣]{2,4})/,
 /성명\s*[:\s]*([가-힣]{2,4})/,
-// "학생" 앞에 이름
 /([가-힣]{2,4})\s*학생의?\s*(성장|학교생활|생기부|학생부)/,
-// 보고서 제목 형태
-/([가-힣]{2,4})\s*(학생)?\s*(성장\s*분석|분석\s*보고)/,
-// 학적사항에서
 /학\s*적\s*사\s*항[^가-힣]*([가-힣]{2,4})/,
-// 테이블 셀에서 이름 (학번+이름 연속 패턴)
 /\d{5,6}\s*([가-힣]{2,4})/,
-// 반번호 뒤 이름
 /\d{1,2}\s*반\s*\d{1,2}\s*번?\s*([가-힣]{2,4})/,
 ];
 let foundName='';
@@ -767,56 +868,66 @@ for(const p of namePatterns){
 const m=txt.match(p);
 if(m&&m[1]&&m[1].length>=2&&m[1].length<=4){
 foundName=m[1];
-console.log('[autoFill] 이름 매칭:',foundName,'패턴:',p.source);
+console.log('[autoFill] 이름:',foundName);
 break;
 }
 }
-if(foundName){
-document.getElementById('sName').value=foundName;
-}
+if(foundName)document.getElementById('sName').value=foundName;
 
-// === 학년반번호 추출 ===
-const gradePatterns=[
+// === 번호만 추출 (학년/반은 classInfo에서 이미 설정됨) ===
+let foundNo='';
+// 패턴1: "3학년 2반 15번" → 15
+const fullPat=[
 /(\d)\s*학\s*년\s*(\d{1,2})\s*반\s*(\d{1,2})\s*번/,
-/(\d)-(\d{1,2})-(\d{1,2})/,  // 3-2-15 형태
+/(\d)-(\d{1,2})-(\d{1,2})/,
 /(\d)학년\s*(\d{1,2})반\s*(\d{1,2})번/,
-/학\s*년\s*[:\s]*(\d)\s*반\s*[:\s]*(\d{1,2})\s*번\s*호?\s*[:\s]*(\d{1,2})/,
 ];
-let foundGrade='',foundClass='',foundNo='';
-for(const p of gradePatterns){
+for(const p of fullPat){
 const m=txt.match(p);
-if(m){
-foundGrade=m[1];foundClass=m[2];foundNo=m[3];
-console.log('[autoFill] 학번 매칭:',foundGrade,foundClass,foundNo);
-break;
+if(m){foundNo=m[3];console.log('[autoFill] 번호(전체패턴):',foundNo);break}
 }
-}
-// 학번 5~6자리 패턴 (예: 30215 = 3학년 02반 15번)
-if(!foundClass){
+// 패턴2: 5자리 학번 "30215" → 15
+if(!foundNo){
 const sidMatch=txt.match(/(\d)(\d{2})(\d{2})\s*[가-힣]{2,4}/);
-if(sidMatch){
-foundGrade=sidMatch[1];foundClass=sidMatch[2];foundNo=sidMatch[3];
-console.log('[autoFill] 학번(5자리) 매칭:',foundGrade,foundClass,foundNo);
+if(sidMatch){foundNo=sidMatch[3];console.log('[autoFill] 번호(5자리):',foundNo)}
 }
+// 번호 설정
+if(foundNo){
+const noVal=String(parseInt(foundNo)).padStart(2,'0');
+if(parseInt(noVal)>=1&&parseInt(noVal)<=30){
+document.getElementById('sNo').value=noVal;
 }
-if(foundClass){
-document.getElementById('sGrade').value=foundGrade||'3';
-document.getElementById('sClass').value=String(parseInt(foundClass)).padStart(2,'0');
-document.getElementById('sNo').value=String(parseInt(foundNo)).padStart(2,'0');
 updPreview();
 }
 
-// === 진로/동아리는 자동추출하지 않음 (오탐이 많아서 AI 분석 후 채움) ===
+// === 진로 추출 (동아리는 자동추출 안 함) ===
+const careerPatterns=[
+/희망\s*진로\s*[:\s]*([가-힣a-zA-Z\s]{2,20})/,
+/진로\s*희망\s*[:\s]*([가-힣a-zA-Z\s]{2,20})/,
+/장래\s*희망\s*[:\s]*([가-힣a-zA-Z\s]{2,20})/,
+/희망\s*학과\s*[:\s]*([가-힣a-zA-Z\s]{2,20})/,
+];
+for(const p of careerPatterns){
+const m=txt.match(p);
+if(m&&m[1]){
+const career=m[1].trim().replace(/\s{2,}/g,' ');
+if(career.length>=2&&!/선택|과목|이수|단위|학기|교과/.test(career)){
+document.getElementById('sCareer').value=career.substring(0,20);
+console.log('[autoFill] 진로:',career);
+break;
+}
+}
+}
 
 chk();
-// 자동추출 결과 안내
 const filled=[];
 if(foundName)filled.push('이름');
-if(foundClass)filled.push('학번');
+if(foundNo)filled.push('번호');
+if(document.getElementById('sCareer').value)filled.push('진로');
 if(filled.length){
 const dz=document.getElementById('dz');
 const sub=dz.querySelector('.dz-s');
-if(sub)sub.textContent+=` · 자동추출: ${filled.join(', ')} ✓`;
+if(sub){sub.style.display='';sub.textContent=`자동추출: ${filled.join(', ')} ✓`}
 }
 
 }catch(e){console.warn('[autoFill] 자동추출 실패:',e)}
@@ -909,54 +1020,108 @@ ${pdf.substring(0,30000)}
 {"student_info":{"name":"","grade":"","class_num":"","student_num":"","career_hope":"","club":""},"overview":{"summary":"","strengths":["","",""],"improvements":["",""],"competencies":{"career":{"grade1":"","grade2":"","growth":""},"academic":{"grade1":"","grade2":"","growth":""},"community":{"grade1":"","grade2":"","growth":""},"character":{"grade1":"","grade2":"","growth":""}}},"jarhaeng":{"jayul":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"","focus":"","supplement":""}},"jinro":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"","focus":"","supplement":""}},"dongari":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"","focus":"","supplement":""}},"hangbal":{"evaluation":"","option1":{"title":"${pri[0]}중심","text":"","focus":"","supplement":""},"option2":{"title":"${pri[1]}중심","text":"","focus":"","supplement":""}}},"setuk":{"direction":"","subjects":[{"name":"","theme":"","reason":"","keywords":[]}]},"club":{"name":"","goal":"","monthly":[{"month":"3월","activity":"","record":""},{"month":"4월","activity":"","record":""},{"month":"5월","activity":"","record":""},{"month":"6월","activity":"","record":""},{"month":"7월","activity":"","record":""},{"month":"8월","activity":"","record":""},{"month":"9월","activity":"","record":""},{"month":"10월","activity":"","record":""},{"month":"11월","activity":"","record":""}]},"counsel":{"talk_points":[],"questions":[],"parent_points":[],"recommended_activities":[]}}`}
 
 function pr(tx,nm,cr,cl,sid,kw){
-// 파싱 전략: 3단계 시도
-function tryParse(str){
-// 백틱 코드블록 제거
-str=str.replace(/```json\s*/gi,'').replace(/```\s*/g,'').replace(/^\s*json\s*/i,'').trim();
-// JSON 블록 추출
-const s=str.indexOf('{'),e=str.lastIndexOf('}');
-if(s<0||e<=s)return null;
-str=str.substring(s,e+1);
-return str;
+function makeMeta(){return{nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')}}
+
+// 빈 텍스트 체크
+if(!tx||tx.trim().length<10){
+console.error('[pr] 빈 텍스트');
+return{_m:makeMeta(),_raw:tx||'(빈 응답)',_err:true};
 }
 
-function makeMeta(){return{nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')}}
+function extractJSON(str){
+str=str.replace(/```json\s*/gi,'').replace(/```\s*/g,'').replace(/^\s*json\s*/i,'').trim();
+const s=str.indexOf('{'),e=str.lastIndexOf('}');
+if(s<0||e<=s)return null;
+return str.substring(s,e+1);
+}
 
 // 1차: 기본 파싱
 try{
-let c=tryParse(tx);
-if(c){const o=JSON.parse(c);o._m=makeMeta();return o}
+let c=extractJSON(tx);
+if(c){const o=JSON.parse(c);o._m=makeMeta();console.log('[pr] 1차 성공');return o}
 }catch(e1){console.log('[pr] 1차 실패:',e1.message)}
 
-// 2차: 줄바꿈/제어문자 정리 후 파싱
+// 2차: 문자열 내부 줄바꿈 → 공백
 try{
-let c=tryParse(tx);
+let c=extractJSON(tx);
 if(c){
-// JSON 문자열 값 내부의 실제 줄바꿈을 이스케이프
-// "..." 안의 실제 \n을 \\n으로 변환
-c=c.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,''); // 제어문자 제거 (탭, 줄바꿈 제외)
-// 문자열 내부의 실제 줄바꿈 처리
+c=c.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,'');
 let result='',inStr=false,prev='';
 for(let i=0;i<c.length;i++){
 const ch=c[i];
 if(ch==='"'&&prev!=='\\')inStr=!inStr;
-if(inStr&&(ch==='\n'||ch==='\r')){result+=' ';continue}
-if(inStr&&ch==='\t'){result+=' ';continue}
+if(inStr&&(ch==='\n'||ch==='\r'||ch==='\t')){result+=' ';prev=ch;continue}
 result+=ch;prev=ch;
 }
-const o=JSON.parse(result);o._m=makeMeta();console.log('[pr] 2차 파싱 성공');return o;
+const o=JSON.parse(result);o._m=makeMeta();console.log('[pr] 2차 성공');return o;
 }
 }catch(e2){console.log('[pr] 2차 실패:',e2.message)}
 
-// 3차: 극단적 정리 - 모든 줄바꿈 공백으로
+// 3차: 모든 줄바꿈/제어문자 제거
 try{
-let c=tryParse(tx);
+let c=extractJSON(tx);
 if(c){
-c=c.replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ');
-c=c.replace(/[\x00-\x1F\x7F]/g,'');
-const o=JSON.parse(c);o._m=makeMeta();console.log('[pr] 3차 파싱 성공');return o;
+c=c.replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ').replace(/[\x00-\x1F\x7F]/g,'');
+const o=JSON.parse(c);o._m=makeMeta();console.log('[pr] 3차 성공');return o;
 }
 }catch(e3){console.log('[pr] 3차 실패:',e3.message)}
+
+// 4차: 문자열 값 안의 이스케이프 안 된 따옴표 수정
+try{
+let c=extractJSON(tx);
+if(c){
+c=c.replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ').replace(/[\x00-\x1F\x7F]/g,'');
+// 문자열 값 안의 " → \\"로 변환 (간단한 상태머신)
+let fixed='',inS=false,i=0;
+while(i<c.length){
+const ch=c[i];
+if(!inS&&ch==='"'){fixed+=ch;inS=true;i++;continue}
+if(inS&&ch==='\\'&&i+1<c.length){fixed+=ch+c[i+1];i+=2;continue}
+if(inS&&ch==='"'){
+// 다음 문자가 :,}] 또는 공백+:,}] 이면 문자열 끝
+const rest=c.substring(i+1).trimStart();
+if(!rest||/^[,:}\]]/.test(rest)){fixed+=ch;inS=false;i++;continue}
+// 아니면 문자열 안의 따옴표 → 이스케이프
+fixed+='\\"';i++;continue;
+}
+fixed+=ch;i++;
+}
+const o=JSON.parse(fixed);o._m=makeMeta();console.log('[pr] 4차 성공(따옴표 수정)');return o;
+}
+}catch(e4){console.log('[pr] 4차 실패:',e4.message)}
+
+// 5차: 최후의 수단 - 핵심 필드만 정규식으로 추출
+try{
+console.log('[pr] 5차 시도 - 정규식 추출');
+const raw=tx;
+const getSafe=(key)=>{
+const re=new RegExp('"'+key+'"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"');
+const m=raw.match(re);
+return m?m[1].replace(/\\"/g,'"').replace(/\\n/g,' '):'';
+};
+const getArr=(key)=>{
+const re=new RegExp('"'+key+'"\\s*:\\s*\\[(.*?)\\]','s');
+const m=raw.match(re);
+if(!m)return[];
+return(m[1].match(/"((?:[^"\\\\]|\\\\.)*)"/g)||[]).map(s=>s.replace(/^"|"$/g,'').replace(/\\"/g,'"'));
+};
+const o={
+student_info:{name:getSafe('name'),career_hope:getSafe('career_hope'),club:getSafe('club')},
+overview:{summary:getSafe('summary'),strengths:getArr('strengths'),improvements:getArr('improvements'),
+competencies:{
+career:{grade1:getSafe('grade1'),grade2:getSafe('grade2'),growth:getSafe('growth')},
+academic:{grade1:'',grade2:'',growth:''},community:{grade1:'',grade2:'',growth:''},character:{grade1:'',grade2:'',growth:''}
+}},
+jarhaeng:{jayul:{evaluation:'',option1:{title:'',text:'',focus:'',supplement:''},option2:{title:'',text:'',focus:'',supplement:''}},
+jinro:{evaluation:'',option1:{title:'',text:'',focus:'',supplement:''},option2:{title:'',text:'',focus:'',supplement:''}},
+dongari:{evaluation:'',option1:{title:'',text:'',focus:'',supplement:''},option2:{title:'',text:'',focus:'',supplement:''}},
+hangbal:{evaluation:'',option1:{title:'',text:'',focus:'',supplement:''},option2:{title:'',text:'',focus:'',supplement:''}}},
+setuk:{direction:getSafe('direction'),subjects:[]},
+club:{name:'',goal:'',monthly:[]},
+counsel:{talk_points:getArr('talk_points'),questions:getArr('questions'),parent_points:[],recommended_activities:[]}
+};
+if(o.overview.summary){o._m=makeMeta();o._partial=true;console.log('[pr] 5차 성공(부분 추출)');return o}
+}catch(e5){console.log('[pr] 5차 실패:',e5.message)}
 
 console.error('[pr] 모든 파싱 시도 실패');
 return{_m:makeMeta(),_raw:tx,_err:true};
@@ -967,28 +1132,39 @@ document.getElementById('resS').style.display='block';
 const el=document.getElementById('resContent');
 
 if(r._err){
-el.innerHTML=`<div class="res-sec"><h3>⚠️ 파싱 실패</h3><p style="margin-bottom:10px;color:var(--coral);font-weight:600">AI 응답을 JSON으로 변환하지 못했습니다. 다시 시도해주세요.</p><details><summary style="cursor:pointer;color:var(--g3);font-size:12px">원문 보기</summary><pre style="white-space:pre-wrap;font-size:11px;color:var(--g3);margin-top:8px;max-height:300px;overflow:auto">${esc(r._raw||'')}</pre></details></div>`;
+const rawLen=(r._raw||'').length;
+const rawPreview=esc((r._raw||'').substring(0,500));
+el.innerHTML=`<div class="res-sec"><h3>⚠️ 파싱 실패</h3>
+<p style="margin-bottom:10px;color:var(--coral);font-weight:600">AI 응답을 JSON으로 변환하지 못했습니다.</p>
+<p style="font-size:12px;color:var(--g3);margin-bottom:10px">응답 길이: ${rawLen}자 | 콘솔(F12)에서 상세 오류를 확인할 수 있습니다.</p>
+<details><summary style="cursor:pointer;color:var(--g3);font-size:12px;font-weight:600">▶ 원문 보기 (앞 500자)</summary>
+<pre style="white-space:pre-wrap;font-size:11px;color:var(--g3);margin-top:8px;max-height:400px;overflow:auto;padding:12px;background:var(--g7);border-radius:8px">${rawPreview}${rawLen>500?'\n\n... ('+rawLen+'자 중 500자만 표시)':''}</pre></details>
+
+<button class="btn btn-blue btn-sm" onclick="analyze()" style="margin-top:12px">🔄 다시 시도</button>
+
+</div>`;
 return;
 }
 
 const m=r._m||{},ov=r.overview||{},cp=ov.competencies||{},jh=r.jarhaeng||{},se=r.setuk||{},club=r.club||{},co=r.counsel||{};
 const compMeta=[
-{k:'career',l:'진로역량',cls:'',color:'#3182F6'},
-{k:'academic',l:'학업역량',cls:'purple',color:'#7B61FF'},
-{k:'community',l:'공동체역량',cls:'green-c',color:'#00C471'},
-{k:'character',l:'인성역량',cls:'orange',color:'#FF9F43'}
+{k:‘career’,l:‘진로역량’,cls:’’,color:’#3182F6’},
+{k:‘academic’,l:‘학업역량’,cls:‘purple’,color:’#7B61FF’},
+{k:‘community’,l:‘공동체역량’,cls:‘green-c’,color:’#00C471’},
+{k:‘character’,l:‘인성역량’,cls:‘orange’,color:’#FF9F43’}
 ];
 const jhMeta=[
-{k:'jayul',l:'자율활동',lm:1500},
-{k:'jinro',l:'진로활동',lm:2100},
-{k:'dongari',l:'동아리활동',lm:1500},
-{k:'hangbal',l:'행동특성및종합의견',lm:1500}
+{k:‘jayul’,l:‘자율활동’,lm:1500},
+{k:‘jinro’,l:‘진로활동’,lm:2100},
+{k:‘dongari’,l:‘동아리활동’,lm:1500},
+{k:‘hangbal’,l:‘행동특성및종합의견’,lm:1500}
 ];
 
-let html='';
+let html=’’;
 
 // === 헤더 ===
 html+=`<div class="res-header">
+
 <h2>📊 ${m.nm||'학생'} 성장분석 보고서</h2>
 <div class="res-info">
 <div>📋 <span>${m.sid||''}</span></div>
@@ -1000,6 +1176,7 @@ html+=`<div class="res-header">
 
 // === 종합 분석 ===
 html+=`<div class="res-sec"><h3>📊 종합 분석</h3>
+
 <div class="res-summary">${ov.summary||'분석 결과 없음'}</div>
 <div class="res-chips">${(ov.strengths||[]).map(s=>`<div class="chip-s green">✦ ${s}</div>`).join('')}</div>
 <div class="res-chips">${(ov.improvements||[]).map(s=>`<div class="chip-s coral">→ ${s}</div>`).join('')}</div>
@@ -1010,6 +1187,7 @@ html+=`<div class="res-sec"><h3>💪 4대 역량 분석</h3><div class="comp-gri
 compMeta.forEach(cm=>{
 const c=cp[cm.k]||{};
 html+=`<div class="comp-card ${cm.cls}" style="border-left-color:${cm.color}">
+
 <div class="comp-label" style="color:${cm.color}">${cm.l}</div>
 <div class="comp-row"><div class="tag">1학년</div><div>${c.grade1||'-'}</div></div>
 <div class="comp-row"><div class="tag">2학년</div><div>${c.grade2||'-'}</div></div>
@@ -1022,8 +1200,9 @@ html+=`</div></div>`;
 html+=`<div class="res-sec"><h3>📝 자율·진로·동아리·행발 기재 예시</h3>`;
 jhMeta.forEach(a=>{
 const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{};
-const b1=bl(o1.text||''),b2=bl(o2.text||'');
+const b1=bl(o1.text||’’),b2=bl(o2.text||’’);
 html+=`<div class="opt-area-title">${a.l} <span class="byte-badge">${a.lm}B</span></div>
+
 <div class="opt-eval">${d.evaluation||''}</div>
 <div class="opt-pair">
 <div class="opt-box">
@@ -1042,6 +1221,7 @@ html+=`</div>`;
 
 // === 세특 ===
 html+=`<div class="res-sec"><h3>🎯 3학년 세특 방향</h3>
+
 <div class="res-summary">${se.direction||''}</div>`;
 (se.subjects||[]).forEach(s=>{
 html+=`<div class="setuk-card"><div class="setuk-name">${s.name||''}</div>
@@ -1053,6 +1233,7 @@ html+=`</div>`;
 
 // === 동아리 ===
 html+=`<div class="res-sec"><h3>🏫 동아리 월별 계획</h3>
+
 <div class="res-summary">${club.goal||''}</div>
 <table class="club-tbl"><tr><th style="width:60px">월</th><th>활동 내용</th><th>기록 포인트</th></tr>`;
 (club.monthly||[]).forEach(m=>{
@@ -1062,6 +1243,7 @@ html+=`</table></div>`;
 
 // === 상담 ===
 html+=`<div class="res-sec"><h3>💬 상담 가이드</h3>
+
 <div class="co-card"><h4>💬 상담 포인트</h4>${(co.talk_points||[]).map(s=>`<p>• ${s}</p>`).join('')}</div>
 <div class="co-card"><h4>❓ 질문 예시</h4>${(co.questions||[]).map(s=>`<p>"${s}"</p>`).join('')}</div>
 <div class="co-card"><h4>👨‍👩‍👧 학부모 상담</h4>${(co.parent_points||[]).map(s=>`<p>• ${s}</p>`).join('')}</div>
@@ -1071,63 +1253,20 @@ html+=`<div class="res-sec"><h3>💬 상담 가이드</h3>
 el.innerHTML=html;
 }
 
-function bl(s){return new Blob([s||'']).size}
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function bl(s){return new Blob([s||’’]).size}
+function esc(s){return s.replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’)}
 
-function getPDFStyles(){return`<style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Sans KR',sans-serif;max-width:860px;margin:0 auto;padding:40px 32px;color:#191F28;line-height:1.7;font-size:13px;background:#fff}
-.cover{text-align:center;padding:40px 0 30px;border-bottom:3px solid #3182F6;margin-bottom:30px}
-.cover h1{font-size:28px;font-weight:900;color:#3182F6;letter-spacing:-1px}
-.cover .sub{font-size:14px;color:#8B95A1;margin-top:8px}
-.info-bar{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;padding:16px 20px;background:linear-gradient(135deg,#EBF4FF,#F0EDFF);border-radius:14px}
-.info-item{font-size:13px;font-weight:600;color:#333D4B}.info-item span{color:#3182F6}
-.section{margin:28px 0;page-break-inside:avoid}
-h2{font-size:18px;font-weight:800;color:#191F28;margin:30px 0 16px;padding-bottom:8px;border-bottom:2px solid #E5E8EB;display:flex;align-items:center;gap:8px}
-h3{font-size:15px;font-weight:700;color:#333D4B;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
-.byte-tag{font-size:11px;background:#F2F4F6;color:#8B95A1;padding:2px 8px;border-radius:100px;font-weight:600}
-.summary{font-size:14px;line-height:1.85;color:#333D4B;padding:18px 20px;background:#F8F9FA;border-radius:12px;border-left:4px solid #3182F6;margin:12px 0}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.chip-good{padding:8px 14px;background:#E8FAF0;color:#00C471;border-radius:10px;font-size:12px;font-weight:600}
-.chip-imp{padding:8px 14px;background:#FFF0F0;color:#FF6B6B;border-radius:10px;font-size:12px;font-weight:600}
-.comp-card{background:#FAFBFC;border-radius:12px;padding:16px 18px;margin:10px 0}
-.comp-title{font-size:14px;font-weight:800;margin-bottom:8px}
-.comp-tbl{width:100%;font-size:12px;line-height:1.7}
-.comp-tbl th{text-align:left;padding:6px 10px;color:#8B95A1;font-weight:600;vertical-align:top}
-.comp-tbl td{padding:6px 10px;color:#4E5968}
-.eval{font-size:13px;color:#4E5968;line-height:1.7;padding:10px 14px;background:#FAFBFC;border-radius:8px;margin-bottom:12px}
-.opt-grid{display:grid;gap:10px}
-.opt-box{border-radius:12px;padding:16px;border:1px solid #E5E8EB;background:#fff}
-.opt-hdr{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.opt-badge{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;color:#fff}
-.opt-badge.blue{background:#3182F6}.opt-badge.purple{background:#7B61FF}
-.byte-count{font-size:11px;font-weight:600;color:#8B95A1;margin-left:auto}.byte-count.over{color:#FF6B6B}
-.opt-body{font-size:13px;color:#333D4B;line-height:1.8;white-space:pre-wrap;padding:12px 14px;background:#F8F9FA;border-radius:8px}
-.opt-meta{font-size:11px;color:#8B95A1;margin-top:8px;font-weight:500}
-.setuk-card{padding:14px 16px;background:#FAFBFC;border-radius:10px;margin:8px 0;border:1px solid #E5E8EB}
-.setuk-name{font-size:14px;font-weight:800;color:#3182F6}
-.setuk-theme{font-size:13px;font-weight:600;color:#333D4B;margin:6px 0}
-.setuk-reason{font-size:12px;color:#4E5968;line-height:1.7}
-.setuk-kws{margin-top:8px}.kw-tag{display:inline-block;padding:3px 10px;background:#EBF4FF;color:#3182F6;border-radius:100px;font-size:11px;font-weight:600;margin:2px}
-.club-tbl{width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid #E5E8EB;font-size:12px}
-.club-tbl th{padding:10px 14px;background:#F2F4F6;font-weight:700;text-align:left;color:#4E5968}
-.club-tbl td{padding:10px 14px;border-top:1px solid #E5E8EB;color:#333D4B;line-height:1.65}
-.co-sec{margin:14px 0;padding:14px 16px;background:#FAFBFC;border-radius:10px}
-.co-sec h4{font-size:13px;font-weight:700;margin-bottom:8px;color:#333D4B}
-.co-sec p{font-size:12px;color:#4E5968;line-height:1.7;margin:4px 0}
-.footer{text-align:center;margin-top:40px;padding-top:16px;border-top:2px solid #E5E8EB;font-size:11px;color:#B0B8C1}
-@media print{body{padding:20px 16px;font-size:12px}.cover{padding:20px 0 16px}.comp-card,.opt-box,.setuk-card{break-inside:avoid}}
-</style>`}
+function getPDFStyles(){return`<style> @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap'); *{margin:0;padding:0;box-sizing:border-box} body{font-family:'Noto Sans KR',sans-serif;max-width:860px;margin:0 auto;padding:40px 32px;color:#191F28;line-height:1.7;font-size:13px;background:#fff} .cover{text-align:center;padding:40px 0 30px;border-bottom:3px solid #3182F6;margin-bottom:30px} .cover h1{font-size:28px;font-weight:900;color:#3182F6;letter-spacing:-1px} .cover .sub{font-size:14px;color:#8B95A1;margin-top:8px} .info-bar{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;padding:16px 20px;background:linear-gradient(135deg,#EBF4FF,#F0EDFF);border-radius:14px} .info-item{font-size:13px;font-weight:600;color:#333D4B}.info-item span{color:#3182F6} .section{margin:28px 0;page-break-inside:avoid} h2{font-size:18px;font-weight:800;color:#191F28;margin:30px 0 16px;padding-bottom:8px;border-bottom:2px solid #E5E8EB;display:flex;align-items:center;gap:8px} h3{font-size:15px;font-weight:700;color:#333D4B;margin:20px 0 10px;display:flex;align-items:center;gap:8px} .byte-tag{font-size:11px;background:#F2F4F6;color:#8B95A1;padding:2px 8px;border-radius:100px;font-weight:600} .summary{font-size:14px;line-height:1.85;color:#333D4B;padding:18px 20px;background:#F8F9FA;border-radius:12px;border-left:4px solid #3182F6;margin:12px 0} .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0} .chip-good{padding:8px 14px;background:#E8FAF0;color:#00C471;border-radius:10px;font-size:12px;font-weight:600} .chip-imp{padding:8px 14px;background:#FFF0F0;color:#FF6B6B;border-radius:10px;font-size:12px;font-weight:600} .comp-card{background:#FAFBFC;border-radius:12px;padding:16px 18px;margin:10px 0} .comp-title{font-size:14px;font-weight:800;margin-bottom:8px} .comp-tbl{width:100%;font-size:12px;line-height:1.7} .comp-tbl th{text-align:left;padding:6px 10px;color:#8B95A1;font-weight:600;vertical-align:top} .comp-tbl td{padding:6px 10px;color:#4E5968} .eval{font-size:13px;color:#4E5968;line-height:1.7;padding:10px 14px;background:#FAFBFC;border-radius:8px;margin-bottom:12px} .opt-grid{display:grid;gap:10px} .opt-box{border-radius:12px;padding:16px;border:1px solid #E5E8EB;background:#fff} .opt-hdr{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap} .opt-badge{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;color:#fff} .opt-badge.blue{background:#3182F6}.opt-badge.purple{background:#7B61FF} .byte-count{font-size:11px;font-weight:600;color:#8B95A1;margin-left:auto}.byte-count.over{color:#FF6B6B} .opt-body{font-size:13px;color:#333D4B;line-height:1.8;white-space:pre-wrap;padding:12px 14px;background:#F8F9FA;border-radius:8px} .opt-meta{font-size:11px;color:#8B95A1;margin-top:8px;font-weight:500} .setuk-card{padding:14px 16px;background:#FAFBFC;border-radius:10px;margin:8px 0;border:1px solid #E5E8EB} .setuk-name{font-size:14px;font-weight:800;color:#3182F6} .setuk-theme{font-size:13px;font-weight:600;color:#333D4B;margin:6px 0} .setuk-reason{font-size:12px;color:#4E5968;line-height:1.7} .setuk-kws{margin-top:8px}.kw-tag{display:inline-block;padding:3px 10px;background:#EBF4FF;color:#3182F6;border-radius:100px;font-size:11px;font-weight:600;margin:2px} .club-tbl{width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid #E5E8EB;font-size:12px} .club-tbl th{padding:10px 14px;background:#F2F4F6;font-weight:700;text-align:left;color:#4E5968} .club-tbl td{padding:10px 14px;border-top:1px solid #E5E8EB;color:#333D4B;line-height:1.65} .co-sec{margin:14px 0;padding:14px 16px;background:#FAFBFC;border-radius:10px} .co-sec h4{font-size:13px;font-weight:700;margin-bottom:8px;color:#333D4B} .co-sec p{font-size:12px;color:#4E5968;line-height:1.7;margin:4px 0} .footer{text-align:center;margin-top:40px;padding-top:16px;border-top:2px solid #E5E8EB;font-size:11px;color:#B0B8C1} @media print{body{padding:20px 16px;font-size:12px}.cover{padding:20px 0 16px}.comp-card,.opt-box,.setuk-card{break-inside:avoid}} </style>`}
 
 function buildPDFContent(result){
 const r=result,m=r._m||{},ov=r.overview||{},cp=ov.competencies||{},jh=r.jarhaeng||{},se=r.setuk||{},cl=r.club||{},co=r.counsel||{};
-const compLabels={career:'진로역량',academic:'학업역량',community:'공동체역량',character:'인성역량'};
-const compColors={career:'#3182F6',academic:'#7B61FF',community:'#00C471',character:'#FF9F43'};
-let compHtml='';
-['career','academic','community','character'].forEach(k=>{
+const compLabels={career:‘진로역량’,academic:‘학업역량’,community:‘공동체역량’,character:‘인성역량’};
+const compColors={career:’#3182F6’,academic:’#7B61FF’,community:’#00C471’,character:’#FF9F43’};
+let compHtml=’’;
+[‘career’,‘academic’,‘community’,‘character’].forEach(k=>{
 const c=cp[k]||{};
 compHtml+=`<div class="comp-card" style="border-left:4px solid ${compColors[k]}">
+
 <div class="comp-title" style="color:${compColors[k]}">${compLabels[k]}</div>
 <table class="comp-tbl"><tr><th style="width:80px">1학년</th><td>${c.grade1||'-'}</td></tr>
 <tr><th>2학년</th><td>${c.grade2||'-'}</td></tr>
@@ -1156,6 +1295,7 @@ let coHtml=`<div class="co-sec"><h4>💬 상담 포인트</h4>${(co.talk_points|
 <div class="co-sec"><h4>🚀 추천 활동</h4>${(co.recommended_activities||[]).map(s=>`<p>✦ ${s}</p>`).join('')}</div>`;
 
 return`<div class="info-bar">
+
 <div class="info-item">📋 <span>${m.sid||''}</span> ${m.nm||''}</div>
 <div class="info-item">🎯 진로: <span>${m.cr||''}</span></div>
 <div class="info-item">🏫 동아리: <span>${m.cl||''}</span></div>
@@ -1175,10 +1315,11 @@ return`<div class="info-bar">
 }
 
 function dlPDF(){if(!cur)return;
-const w=window.open('','_blank');
+const w=window.open(’’,’_blank’);
 const m=cur._m||{};
-w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${m.nm||''} 생기부 성장분석 보고서</title>
+w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${m.nm||’’} 생기부 성장분석 보고서</title>
 ${getPDFStyles()}</head><body>
+
 <div class="cover"><h1>📊 생기부 성장분석 보고서</h1><div class="sub">AI 기반 학생부 종합 분석 리포트</div></div>
 ${buildPDFContent(cur)}
 </body></html>`);
@@ -1187,37 +1328,37 @@ w.document.close();setTimeout(()=>w.print(),800)}
 function dlXL(){if(!cur||cur._err)return;const r=cur,m=r._m,jh=r.jarhaeng||{};
 // SheetJS로 엑셀 생성
 const wb=XLSX.utils.book_new();
-const areas=[{k:'jayul',l:'자율활동',lm:1500},{k:'jinro',l:'진로활동',lm:2100},{k:'dongari',l:'동아리활동',lm:1500},{k:'hangbal',l:'행동특성및종합의견',lm:1500}];
+const areas=[{k:‘jayul’,l:‘자율활동’,lm:1500},{k:‘jinro’,l:‘진로활동’,lm:2100},{k:‘dongari’,l:‘동아리활동’,lm:1500},{k:‘hangbal’,l:‘행동특성및종합의견’,lm:1500}];
 
 // ===== 시트1: 학생별 상세 (좌: AI예시 / 우: 교사기입) =====
 const s1=[];
 // 헤더
-s1.push(['생기부 성장분석 - 개인별 상담 기록지','','','','','','']);
-s1.push(['학교명','','학년','반','번호','성명','희망진로']);
-s1.push(['','',(m.sid||'').substring(0,1),(m.sid||'').substring(1,3),(m.sid||'').substring(3,5),m.nm,m.cr]);
+s1.push([‘생기부 성장분석 - 개인별 상담 기록지’,’’,’’,’’,’’,’’,’’]);
+s1.push([‘학교명’,’’,‘학년’,‘반’,‘번호’,‘성명’,‘희망진로’]);
+s1.push([’’,’’,(m.sid||’’).substring(0,1),(m.sid||’’).substring(1,3),(m.sid||’’).substring(3,5),m.nm,m.cr]);
 s1.push([]);
-s1.push(['영역','바이트제한','AI 생성 예시 (1안)','Byte','AI 생성 예시 (2안)','Byte','교사 직접 기입란','Byte']);
+s1.push([‘영역’,‘바이트제한’,‘AI 생성 예시 (1안)’,‘Byte’,‘AI 생성 예시 (2안)’,‘Byte’,‘교사 직접 기입란’,‘Byte’]);
 
 areas.forEach(a=>{
 const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{};
-const t1=o1.text||'',t2=o2.text||'';
-s1.push([a.l,a.lm,t1,bl(t1),t2,bl(t2),'',0]);
+const t1=o1.text||’’,t2=o2.text||’’;
+s1.push([a.l,a.lm,t1,bl(t1),t2,bl(t2),’’,0]);
 });
 
 s1.push([]);
-s1.push(['※ 왼쪽 AI 예시를 참고하여 오른쪽 교사 기입란에 직접 작성해주세요.']);
-s1.push(['※ 바이트 제한을 초과하면 해당 셀의 바이트 수가 빨간색으로 표시됩니다.']);
-s1.push(['※ 이 곳에 필요한 내용을 입력하고 반드시 선택한 후 복사해서 검토용으로 사용하시면 됩니다.']);
-s1.push(['※ 출력물에 나오게 하고 싶지 않은 문자내용은 글자색을 인쇄로 설정하면 됩니다.']);
+s1.push([’※ 왼쪽 AI 예시를 참고하여 오른쪽 교사 기입란에 직접 작성해주세요.’]);
+s1.push([’※ 바이트 제한을 초과하면 해당 셀의 바이트 수가 빨간색으로 표시됩니다.’]);
+s1.push([’※ 이 곳에 필요한 내용을 입력하고 반드시 선택한 후 복사해서 검토용으로 사용하시면 됩니다.’]);
+s1.push([’※ 출력물에 나오게 하고 싶지 않은 문자내용은 글자색을 인쇄로 설정하면 됩니다.’]);
 
 const ws1=XLSX.utils.aoa_to_sheet(s1);
 
 // 컬럼 너비
-ws1['!cols']=[{wch:14},{wch:8},{wch:55},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
+ws1[’!cols’]=[{wch:14},{wch:8},{wch:55},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
 
 // 셀 스타일링 (SheetJS 무료버전 한계 내에서)
 // 머지: 타이틀
-ws1['!merges']=[
+ws1[’!merges’]=[
 {s:{r:0,c:0},e:{r:0,c:7}}, // 타이틀
 {s:{r:9,c:0},e:{r:9,c:7}}, // 안내1
 {s:{r:10,c:0},e:{r:10,c:7}}, // 안내2
@@ -1226,111 +1367,107 @@ ws1['!merges']=[
 ];
 
 // 행 높이 설정 (데이터 행은 높게)
-ws1['!rows']=[{hpt:30},{hpt:22},{hpt:22},{hpt:10},{hpt:22},{hpt:180},{hpt:200},{hpt:180},{hpt:180}];
+ws1[’!rows’]=[{hpt:30},{hpt:22},{hpt:22},{hpt:10},{hpt:22},{hpt:180},{hpt:200},{hpt:180},{hpt:180}];
 
-XLSX.utils.book_append_sheet(wb,ws1,'개인상담');
+XLSX.utils.book_append_sheet(wb,ws1,‘개인상담’);
 
 // ===== 시트2: 전체 학생 일람표 =====
 const s2=[];
-s2.push(['생기부 전체 학생 일람표 - 교사용','','','','','','','','']);
-s2.push(['번호','이름','자율활동 (1500B)','Byte','진로활동 (2100B)','Byte','동아리활동 (1500B)','Byte','행발 (1500B)','Byte']);
+s2.push([‘생기부 전체 학생 일람표 - 교사용’,’’,’’,’’,’’,’’,’’,’’,’’]);
+s2.push([‘번호’,‘이름’,‘자율활동 (1500B)’,‘Byte’,‘진로활동 (2100B)’,‘Byte’,‘동아리활동 (1500B)’,‘Byte’,‘행발 (1500B)’,‘Byte’]);
 
 // 현재 학생 데이터 + 나머지 빈 행
 const allStu=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
 for(let i=1;i<=30;i++){
-const num=String(i).padStart(2,'0');
+const num=String(i).padStart(2,‘0’);
 const found=allStu.find(s=>s.sid&&s.sid.endsWith(num));
 if(found&&found.result&&!found.result._err){
 const fj=found.result.jarhaeng||{};
-const ja=fj.jayul?.option1?.text||'';
-const ji=fj.jinro?.option1?.text||'';
-const dg=fj.dongari?.option1?.text||'';
-const hb=fj.hangbal?.option1?.text||'';
-s2.push([num,found.name||'',ja,bl(ja),ji,bl(ji),dg,bl(dg),hb,bl(hb)]);
+const ja=fj.jayul?.option1?.text||’’;
+const ji=fj.jinro?.option1?.text||’’;
+const dg=fj.dongari?.option1?.text||’’;
+const hb=fj.hangbal?.option1?.text||’’;
+s2.push([num,found.name||’’,ja,bl(ja),ji,bl(ji),dg,bl(dg),hb,bl(hb)]);
 }else{
-s2.push([num,'','',0,'',0,'',0,'',0]);
+s2.push([num,’’,’’,0,’’,0,’’,0,’’,0]);
 }
 }
 
 const ws2=XLSX.utils.aoa_to_sheet(s2);
-ws2['!cols']=[{wch:6},{wch:8},{wch:55},{wch:6},{wch:60},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
-ws2['!merges']=[{s:{r:0,c:0},e:{r:0,c:9}}];
-ws2['!rows']=[{hpt:28},{hpt:22},...Array(30).fill({hpt:160})];
+ws2[’!cols’]=[{wch:6},{wch:8},{wch:55},{wch:6},{wch:60},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
+ws2[’!merges’]=[{s:{r:0,c:0},e:{r:0,c:9}}];
+ws2[’!rows’]=[{hpt:28},{hpt:22},…Array(30).fill({hpt:160})];
 
-XLSX.utils.book_append_sheet(wb,ws2,'전체일람');
+XLSX.utils.book_append_sheet(wb,ws2,‘전체일람’);
 
 XLSX.writeFile(wb,`생기부_${m.sid}_${m.nm}.xlsx`)}
 
-function dlAll(){if(!Object.keys(stu).length){alert('분석된 학생이 없습니다');return}
+function dlAll(){if(!Object.keys(stu).length){alert(‘분석된 학생이 없습니다’);return}
 const wb=XLSX.utils.book_new();
 
 // 전체 일람표
 const s1=[];
-s1.push(['생기부 전체 학생 일람표','','','','','','','','','']);
-s1.push(['번호','이름','진로','자율활동 (1500B)','Byte','진로활동 (2100B)','Byte','동아리활동 (1500B)','Byte','행발 (1500B)','Byte']);
+s1.push([‘생기부 전체 학생 일람표’,’’,’’,’’,’’,’’,’’,’’,’’,’’]);
+s1.push([‘번호’,‘이름’,‘진로’,‘자율활동 (1500B)’,‘Byte’,‘진로활동 (2100B)’,‘Byte’,‘동아리활동 (1500B)’,‘Byte’,‘행발 (1500B)’,‘Byte’]);
 const allStu=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
 for(let i=1;i<=30;i++){
-const num=String(i).padStart(2,'0');
+const num=String(i).padStart(2,‘0’);
 const found=allStu.find(s=>s.sid&&s.sid.endsWith(num));
 if(found&&found.result&&!found.result._err){
 const fj=found.result.jarhaeng||{};
-const ja=fj.jayul?.option1?.text||'';
-const ji=fj.jinro?.option1?.text||'';
-const dg=fj.dongari?.option1?.text||'';
-const hb=fj.hangbal?.option1?.text||'';
-s1.push([num,found.name||'',found.career||'',ja,bl(ja),ji,bl(ji),dg,bl(dg),hb,bl(hb)]);
+const ja=fj.jayul?.option1?.text||’’;
+const ji=fj.jinro?.option1?.text||’’;
+const dg=fj.dongari?.option1?.text||’’;
+const hb=fj.hangbal?.option1?.text||’’;
+s1.push([num,found.name||’’,found.career||’’,ja,bl(ja),ji,bl(ji),dg,bl(dg),hb,bl(hb)]);
 }else{
-s1.push([num,'','','',0,'',0,'',0,'',0]);
+s1.push([num,’’,’’,’’,0,’’,0,’’,0,’’,0]);
 }
 }
 const ws1=XLSX.utils.aoa_to_sheet(s1);
-ws1['!cols']=[{wch:6},{wch:8},{wch:12},{wch:55},{wch:6},{wch:60},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
-ws1['!merges']=[{s:{r:0,c:0},e:{r:0,c:10}}];
-ws1['!rows']=[{hpt:28},{hpt:22},...Array(30).fill({hpt:160})];
-XLSX.utils.book_append_sheet(wb,ws1,'전체일람');
+ws1[’!cols’]=[{wch:6},{wch:8},{wch:12},{wch:55},{wch:6},{wch:60},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
+ws1[’!merges’]=[{s:{r:0,c:0},e:{r:0,c:10}}];
+ws1[’!rows’]=[{hpt:28},{hpt:22},…Array(30).fill({hpt:160})];
+XLSX.utils.book_append_sheet(wb,ws1,‘전체일람’);
 
 // 개별 학생 시트
 allStu.forEach(s=>{
-if(!s.result||s.result._err)return;
+if(!s.result||s.result.*err)return;
 const r=s.result,jh=r.jarhaeng||{};
-const d=[['생기부 개인 상담 기록 - '+s.sid+' '+s.name,'','','','','',''],
-['영역','제한','AI 1안','Byte','AI 2안','Byte','교사 기입란','Byte']];
-[{k:'jayul',l:'자율활동',lm:1500},{k:'jinro',l:'진로활동',lm:2100},{k:'dongari',l:'동아리활동',lm:1500},{k:'hangbal',l:'행발',lm:1500}].forEach(a=>{
+const d=[[‘생기부 개인 상담 기록 - ‘+s.sid+’ ‘+s.name,’’,’’,’’,’’,’’,’’],
+[‘영역’,‘제한’,‘AI 1안’,‘Byte’,‘AI 2안’,‘Byte’,‘교사 기입란’,‘Byte’]];
+[{k:‘jayul’,l:‘자율활동’,lm:1500},{k:‘jinro’,l:‘진로활동’,lm:2100},{k:‘dongari’,l:‘동아리활동’,lm:1500},{k:‘hangbal’,l:‘행발’,lm:1500}].forEach(a=>{
 const ar=jh[a.k]||{},o1=ar.option1||{},o2=ar.option2||{};
-d.push([a.l,a.lm,o1.text||'',bl(o1.text||''),o2.text||'',bl(o2.text||''),'',0]);
+d.push([a.l,a.lm,o1.text||’’,bl(o1.text||’’),o2.text||’’,bl(o2.text||’’),’’,0]);
 });
 const ws=XLSX.utils.aoa_to_sheet(d);
-ws['!cols']=[{wch:14},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
-ws['!merges']=[{s:{r:0,c:0},e:{r:0,c:7}}];
-ws['!rows']=[{hpt:28},{hpt:22},{hpt:180},{hpt:200},{hpt:180},{hpt:180}];
-const sheetName=(s.sid+'_'+s.name).substring(0,31);
+ws[’!cols’]=[{wch:14},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6},{wch:55},{wch:6}];
+ws[’!merges’]=[{s:{r:0,c:0},e:{r:0,c:7}}];
+ws[’!rows’]=[{hpt:28},{hpt:22},{hpt:180},{hpt:200},{hpt:180},{hpt:180}];
+const sheetName=(s.sid+’*’+s.name).substring(0,31);
 XLSX.utils.book_append_sheet(wb,ws,sheetName);
 });
 
-XLSX.writeFile(wb,'생기부_전체.xlsx')}
+XLSX.writeFile(wb,‘생기부_전체.xlsx’)}
 
-function rStu(){const l=document.getElementById('stuL'),e=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
-document.getElementById('stuCnt').textContent=e.length+'명 완료';
-if(!e.length){l.innerHTML='<div style="padding:20px;color:var(--g4);text-align:center;font-size:14px">아직 분석된 학생이 없습니다</div>';return}
-l.innerHTML=e.map(s=>`<div class="si" style="cursor:pointer" onclick="viewStudent('${s.sid}')">
-<span><span class="num">${s.sid}</span><strong>${s.name}</strong></span>
-<span style="display:flex;align-items:center;gap:8px">
-<span class="meta">${s.career} · ${s.date}</span>
-<button class="btn btn-sm" style="padding:4px 10px;font-size:11px;background:var(--green-bg);color:var(--green);border:none;border-radius:6px;cursor:pointer" onclick="event.stopPropagation();dlStudentPDF('${s.sid}')">PDF</button>
-</span></div>`).join('')}
+function rStu(){const l=document.getElementById(‘stuL’),e=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
+document.getElementById(‘stuCnt’).textContent=e.length+‘명 완료’;
+if(!e.length){l.innerHTML=’<div style="padding:20px;color:var(--g4);text-align:center;font-size:14px">아직 분석된 학생이 없습니다</div>’;return}
+l.innerHTML=e.map(s=>`<div class="si" style="cursor:pointer" onclick="viewStudent('${s.sid}')"> <span><span class="num">${s.sid}</span><strong>${s.name}</strong></span> <span style="display:flex;align-items:center;gap:8px"> <span class="meta">${s.career} · ${s.date}</span> <button class="btn btn-sm" style="padding:4px 10px;font-size:11px;background:var(--green-bg);color:var(--green);border:none;border-radius:6px;cursor:pointer" onclick="event.stopPropagation();dlStudentPDF('${s.sid}')">PDF</button> </span></div>`).join(’’)}
 
 function next(){
-document.getElementById('resS').style.display='none';
-document.getElementById('resContent').innerHTML='';
+document.getElementById(‘resS’).style.display=‘none’;
+document.getElementById(‘resContent’).innerHTML=’’;
 cur=null;
-['sName','sCareer','sClub','memo'].forEach(id=>document.getElementById(id).value='');
-pdf='';const d=document.getElementById('dz');d.classList.remove('done');d.querySelector('.dz-i').textContent='📄';
-d.querySelector('.dz-m').textContent='PDF 파일 선택 또는 드래그';const ds=d.querySelector('.dz-s');if(ds)ds.style.display='none';
-document.getElementById('fI').classList.add('hidden');document.getElementById('fi').value='';
+[‘sName’,‘sCareer’,‘sClub’,‘memo’].forEach(id=>document.getElementById(id).value=’’);
+pdf=’’;const d=document.getElementById(‘dz’);d.classList.remove(‘done’);d.querySelector(’.dz-i’).textContent=‘📄’;
+d.querySelector(’.dz-m’).textContent=‘PDF 파일 선택 또는 드래그’;const ds=d.querySelector(’.dz-s’);if(ds)ds.style.display=‘none’;
+document.getElementById(‘fI’).classList.add(‘hidden’);document.getElementById(‘fi’).value=’’;
 // 번호 자동 +1
-const curNo=parseInt(document.getElementById('sNo').value)||0;
-if(curNo<30)document.getElementById('sNo').value=String(curNo+1).padStart(2,'0');
-updPreview();chk();window.scrollTo({top:0,behavior:'smooth'})}
+const curNo=parseInt(document.getElementById(‘sNo’).value)||0;
+if(curNo<30)document.getElementById(‘sNo’).value=String(curNo+1).padStart(2,‘0’);
+updPreview();chk();window.scrollTo({top:0,behavior:‘smooth’})}
 </script>
+
 </body>
 </html>
