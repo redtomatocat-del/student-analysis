@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>생기부 성장 분석 및 3학년 전략 보고서 | Gemini 3.0 Pro</title>
+    <title>생기부 심화 보완 및 3학년 완결 보고서</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
         :root { --p: #6366f1; --s: #10b981; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
-        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 20px; }
-        .wrap { max-width: 1000px; margin: 0 auto; }
-        .card { background: var(--card); border-radius: 16px; padding: 30px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
-        h1 { font-size: 2.2rem; text-align: center; background: linear-gradient(to right, #818cf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; margin-bottom: 10px; }
+        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px; }
+        .wrap { max-width: 1100px; margin: 0 auto; }
+        .card { background: var(--card); border-radius: 16px; padding: 30px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        h1 { font-size: 2.2rem; text-align: center; background: linear-gradient(to right, #818cf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+        .upload-zone { border: 2px dashed #475569; border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; background: rgba(0,0,0,0.1); margin: 20px 0; }
         .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
         input, textarea { width: 100%; padding: 14px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: #fff; box-sizing: border-box; }
-        .btn-main { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--p), #8b5cf6); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(99,102,241,0.4); }
-        
-        /* 보고서 스타일링 */
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: rgba(0,0,0,0.2); }
-        th, td { border: 1px solid #334155; padding: 12px; text-align: left; font-size: 0.95rem; }
-        th { background: rgba(99,102,241,0.2); color: #a5b4fc; }
-        .project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .project-item { background: #0f172a; padding: 15px; border-radius: 10px; border-left: 4px solid var(--s); }
-        .badge { display: inline-block; padding: 4px 10px; background: var(--p); border-radius: 6px; font-size: 0.8rem; margin-bottom: 8px; }
-        #loading { display: none; text-align: center; padding: 50px; }
-        .spinner { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--p); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        .btn-main { width: 100%; padding: 20px; background: linear-gradient(135deg, var(--p), #8b5cf6); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 1.2rem; }
+
+        .section-title { font-size: 1.4rem; color: #a5b4fc; border-left: 5px solid var(--p); padding-left: 15px; margin: 35px 0 20px; font-weight: 700; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
+        th, td { border: 1px solid #334155; padding: 15px; text-align: left; }
+        th { background: rgba(99,102,241,0.15); }
+        .deep-box { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2); border-radius: 10px; padding: 20px; margin-top: 15px; }
+        .strategy-item { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .strategy-tag { display: inline-block; padding: 3px 10px; border-radius: 5px; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; }
+        #loading { display: none; text-align: center; padding: 60px; }
+        .spinner { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--p); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
@@ -32,142 +32,118 @@
 
 <div class="wrap">
     <div class="card" style="text-align: center;">
-        <h1>생기부 성장 분석 및 3학년 전략 보고서</h1>
-        <p style="color: #94a3b8;">Gemini 3.0 Pro 기반 | 1·2학년 분석 및 3학년 완결 로드맵</p>
+        <h1>생기부 성장 분석 및 3학년 심화 가이드</h1>
+        <p style="color: #94a3b8;">자율·진로·동아리 심화 보완 및 기재 포인트 자동 생성</p>
     </div>
 
     <div class="card">
-        <label>🔑 Gemini API Key</label>
-        <input type="password" id="apiKey" placeholder="sk-..." style="margin-bottom: 20px;">
-        
-        <div class="input-group">
+        <input type="password" id="apiKey" placeholder="Gemini API Key (sk-...)">
+        <div class="input-group" style="margin-top:15px">
             <input type="text" id="name" placeholder="학생 성명">
             <input type="text" id="major" placeholder="희망 진로/학과">
         </div>
-        <textarea id="rawText" rows="8" placeholder="학생의 1, 2학년 생기부 텍스트를 입력하세요."></textarea>
+        <div id="drop-zone" class="upload-zone">
+            <div id="upload-status">📄 생기부 PDF를 드래그하거나 클릭하여 업로드하세요</div>
+            <input type="file" id="file-input" accept=".pdf" style="display: none;">
+        </div>
+        <textarea id="rawText" style="display:none;"></textarea>
     </div>
 
-    <button class="btn-main" onclick="runAnalysis()">🔍 최종 보고서 생성 시작</button>
+    <button class="btn-main" onclick="runAnalysis()">🔍 심화 보완 보고서 생성</button>
 
     <div id="loading">
         <div class="spinner"></div>
-        <p id="status">Gemini 3.0 Pro가 학생의 성장 궤적을 심층 분석 중입니다...</p>
+        <p>자율/진로/동아리별 심화 보완 포인트를 설계 중입니다...</p>
     </div>
 
     <div id="result"></div>
 </div>
 
 <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+
+    dropZone.onclick = () => fileInput.click();
+    fileInput.onchange = (e) => handleFile(e.target.files[0]);
+    dropZone.ondragover = (e) => e.preventDefault();
+    dropZone.ondrop = async (e) => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); };
+
+    async function handleFile(file) {
+        if (!file || file.type !== 'application/pdf') return;
+        document.getElementById('upload-status').innerHTML = "⏳ 텍스트 추출 중...";
+        const pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            text += (await page.getTextContent()).items.map(t => t.str).join(' ') + '\n';
+        }
+        document.getElementById('rawText').value = text;
+        document.getElementById('upload-status').innerHTML = `✅ ${file.name} 준비 완료!`;
+    }
+
     async function runAnalysis() {
         const key = document.getElementById('apiKey').value;
-        const name = document.getElementById('name').value;
-        const major = document.getElementById('major').value;
         const text = document.getElementById('rawText').value;
-
-        if(!key || !text) return alert("API 키와 데이터를 입력해주세요.");
+        if(!key || !text) return alert("데이터를 확인하세요.");
 
         document.getElementById('loading').style.display = 'block';
         document.getElementById('result').innerHTML = '';
 
-        // 보고서 형식을 강제하는 초정밀 프롬프트
-        const systemPrompt = `당신은 대한민국 고3 진학 전문가입니다. 학생(${name}, 진로:${major})의 데이터를 바탕으로 5페이지 분량의 전문 보고서를 작성하세요.
-        반드시 다음의 JSON 구조를 지키고, 내용은 '마무리와 심화'에 집중하세요.
-        
-        {
-          "growth_analysis": [
-            {"category": "진로역량", "grade1": "기초 형성 내용", "grade2": "심화 성과 내용", "growth": "성장 특징"},
-            {"category": "학업역량", "grade1": "기초 형성 내용", "grade2": "심화 성과 내용", "growth": "성장 특징"},
-            {"category": "공동체역량", "grade1": "기초 형성 내용", "grade2": "심화 성과 내용", "growth": "성장 특징"},
-            {"category": "인성역량", "grade1": "기초 형성 내용", "grade2": "심화 성과 내용", "growth": "성장 특징"}
-          ],
-          "blue_ocean_projects": [
-            {"title": "프로젝트명", "concept": "핵심 이론 및 컨셉", "steps": ["1단계", "2단계", "3단계"], "competency": "기대 역량"}
-          ],
-          "record_strategy": {
-            "career": "진로역량 기록 포인트",
-            "academic": "학업역량 기록 포인트",
-            "community": "공동체/성숙 기록 포인트"
-          },
-          "recommended_books": [
-            {"title": "도서명", "reason": "1,2학년 활동과 연계한 심화 이유"}
-          ],
-          "conclusion": "기대되는 성장 완성 모습 요약"
-        }`;
+        const sys = `당신은 입시 전문가입니다. 1,2학년 생기부를 분석하여 다음 5단 구성을 JSON으로 응답하세요.
+        1. growth_table: 역량별 1,2학년 비교 분석
+        2. deep_guide: [자율활동, 진로활동, 동아리활동] 각각에 대한 '3학년 심화 보완 추가 내용' (구체적 탐구 주제 및 연결고리 포함)
+        3. record_points: 영역별 생기부 기재 핵심 포인트 (과정 중심 기록 방법)
+        4. finishing_tips: 동아리 및 활동 마무리 방안 (결과물 완성도 및 성찰 일지 가이드)
+        5. books: 탐구의 깊이를 더해줄 심화 서적 3권`;
 
         try {
             const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    contents: [{parts: [{text: systemPrompt + "\n\n데이터:\n" + text}]}],
+                    contents: [{parts: [{text: sys + "\n\n데이터:\n" + text}]}],
                     generationConfig: {response_mime_type: "application/json"}
                 })
             });
-            const data = await resp.json();
-            const res = JSON.parse(data.candidates[0].content.parts[0].text);
-            renderReport(res);
-        } catch (e) {
-            alert("분석에 실패했습니다. 키를 확인하거나 데이터를 줄여보세요.");
-        } finally {
-            document.getElementById('loading').style.display = 'none';
-        }
+            render(JSON.parse((await resp.json()).candidates[0].content.parts[0].text));
+        } catch (e) { alert("분석 실패."); } finally { document.getElementById('loading').style.display = 'none'; }
     }
 
-    function renderReport(res) {
-        let tableRows = res.growth_analysis.map(item => `
-            <tr>
-                <th>${item.category}</th>
-                <td>${item.grade1}</td>
-                <td>${item.grade2}</td>
-                <td>${item.growth}</td>
-            </tr>
-        `).join('');
-
-        let projectCards = res.blue_ocean_projects.map(p => `
-            <div class="project-item">
-                <div class="badge">PROJECT</div>
-                <h4 style="margin:5px 0; color:var(--s)">${p.title}</h4>
-                <p style="font-size:0.85rem; color:#94a3b8">${p.concept}</p>
-                <ul style="font-size:0.85rem; padding-left:15px">
-                    ${p.steps.map(s => `<li>${s}</li>`).join('')}
-                </ul>
-                <p style="font-size:0.8rem; border-top:1px solid #334155; padding-top:5px; margin-top:5px">🎯 ${p.competency}</p>
+    function render(res) {
+        let table = res.growth_table.map(i => `<tr><th>${i.cat}</th><td><strong>1학년:</strong> ${i.g1}</td><td><strong>2학년:</strong> ${i.g2}</td><td>${i.growth}</td></tr>`).join('');
+        
+        let deepGuides = res.deep_guide.map(g => `
+            <div class="strategy-item">
+                <div class="strategy-tag" style="background:var(--p)">${g.category}</div>
+                <h4>${g.title || '심화 보완 전략'}</h4>
+                <p>${g.content}</p>
+                <div class="deep-box">💡 <strong>추가 탐구 포인트:</strong> ${g.deep_point}</div>
             </div>
         `).join('');
 
         document.getElementById('result').innerHTML = `
-            <div class="card">
-                <h2 style="color:var(--p)">1. 1학년 대비 2학년 주요 역량 성장 분석</h2>
-                <table>
-                    <thead><tr><th>역량</th><th>1학년(기초)</th><th>2학년(심화)</th><th>성장 특징</th></tr></thead>
-                    <tbody>${tableRows}</tbody>
-                </table>
+            <div class="card"><div class="section-title">1. 역량 성장 분석표</div><table>${table}</table></div>
+            
+            <div class="card"><div class="section-title">2. 자율·진로·동아리 심화 보완 추가 내용</div>
+                ${deepGuides}
             </div>
 
-            <div class="card">
-                <h2 style="color:var(--s)">2. 3학년 '블루오션' 실행형 프로젝트 제언</h2>
-                <div class="project-grid">${projectCards}</div>
+            <div class="card"><div class="section-title">3. 영역별 생기부 기록 핵심 포인트</div>
+                <p><strong>진로역량 심화:</strong> ${res.record_points.career}</p>
+                <p><strong>학업역량 확장:</strong> ${res.record_points.academic}</p>
+                <p><strong>공동체역량 성숙:</strong> ${res.record_points.community}</p>
             </div>
 
-            <div class="card">
-                <h2 style="color:var(--p)">3. 학교생활기록부 영역별 기록 전략</h2>
-                <p><strong>진로역량:</strong> ${res.record_strategy.career}</p>
-                <p><strong>학업역량:</strong> ${res.record_strategy.academic}</p>
-                <p><strong>공동체역량:</strong> ${res.record_strategy.community}</p>
+            <div class="card"><div class="section-title">4. 활동 마무리 및 완성도 제고 방안</div>
+                <p>${res.finishing_tips}</p>
             </div>
 
-            <div class="card">
-                <h2 style="color:var(--s)">4. 완결성을 위한 심화 추천 도서</h2>
-                ${res.recommended_books.map(b => `<p>📘 <strong>${b.title}</strong>: ${b.reason}</p>`).join('')}
-            </div>
-
-            <div class="card" style="background: linear-gradient(to bottom right, #1e293b, #0f172a); border: 2px solid var(--p);">
-                <h2 style="text-align:center">5. 기대되는 성장 완성 모습</h2>
-                <p style="font-style:italic; text-align:center">${res.conclusion}</p>
+            <div class="card"><div class="section-title">5. 탐구 매듭을 위한 심화 추천 도서</div>
+                ${res.books.map(b => `<p>📘 <strong>${b.title}</strong>: ${b.reason}</p>`).join('')}
             </div>
         `;
     }
 </script>
-
 </body>
 </html>
