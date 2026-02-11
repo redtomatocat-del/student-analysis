@@ -646,10 +646,10 @@ btn.textContent='🔍 AI 종합 분석 시작';
 
 async function analyze(){
 console.log('[analyze] 시작');
-const sid=getStuId()||'30101';
-const nm=document.getElementById('sName').value.trim()||'학생';
-const cr=document.getElementById('sCareer').value.trim()||'미정';
-const cl=document.getElementById('sClub').value.trim()||'미정';
+let sid=getStuId()||'30101';
+let nm=document.getElementById('sName').value.trim()||'학생';
+let cr=document.getElementById('sCareer').value.trim()||'미정';
+let cl=document.getElementById('sClub').value.trim()||'미정';
 const me=document.getElementById('memo').value.trim();
 const kw=[...selKW];const kc=document.getElementById('kwC').value.trim();if(kc)kw.push(...kc.split(',').map(s=>s.trim()).filter(Boolean));
 
