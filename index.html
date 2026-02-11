@@ -818,22 +818,23 @@ function pr(tx,nm,cr,cl,sid,kw){
 function makeMeta(){return{nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')}}
 
 function cleanAndExtract(str){
-// 백틱 코드블록 완전 제거
 str=str.replace(/```json\s*/gi,'').replace(/```\s*/gi,'').trim();
-// JSON 블록 추출
 const s=str.indexOf('{'),e=str.lastIndexOf('}');
 if(s<0||e<=s)return null;
 return str.substring(s,e+1);
 }
 
+console.log('[PR] len='+tx.length+' start='+tx.substring(0,150));
+
 // 1차: 기본 파싱
 try{
 let c=cleanAndExtract(tx);
 if(c){
+console.log('[PR] JSON extracted, len='+c.length);
 c=c.replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ');
-const o=JSON.parse(c);o._m=makeMeta();return o;
-}
-}catch(e1){}
+const o=JSON.parse(c);o._m=makeMeta();console.log('[PR] 1차 OK');return o;
+}else{console.log('[PR] 1차: JSON 블록 없음')}
+}catch(e1){console.log('[PR] 1차 fail:',e1.message)}
 
 // 2차: 제어문자 제거 + 문자열 내 줄바꿈 처리
 try{
@@ -850,7 +851,7 @@ result+=ch;prev=ch;
 }
 const o=JSON.parse(result);o._m=makeMeta();return o;
 }
-}catch(e2){}
+}catch(e2){console.log('[PR] 2차 fail:',e2.message)}
 
 // 3차: 모든 줄바꿈 공백으로
 try{
@@ -859,7 +860,7 @@ if(c){
 c=c.replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ').replace(/[\x00-\x1F\x7F]/g,'');
 const o=JSON.parse(c);o._m=makeMeta();return o;
 }
-}catch(e3){}
+}catch(e3){console.log('[PR] 3차 fail:',e3.message)}
 
 // 4차: 불완전 JSON 복구 (중괄호 균형)
 try{
@@ -875,13 +876,45 @@ while(cA<oA){c+=']';cA++}
 c=c.replace(/,\s*([}\]])/g,'$1');
 const o=JSON.parse(c);o._m=makeMeta();return o;
 }
-}catch(e4){}
+}catch(e4){console.log('[PR] 4차 fail:',e4.message)}
+
+// 5차: 문자열 내 줄바꿈을 \\n으로 + 중괄호 복구
+try{
+let c=cleanAndExtract(tx);
+if(c){
+c=c.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,'');
+let r='',inS=false,p='';
+for(let i=0;i<c.length;i++){
+const ch=c[i];
+if(ch==='"'&&p!=='\\')inS=!inS;
+if(inS&&(ch==='\n'||ch==='\r')){r+=' ';continue}
+if(inS&&ch==='\t'){r+=' ';continue}
+r+=ch;p=ch;
+}
+r=r.replace(/,\s*([}\]])/g,'$1');
+let ob=0,cb=0,oA=0,cA=0;
+for(const ch of r){if(ch==='{')ob++;if(ch==='}')cb++;if(ch==='[')oA++;if(ch===']')cA++;}
+while(cb<ob){r+='}';cb++}
+while(cA<oA){r+=']';cA++}
+const o=JSON.parse(r);o._m=makeMeta();console.log('[PR] 5차 OK');return o;
+}
+}catch(e5){console.log('[PR] 5차 fail:',e5.message)}
+
+console.log('[PR] 모든 파싱 실패. Raw 앞 500자:', tx.substring(0,500));
 
 return{_m:makeMeta(),_raw:tx,_err:true};
 }
 
 function rR(r){document.getElementById('resS').style.display='block';
-if(r._err){document.getElementById('tc-ov').innerHTML=`<div class="rb"><h4>⚠ 파싱 실패</h4><pre style="white-space:pre-wrap;font-size:12px;color:var(--g3)">${esc(r._raw||'')}</pre></div>`;return}
+if(r._err){
+const raw=r._raw||'';
+const preview=raw.substring(0,500);
+const hasJson=raw.includes('{')&&raw.includes('}');
+document.getElementById('tc-ov').innerHTML=`<div class="rb"><h4>⚠ 파싱 실패</h4>
+<p style="margin:8px 0;font-size:13px;color:var(--g2)">${hasJson?'JSON 구조가 손상되었습니다. AI 응답에 JSON 외 텍스트가 포함되었을 수 있습니다.':'AI가 JSON 형식으로 응답하지 않았습니다.'}</p>
+<p style="margin:8px 0;font-size:12px;color:var(--g3)">💡 해결방법: ⚙️ → "전체 초기화" 후 같은 PDF로 재분석해보세요.</p>
+<details><summary style="cursor:pointer;font-size:12px;color:var(--blue);font-weight:600">AI 원본 응답 보기 (${raw.length}자)</summary>
+<pre style="white-space:pre-wrap;font-size:11px;color:var(--g3);max-height:400px;overflow-y:auto;margin-top:8px;padding:12px;background:var(--g7);border-radius:8px">${esc(raw)}</pre></details></div>`;return}
 const m=r._m,ov=r.overview||{},cp=ov.competencies||{},sc=ov.scores||{},sb=ov.score_brief||{};
 const starBar=(v,mx=5)=>{const pct=Math.min(v/mx*100,100);const clr=v>=4?'var(--blue)':v>=3?'var(--teal)':v>=2?'var(--orange)':'var(--coral)';return`<div style="display:flex;align-items:center;gap:8px;margin:2px 0"><div style="flex:1;height:8px;background:var(--g6);border-radius:4px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${clr};border-radius:4px;transition:width .5s"></div></div><span style="font-size:14px;font-weight:800;color:${clr};min-width:28px;text-align:right">${v}</span></div>`};
 const kwds=ov.keywords||m.kw||[];
