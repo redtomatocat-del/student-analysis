@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>세공사 v3.0 — 생기부 성장분석기</title>
+<title>세공사 v4.2 — 생기부 성장분석기</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -179,7 +179,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 <div class="hdr">
 <h1>📊 생기부 성장분석기</h1>
-<div class="hdr-badge"><span class="dot"></span>AI Powered</div>
+<div class="hdr-badge"><span class="dot"></span>v4.2</div>
 </div>
 
 <!-- Flow Steps -->
@@ -209,11 +209,16 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 <!-- PDF -->
 <div class="card no-print">
-<div class="card-top"><div class="c-icon coral"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z" fill="#FF6B6B" opacity=".2"/><path d="M14 2v5h5" stroke="#FF6B6B" stroke-width="1.5"/><path d="M9 13l3 3 3-3M12 16V9" stroke="#FF6B6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="c-title">생기부 업로드</div><div class="c-desc">PDF 드래그 또는 클릭</div></div></div>
+<div class="card-top"><div class="c-icon coral"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z" fill="#FF6B6B" opacity=".2"/><path d="M14 2v5h5" stroke="#FF6B6B" stroke-width="1.5"/><path d="M9 13l3 3 3-3M12 16V9" stroke="#FF6B6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="c-title">생기부 업로드</div><div class="c-desc">개별 PDF 또는 폴더 일괄</div></div></div>
 <div class="dz" id="dz" onclick="document.getElementById('fi').click()">
-<div class="dz-i">📁</div><div class="dz-m">PDF 파일 선택</div><div class="dz-s">1, 2학년 생기부 포함</div>
+<div class="dz-i">📁</div><div class="dz-m">PDF 파일 선택 (개별)</div><div class="dz-s">1, 2학년 생기부 포함</div>
 </div>
 <input type="file" id="fi" class="file-input" accept=".pdf"/>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-ghost btn-sm" onclick="selectFolder()" style="flex:1;border:1.5px dashed var(--purple);color:var(--purple)">📂 폴더 통째로 읽기 (일괄)</button>
+<button class="btn btn-ghost btn-sm" onclick="selectMultiFiles()" style="flex:1;border:1.5px dashed var(--teal);color:var(--teal)">📑 파일 여러개 선택</button>
+</div>
+<input type="file" id="fiMulti" class="file-input" accept=".pdf" multiple/>
 <div id="fI" class="hidden f-info"></div>
 </div>
 
@@ -222,11 +227,12 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <!-- Class Setup -->
 <div class="card no-print" id="classSetupCard" style="border:2px solid var(--blue);background:linear-gradient(135deg,#FAFBFF,#F0F4FF)">
 <div class="card-top"><div class="c-icon blue">🏫</div><div><div class="c-title">학급 설정</div><div class="c-desc">한 번 설정하면 학생 데이터가 이 학급에 누적됩니다</div></div></div>
-<div class="row r4">
-<div><label>학년</label><select id="sGrade"><option value="3">3학년</option><option value="2">2학년</option><option value="1">1학년</option></select></div>
+<div class="row r5">
+<div><label>학년</label><select id="sGrade"><option value="3">3학년</option></select></div>
 <div><label>반</label><select id="sClass"><option value="">선택</option></select></div>
 <div><label>담임교사</label><input type="text" id="sTeacher" placeholder="홍길동"/></div>
 <div><label>학교명</label><input type="text" id="sSchool" placeholder="○○고등학교"/></div>
+<div><label>학생수</label><select id="sTotalStu"><option value="25">25명</option><option value="28">28명</option><option value="30" selected>30명</option><option value="32">32명</option><option value="33">33명</option><option value="34">34명</option><option value="35">35명</option><option value="36">36명</option><option value="40">40명</option></select></div>
 </div>
 <div style="display:flex;gap:8px;margin-top:10px">
 <button class="btn btn-blue btn-sm" onclick="saveClassInfo()">💾 학급 저장</button>
@@ -309,6 +315,12 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <div class="tc" id="tc-cl"></div>
 <div class="tc" id="tc-co"></div>
 </div>
+<!-- v4.2: 교사 상담 기록 -->
+<div class="card no-print" id="teacherNoteArea" style="display:none;margin-top:14px;background:linear-gradient(135deg,#FFFBF5,#FFF8F0);border:2px solid var(--orange)">
+<div class="card-top"><div class="c-icon orange">✏️</div><div><div class="c-title">교사 상담 기록</div><div class="c-desc">학생별 자동저장 · 엑셀 다운로드 시 반영</div></div></div>
+<textarea id="teacherNoteInput" style="min-height:120px" placeholder="상담 내용, 관찰사항, 학부모 면담 내용, 추가 지도 계획 등을 기록하세요." oninput="saveTeacherNote()"></textarea>
+<div id="tnStatus" style="font-size:11px;color:var(--green);font-weight:600;margin-top:4px;min-height:16px"></div>
+</div>
 <div class="actions no-print">
 <button class="btn btn-green" onclick="dlPDF()" style="flex:1">📄 이 학생 PDF</button>
 <button class="btn btn-purple" onclick="dlXL()" style="flex:1">📊 엑셀 저장</button>
@@ -319,8 +331,10 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <!-- Student Summary -->
 <div class="card no-print">
 <div class="card-top"><div class="c-icon green">📋</div><div><div class="c-title">분석 완료 학생</div><div class="c-desc" id="stuCnt">0명 완료</div></div></div>
+<div id="batchStatus" style="display:none;margin-bottom:10px;padding:12px 16px;background:var(--blue-bg);border-radius:var(--rx);font-size:13px;color:var(--blue);font-weight:600"><span id="batchText"></span><div style="margin-top:6px;height:4px;background:var(--g6);border-radius:2px;overflow:hidden"><div id="batchBar" style="height:100%;background:var(--blue);border-radius:2px;transition:width .5s;width:0"></div></div></div>
 <div class="sl" id="stuL"><div style="padding:20px;color:var(--g4);text-align:center;font-size:14px">아직 분석된 학생이 없습니다</div></div>
 <div class="actions" style="margin-top:12px">
+<button class="btn btn-blue btn-sm" id="batchBtn" onclick="runBatch()" style="flex:1;display:none">🚀 일괄 분석 시작</button>
 <button class="btn btn-purple btn-sm" onclick="dlAll()" style="flex:1">📊 전체 엑셀</button>
 <button class="btn btn-green btn-sm" onclick="dlAllPDF()" style="flex:1">📄 전체 PDF 묶음</button>
 </div>
@@ -331,6 +345,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 <script>
 let pdf='',key='',pri=['학업','진로','공동체'],selKW=[],stu={},cur=null,classInfo={};
+let batchQueue=[],isBatchRunning=false;
 const KW=['자기주도학습','비판적사고','데이터분석','리더십','협업','문제해결','발표력','봉사활동','융합사고','창의성','의사소통','글로벌역량','디지털리터러시','연구역량','진로탐색','멘토링','프로젝트기획','독서활동'];
 
 (function(){
@@ -354,11 +369,178 @@ const sn=document.getElementById('sNo');for(let i=1;i<=40;i++){const o=document.
 const g=document.getElementById('kwG');KW.forEach(k=>{const d=document.createElement('div');d.className='kw';d.textContent=k;d.onclick=()=>{d.classList.toggle('on');d.classList.contains('on')?selKW.push(k):selKW=selKW.filter(x=>x!==k)};g.appendChild(d)});
 const sv=localStorage.getItem('sgb_key');if(sv){key=sv;document.getElementById('apiKey').value=sv;apiOk()}
 
+// 다중파일 선택 이벤트
+document.getElementById('fiMulti').addEventListener('change',e=>{
+if(e.target.files.length)addFilesToBatch(Array.from(e.target.files));
+});
+
 // 학급 정보 로드
 loadClassInfo();
 
 chk();setP('top');
 })();
+
+// === 폴더 일괄 업로드 (크롬/엣지) ===
+async function selectFolder(){
+if(!window.showDirectoryPicker){alert('📂 폴더 선택은 크롬/엣지 브라우저에서만 지원됩니다.\n\n대신 [파일 여러개 선택] 버튼을 이용해주세요.');return}
+try{
+const dir=await window.showDirectoryPicker();
+const files=[];
+for await(const entry of dir.values()){
+if(entry.kind==='file'&&entry.name.toLowerCase().endsWith('.pdf')){
+const f=await entry.getFile();files.push(f);
+}
+}
+if(!files.length){alert('폴더에 PDF 파일이 없습니다.');return}
+addFilesToBatch(files);
+alert(`✅ ${files.length}개 PDF를 불러왔습니다.\n\n학생 목록에서 [🚀 일괄 분석 시작]을 눌러주세요.`);
+}catch(e){if(e.name!=='AbortError')console.warn(e)}
+}
+
+// === 파일 여러개 선택 ===
+function selectMultiFiles(){document.getElementById('fiMulti').click()}
+
+// === 파일들을 배치 큐에 추가 ===
+async function addFilesToBatch(files){
+const pdfFiles=files.filter(f=>f.type==='application/pdf'||f.name.toLowerCase().endsWith('.pdf'));
+if(!pdfFiles.length){alert('PDF 파일이 없습니다.');return}
+let added=0;
+for(const f of pdfFiles){
+try{
+// PDF에서 텍스트 추출
+const ab=await f.arrayBuffer();
+const p=await pdfjsLib.getDocument({data:ab}).promise;
+let txt='';
+for(let i=1;i<=p.numPages;i++){const pg=await p.getPage(i);const tc=await pg.getTextContent();txt+=tc.items.map(x=>x.str).join(' ')+'\n'}
+if(txt.length<50)continue;
+// 파일명에서 학번/이름 추출 시도
+let fname=f.name.replace('.pdf','').replace('.PDF','');
+let sid='',sname=fname;
+const m1=fname.match(/(\d{5,6})/);
+if(m1)sid=m1[1];
+const m2=fname.match(/([가-힣]{2,4})/);
+if(m2)sname=m2[1];
+// 배치 큐에 추가
+batchQueue.push({fileName:f.name,text:txt,pages:p.numPages,size:f.size,sid:sid,name:sname,status:'wait'});
+added++;
+}catch(e){console.warn('파일 처리 실패:',f.name,e)}
+}
+if(added>0){
+document.getElementById('batchBtn').style.display='';
+rBatch();
+}
+}
+
+// === 배치 큐 렌더링 ===
+function rBatch(){
+if(!batchQueue.length)return;
+const l=document.getElementById('stuL');
+const existing=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
+const okCount=existing.filter(s=>s.result&&!s.result._err).length;
+// 기존 완료 학생 + 배치 대기 학생 합쳐서 표시
+let html='';
+// 배치 대기열 먼저
+const waitCount=batchQueue.filter(q=>q.status==='wait').length;
+if(waitCount>0){
+html+=`<div style="padding:8px 12px;background:var(--purple-bg);border-radius:8px;margin-bottom:8px;font-size:12px;font-weight:700;color:var(--purple)">📂 일괄 업로드 대기: ${batchQueue.length}명 (대기 ${waitCount}명)</div>`;
+}
+batchQueue.forEach((q,i)=>{
+const stClr=q.status==='wait'?'var(--g3)':q.status==='run'?'var(--blue)':q.status==='done'?'var(--green)':'var(--coral)';
+const stTxt=q.status==='wait'?'대기':q.status==='run'?'분석중...':q.status==='done'?'완료':'오류';
+const stBg=q.status==='run'?'var(--blue-bg)':q.status==='done'?'var(--green-bg)':q.status==='err'?'var(--coral-bg)':'var(--g7)';
+html+=`<div class="si" style="background:${q.status==='run'?'var(--blue-bg)':'transparent'}">
+<span><span style="font-size:11px;padding:3px 8px;border-radius:6px;font-weight:700;background:${stBg};color:${stClr};margin-right:8px">${stTxt}</span><strong>${q.name||q.fileName}</strong></span>
+<span class="meta">${q.sid||''} · ${q.pages||'?'}p</span></div>`;
+});
+// 기존 완료 학생
+existing.forEach(s=>{
+const hasErr=!s.result||s.result._err;
+html+=`<div class="si" style="cursor:pointer${hasErr?';opacity:.5':''}" onclick="viewStudent('${s.sid}')">
+<span><span class="num">${s.sid}</span><strong>${s.name}</strong>${hasErr?'<span style="color:var(--coral);font-size:11px;margin-left:6px">⚠ 재분석 필요</span>':''}</span>
+<span style="display:flex;align-items:center;gap:8px">
+<span class="meta">${s.career} · ${s.date}</span>
+${hasErr?'':'<button class="btn btn-sm" style="padding:4px 10px;font-size:11px;background:var(--green-bg);color:var(--green);border:none;border-radius:6px;cursor:pointer" onclick="event.stopPropagation();dlStudentPDF(\''+s.sid+'\')">PDF</button>'}
+</span></div>`;
+});
+l.innerHTML=html||'<div style="padding:20px;color:var(--g4);text-align:center;font-size:14px">아직 분석된 학생이 없습니다</div>';
+document.getElementById('stuCnt').textContent=okCount+'명 완료'+(batchQueue.length?` · 대기 ${waitCount}명`:'');
+document.getElementById('cbCount').textContent=okCount;
+}
+
+// === 배치 분석 실행 ===
+async function runBatch(){
+if(isBatchRunning){alert('이미 분석이 진행 중입니다.');return}
+if(!key){alert('❌ API Key를 먼저 입력해주세요');return}
+const waiting=batchQueue.filter(q=>q.status==='wait');
+if(!waiting.length){alert('대기 중인 파일이 없습니다.');return}
+isBatchRunning=true;
+const btn=document.getElementById('batchBtn');
+btn.textContent='⏳ 분석 진행 중...';btn.disabled=true;
+const bs=document.getElementById('batchStatus');bs.style.display='block';
+const total=waiting.length;
+let done=0;
+for(let i=0;i<batchQueue.length;i++){
+const q=batchQueue[i];
+if(q.status!=='wait')continue;
+q.status='run';rBatch();
+document.getElementById('batchText').textContent=`🤖 ${q.name||q.fileName} 분석 중... (${done+1}/${total})`;
+document.getElementById('batchBar').style.width=((done/total)*100)+'%';
+try{
+// 학생 정보 설정
+const nm=q.name||'학생';
+const cr='미정';
+const cl='미정';
+const kw=[...selKW];const kc=document.getElementById('kwC').value.trim();if(kc)kw.push(...kc.split(',').map(s=>s.trim()).filter(Boolean));
+const me='';
+// v4.2: pdf 변수를 try 안에서 교체, finally에서 복원
+const origPdf=pdf;
+pdf=q.text;
+const prompt=bp(nm,cr,cl,kw,me);
+const r=await fetch('https://api.anthropic.com/v1/messages',{
+method:'POST',
+headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+body:JSON.stringify({model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929',max_tokens:16000,stream:true,messages:[{role:'user',content:prompt}]})
+});
+if(!r.ok)throw new Error('API 오류 ('+r.status+')');
+const reader=r.body.getReader();const decoder=new TextDecoder();let fullText='',buffer='';
+while(true){
+const{done:d,value}=await reader.read();if(d)break;
+buffer+=decoder.decode(value,{stream:true});
+const lines=buffer.split('\n');buffer=lines.pop()||'';
+for(const line of lines){
+if(!line.startsWith('data:'))continue;const data=line.substring(5).trim();
+if(data==='[DONE]'||!data)continue;
+try{const evt=JSON.parse(data);if(evt.type==='content_block_delta'&&evt.delta?.text)fullText+=evt.delta.text;}catch(pe){}
+}
+}
+// 파싱
+const sid=q.sid||getStuId()||('30'+String(i+1).padStart(3,'0'));
+const result=pr(fullText,nm,cr,cl,sid,kw);
+// AI가 추출한 이름 반영
+if(!result._err&&result.student_info){
+if(result.student_info.name)q.name=result.student_info.name;
+if(result.student_info.career_hope)cr=result.student_info.career_hope;
+}
+stu[sid]={name:q.name||nm,career:cr,club:cl,sid,date:new Date().toLocaleDateString('ko-KR'),result,teacherNote:''};
+saveClassStudents();
+q.status='done';done++;
+}catch(e){
+console.error('배치 분석 실패:',q.fileName,e);
+q.status='err';done++;
+}finally{pdf=origPdf;}
+rBatch();rStu();updateBanner();
+// API 속도 조절 (1초 딜레이)
+await new Promise(r=>setTimeout(r,1000));
+}
+document.getElementById('batchText').textContent=`✅ 전체 분석 완료! (${total}명)`;
+document.getElementById('batchBar').style.width='100%';
+btn.textContent='🚀 일괄 분석 시작';btn.disabled=false;
+isBatchRunning=false;
+// 배치 큐 정리 (완료된 것 제거)
+batchQueue=batchQueue.filter(q=>q.status!=='done');
+if(!batchQueue.length)btn.style.display='none';
+rBatch();rStu();updateBanner();
+}
 
 function getStuId(){
 const g=document.getElementById('sGrade').value;
@@ -389,7 +571,7 @@ const t=document.getElementById('sTeacher').value.trim();
 const s=document.getElementById('sSchool').value.trim();
 if(!c){alert('반을 선택해주세요');return}
 if(!t){alert('담임교사를 입력해주세요');return}
-classInfo={grade:g,cls:c,teacher:t,school:s};
+classInfo={grade:g,cls:c,teacher:t,school:s,totalStudents:parseInt(document.getElementById('sTotalStu').value)||30};
 localStorage.setItem('sgb_classInfo',JSON.stringify(classInfo));
 loadClassStudents();
 updateBanner();
@@ -408,6 +590,7 @@ document.getElementById('cbSchool').textContent=classInfo.school||'학교명 미
 document.getElementById('cbClass').textContent=`${classInfo.grade}학년 ${parseInt(classInfo.cls)}반`;
 document.getElementById('cbTeacher').textContent=classInfo.teacher||'미설정';
 document.getElementById('cbCount').textContent=Object.keys(stu).filter(k=>stu[k].result&&!stu[k].result._err).length;
+document.getElementById('cbTotal').textContent=classInfo.totalStudents||30;
 }
 
 function toggleClassSetup(){
@@ -424,6 +607,7 @@ document.getElementById('sGrade').value=classInfo.grade||'3';
 document.getElementById('sClass').value=classInfo.cls||'';
 document.getElementById('sTeacher').value=classInfo.teacher||'';
 document.getElementById('sSchool').value=classInfo.school||'';
+if(classInfo.totalStudents)document.getElementById('sTotalStu').value=classInfo.totalStudents;
 loadClassStudents();
 updateBanner();
 }else{
@@ -467,6 +651,33 @@ key='';pdf='';stu={};cur=null;classInfo={};
 location.reload();
 }
 
+// === v4.2: 교사 상담 기록 저장/로드 ===
+let _tnTimer=null;
+function saveTeacherNote(){
+clearTimeout(_tnTimer);
+_tnTimer=setTimeout(()=>{
+const sid=getStuId();
+if(sid&&stu[sid]){
+stu[sid].teacherNote=document.getElementById('teacherNoteInput').value;
+saveClassStudents();
+document.getElementById('tnStatus').textContent='✓ 자동 저장됨 ('+new Date().toLocaleTimeString('ko-KR')+')';
+}
+},500);
+}
+function loadTeacherNote(sid){
+const ta=document.getElementById('teacherNoteInput');
+const area=document.getElementById('teacherNoteArea');
+if(!ta||!area)return;
+if(stu[sid]){
+ta.value=stu[sid].teacherNote||'';
+area.style.display='';
+document.getElementById('tnStatus').textContent='';
+}else{
+ta.value='';
+area.style.display='none';
+}
+}
+
 // === 학생 클릭 → 보고서 재열람 ===
 function viewStudent(sid){
 const s=stu[sid];
@@ -489,6 +700,8 @@ document.getElementById('sClub').value=s.club||'';
 updPreview();
 // 결과 표시
 rR(cur);
+// v4.2: 교사 메모 로드
+loadTeacherNote(sid);
 // 스크롤
 document.getElementById('resS').scrollIntoView({behavior:'smooth'});
 }
@@ -680,9 +893,9 @@ sid=getStuId()||sid;
 if(cur._m){cur._m.nm=nm;cur._m.cr=cr;cur._m.cl=cl;cur._m.sid=sid;}
 }
 
-stu[sid]={name:nm,career:cr,club:cl,sid,date:new Date().toLocaleDateString('ko-KR'),result:cur};
+stu[sid]={name:nm,career:cr,club:cl,sid,date:new Date().toLocaleDateString('ko-KR'),result:cur,teacherNote:(stu[sid]&&stu[sid].teacherNote)||''};
 saveClassStudents();
-rR(cur);rStu();updateBanner();showStatus('✅ 분석 완료!',100);
+rR(cur);rStu();updateBanner();loadTeacherNote(sid);showStatus('✅ 분석 완료!',100);
 setTimeout(()=>{document.getElementById('pW').style.display='none';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').textContent='🔍 AI 종합 분석 시작'},1500);
 
 }catch(e){
@@ -749,14 +962,26 @@ if(sub)sub.textContent+=` · 자동추출: ${filled.join(', ')} ✓`;
 }catch(e){console.warn('[autoFill]',e)}
 }
 
-function bp(nm,cr,cl,kw,me){return`당신은 대한민국 고등학교 학교생활기록부(생기부) 전문 분석가입니다.
-학생의 1~2학년 생기부를 분석하여 3학년 전략 보고서를 JSON으로 작성합니다.
+function bp(nm,cr,cl,kw,me){return`당신은 대한민국 고등학교 학교생활기록부(생기부) 전문 분석가이자 학생부종합전형 평가 전문가입니다.
+학생의 1~2학년 생기부를 냉정하고 객관적으로 분석하여 3학년 전략 보고서를 JSON으로 작성합니다.
 
 [학생 정보]
 - 이름: ${nm} | 진로: ${cr} | 동아리: ${cl}
 - 키워드: ${kw.join(', ')||'미지정'}
 ${me?'- 메모: '+me:''}
 - 우선순위: 1순위 ${pri[0]} → 2순위 ${pri[1]} → 3순위 ${pri[2]}
+
+[2026 대입 제도 핵심]
+- 평가 역량: 학업역량(성취도·태도·탐구력), 진로역량(교과이수·진로탐색), 공동체역량(협업·나눔·성실·리더십)
+- 교사추천서·자기소개서 폐지 → 생기부만으로 평가
+- 행발 3학년: 학종 수시 미반영(1~2학년만 제공), 정시 학생부반영 대학(서울대 등)에서만 활용
+- 비교과(자율동아리·교내수상·독서·개인봉사) 대학 미제공
+
+[등급 판정 기준 — S/A/B/C]
+S등급: 심화탐구 + 방법론·도구·결과 3점 세트 + 후속연구 질문 + 교과 개념 재해석. 독서 연계 시 "개념을 적용하여 재해석" 수준.
+A등급: 구체적 데이터 제시 + 분석기준 2~3개 + 결과물 명확. 교과 연계 활동이 구체적.
+B등급: 동기+수행+느낀점 구조. 활동 나열은 있으나 사고 과정·심화 부족.
+C등급: 수동적 참여 기록, 복붙·성적 나열, 구체성 없음, "~에 대해 알게 됨" 수준.
 
 [바이트 제한] 한글1자=3B, 영문/숫자=1B
 자율:1500B | 진로:2100B | 동아리:1500B | 행발:1500B
@@ -768,39 +993,71 @@ ${pdf.length>45000?pdf.substring(0,45000)+'\n[⚠ 원문 일부 생략]':pdf}
 
 0. student_info: 생기부에서 이름/학년/반/번호/진로/동아리 추출
 
-1. overview: 종합 분석
-- summary: 성장 서사 3~4문장
-- strengths: 강점 3개 (각 1~2문장, 구체적 활동 근거)
-- improvements: 보완점 2개 (구체적 대안 포함)
-- scores: 4대 역량 점수 (1~5점, 정수). 생기부 내용 기반 객관적 평가
-  * career: 진로역량 점수 (진로탐색 깊이, 전공 연계도)
-  * academic: 학업역량 점수 (교과 심화, 탐구력)
-  * community: 공동체역량 점수 (리더십, 협업, 봉사)
-  * character: 인성역량 점수 (성실성, 성장 태도)
-- score_brief: 각 역량 점수의 근거 한줄 (예: "career: 행동경제학 실험 설계 등 전공 연계 우수")
-- competencies: 4대 역량별 grade1(1학년 2문장), grade2(2학년 2문장), growth(성장 1문장)
+1. overview: 종합 분석 — 가장 중요! 충실하게!
+- summary: 전체 성장 서사 5~7문장. 1학년에서 어떻게 시작해서, 2학년에서 어떻게 발전했는지 구체적으로 서술. 단순 나열 아님, 스토리로 엮을 것.
+- change_analysis: 1학년→2학년 변화 분석 3~5문장. 어떤 역량이 눈에 띄게 성장했고, 어떤 부분은 정체했는지. 양적(활동 수)·질적(심화도) 변화 모두 기술.
+- grade3_direction: 3학년 전략 방향 총괄 안내 3~5문장. 현재 생기부 수준에서 3학년에 무엇을 집중해야 경쟁력이 올라가는지. 구체적이고 실행 가능한 조언.
+- strengths: 강점 3개 (각 2문장, 구체적 활동·과목·사례 근거 필수)
+- improvements: 보완점 2개 (구체적 대안 포함, 3학년에 어떻게 보완할지)
+- gpa: 생기부 종합 평점 (5.0 만점, 소수점 첫째자리. 예: 3.8, 4.2). S등급 요소 비율·A등급 비율·전체 기록 밀도 기반.
+  평점 기준: 4.5~5.0 최상위권(S등급 다수), 4.0~4.4 상위권(A등급 주축), 3.5~3.9 중상위권(A/B 혼재), 3.0~3.4 중위권(B등급 주축), 2.5~2.9 중하위권(B/C 혼재), 2.0~2.4 하위권(C등급 주축)
+- gpa_brief: 평점 산출 근거 2문장 (S/A/B/C 분포 기반)
+- tier: 평점 기반 대략적 생기부 경쟁력 티어. "최상위권(인서울 상위·의약학)", "상위권(인서울 중상위)", "중상위권(인서울 중위)", "중위권(지방거점국립)", "중하위권(지방권 일반)" 중 택1
+- scores: 3대 역량 점수 (5.0 만점, 소수점 첫째자리). 생기부 내용 기반 냉정한 평가
+  * academic: 학업역량 (성취도, 학업태도, 탐구력)
+  * career: 진로역량 (교과이수 노력, 진로탐색 깊이)
+  * community: 공동체역량 (협업, 나눔, 성실, 리더십)
+- score_brief: 각 역량 점수 근거 한줄
+- competencies: 3대 역량별로 학년별 분석을 역량 성장 테이블로 제시
+  * academic/career/community 각각: grade1(1학년 상태 3문장), grade2(2학년 상태 3문장), growth(1→2학년 핵심 변화 포인트 2문장), grade3_focus(3학년 집중 포인트 2문장)
 - keywords: 이 학생을 대표하는 핵심 키워드 3~5개
 
-2. jarhaeng: 자율/진로/동아리/행발 기재 예시 — 가장 중요!
-각 영역별:
-- evaluation: 현재 기록 수준 + 3학년 방향 (2문장)
-- option1, option2: 서로 다른 관점의 완성된 생기부 기재문
-  * text: 바이트 제한 내 완성 문장. "~함","~보임" 문체. 구체적 활동명/역할/과정/결과 필수
-  * title: 기재 방향 (예: "학업역량 중심")
-  * focus: 강점 (1문장) | supplement: 보완점 (1문장)
+2. subject_analysis: 교과 세특 전반 분석 — 핵심!
+- overall_grade: 교과 세특 전반 등급 (S/A/B/C)
+- overall_score: 교과 세특 전반 평점 (5.0 만점, 소수점 첫째자리)
+- s_elements: S등급 요소 — 구체적 과목명+내용 포함하여 기술 (예: "2회. 정치와법에서 범죄지수 상관분석(방법론·데이터·결과물 완비), 사회문화에서 가스라이팅 4단계 통제구조 분석")
+- a_elements: A등급 요소 — 동일 형식
+- b_elements: B등급 요소 — 횟수와 주요 패턴
+- c_elements: C등급 요소 — 횟수와 주요 패턴
+- analysis: 교과 세특 전반 종합 분석 3~4문장
+- subject_cards: 과목별 세특 분석 카드 배열. 각 카드:
+  {"name":"과목명","grade":"S/A/B/C","grade_num":"학년","summary":"이 과목 세특의 핵심 내용과 등급 판정 근거 2~3문장","highlight":"가장 인상적인 활동이나 탐구"}
+  → 세특 기록이 있는 과목만 포함 (6~12개 정도)
+- strong_subjects: 세특이 잘 쓰여진 과목 2~3개(과목명만)
+- weak_subjects: 세특 보완 필요 과목 2~3개(과목명만)
 
-3. setuk: 세특 방향 — 간결하게
+3. jarhaeng: 자율/진로/동아리/행발 기재 예시 — 가장 중요!
+각 영역별:
+- grade: 1~2학년 해당 영역 기록 등급 (S/A/B/C)
+- evaluation: 현재 기록 수준 평가 + 3학년 보완 방향 (2문장)
+- option1: 안전형(A등급 기준) — 1~2학년 확인된 역량 기반 현실적 기재
+- option2: 도전형(S등급 기준) — 심화 탐구·방법론 강화한 상위 기재
+  * 공통 필드: title, text, focus, supplement
+  * text 규칙:
+    ⚠️ 3학년 활동이므로 반드시 조건부 제안 형식 사용!
+    "~할 경우", "~한다면", "~을 계획하고 있으며" 등 미래형·가정법 톤.
+    또는 "이런 활동을 수행한다면 → 이렇게 기재 가능" 구조.
+    절대 아직 하지 않은 활동을 완료형("~하였음","~수행함")으로 쓰지 말 것!
+    "~함","~보임" 문체는 활동 완료 후 기재 시에만 사용.
+    바이트 제한 내 완성 문장. 구체적 활동명/역할/과정/예상결과 필수.
+- hangbal 특별 규칙: 3학년 행발은 학종 수시 미반영임을 유의. "정시 학생부반영 대학 대비" 또는 "기록 관리 차원"으로 안내.
+
+4. setuk: 세특 방향 — 간결하게
 - direction: 전체 방향 2문장
 - subjects: 3~4개 과목. 각각 name, theme(구체적 주제), reason(적합 이유 1문장), keywords(3개)
 
-4. club: 동아리 계획 — 분기별
-- name, goal(2문장)
+5. club: 동아리 계획 — 전반 분석 + 프로젝트 2~3개 제안
+- name: 동아리명
+- overview: 1~2학년 동아리 활동 전반 분석 2~3문장 (무엇을 했고, 어떤 성과가 있었고, 3학년에 무엇을 발전시킬지)
+- goal: 3학년 동아리 활동 목표 2문장
+- projects: 프로젝트 2~3개 제안 배열. 각 프로젝트:
+  {"title":"프로젝트명","concept":"컨셉 및 진로 연계 방향 2~3문장","steps":["실행 단계1","단계2","단계3","단계4","단계5"],"record_points":"기대 역량 강화 및 생기부 포인트 2문장"}
 - quarterly: 3개 분기
   [{"quarter":"1분기(3~5월)","focus":"","activities":"","record":""},
    {"quarter":"2분기(6~8월)","focus":"","activities":"","record":""},
    {"quarter":"3분기(9~11월)","focus":"","activities":"","record":""}]
 
-5. counsel: 상담 가이드 — 핵심만
+6. counsel: 상담 가이드 — 핵심만
 - points: 상담 시 다룰 핵심 3개 (각 1~2문장)
 - questions: 학생에게 던질 질문 3개
 - parent: 학부모 전달 사항 2개
@@ -808,11 +1065,12 @@ ${pdf.length>45000?pdf.substring(0,45000)+'\n[⚠ 원문 일부 생략]':pdf}
 [필수 규칙]
 - JSON만 출력 (백틱/설명 금지)
 - 빈 문자열 "" 금지, 모든 필드 채울 것
-- 출력 순서: overview → jarhaeng → setuk → club → counsel
+- 출력 순서: student_info → overview → subject_analysis → jarhaeng → setuk → club → counsel
 - ⚠️ 모든 섹션 빠짐없이 완성할 것
+- 평점은 반드시 냉정하게. 과대평가 금지. B등급 다수면 3.0~3.5가 맞음.
 
 [JSON 구조]
-{"student_info":{"name":"","grade":"","class_num":"","student_num":"","career_hope":"","club":""},"overview":{"summary":"","strengths":["","",""],"improvements":["",""],"scores":{"career":0,"academic":0,"community":0,"character":0},"score_brief":{"career":"","academic":"","community":"","character":""},"competencies":{"career":{"grade1":"","grade2":"","growth":""},"academic":{"grade1":"","grade2":"","growth":""},"community":{"grade1":"","grade2":"","growth":""},"character":{"grade1":"","grade2":"","growth":""}},"keywords":[]},"jarhaeng":{"jayul":{"evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"jinro":{"evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"dongari":{"evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"hangbal":{"evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}}},"setuk":{"direction":"","subjects":[{"name":"","theme":"","reason":"","keywords":[]}]},"club":{"name":"","goal":"","quarterly":[{"quarter":"1분기(3~5월)","focus":"","activities":"","record":""},{"quarter":"2분기(6~8월)","focus":"","activities":"","record":""},{"quarter":"3분기(9~11월)","focus":"","activities":"","record":""}]},"counsel":{"points":[],"questions":[],"parent":[]}}`}
+{"student_info":{"name":"","grade":"","class_num":"","student_num":"","career_hope":"","club":""},"overview":{"summary":"","change_analysis":"","grade3_direction":"","strengths":["","",""],"improvements":["",""],"gpa":0.0,"gpa_brief":"","tier":"","scores":{"academic":0.0,"career":0.0,"community":0.0},"score_brief":{"academic":"","career":"","community":""},"competencies":{"academic":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"career":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"community":{"grade1":"","grade2":"","growth":"","grade3_focus":""}},"keywords":[]},"subject_analysis":{"overall_grade":"","overall_score":0.0,"s_elements":"","a_elements":"","b_elements":"","c_elements":"","analysis":"","subject_cards":[{"name":"","grade":"","grade_num":"","summary":"","highlight":""}],"strong_subjects":[],"weak_subjects":[]},"jarhaeng":{"jayul":{"grade":"","evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"jinro":{"grade":"","evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"dongari":{"grade":"","evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"hangbal":{"grade":"","evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}}},"setuk":{"direction":"","subjects":[{"name":"","theme":"","reason":"","keywords":[]}]},"club":{"name":"","overview":"","goal":"","projects":[{"title":"","concept":"","steps":[],"record_points":""}],"quarterly":[{"quarter":"1분기(3~5월)","focus":"","activities":"","record":""},{"quarter":"2분기(6~8월)","focus":"","activities":"","record":""},{"quarter":"3분기(9~11월)","focus":"","activities":"","record":""}]},"counsel":{"points":[],"questions":[],"parent":[]}}`}
 
 function pr(tx,nm,cr,cl,sid,kw){
 function makeMeta(){return{nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')}}
@@ -906,6 +1164,7 @@ return{_m:makeMeta(),_raw:tx,_err:true};
 }
 
 function rR(r){document.getElementById('resS').style.display='block';
+var _tna=document.getElementById('teacherNoteArea');if(_tna)_tna.style.display='';
 if(r._err){
 const raw=r._raw||'';
 const preview=raw.substring(0,500);
@@ -915,8 +1174,12 @@ document.getElementById('tc-ov').innerHTML=`<div class="rb"><h4>⚠ 파싱 실�
 <p style="margin:8px 0;font-size:12px;color:var(--g3)">💡 해결방법: ⚙️ → "전체 초기화" 후 같은 PDF로 재분석해보세요.</p>
 <details><summary style="cursor:pointer;font-size:12px;color:var(--blue);font-weight:600">AI 원본 응답 보기 (${raw.length}자)</summary>
 <pre style="white-space:pre-wrap;font-size:11px;color:var(--g3);max-height:400px;overflow-y:auto;margin-top:8px;padding:12px;background:var(--g7);border-radius:8px">${esc(raw)}</pre></details></div>`;return}
-const m=r._m,ov=r.overview||{},cp=ov.competencies||{},sc=ov.scores||{},sb=ov.score_brief||{};
-const starBar=(v,mx=5)=>{const pct=Math.min(v/mx*100,100);const clr=v>=4?'var(--blue)':v>=3?'var(--teal)':v>=2?'var(--orange)':'var(--coral)';return`<div style="display:flex;align-items:center;gap:8px;margin:2px 0"><div style="flex:1;height:8px;background:var(--g6);border-radius:4px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${clr};border-radius:4px;transition:width .5s"></div></div><span style="font-size:14px;font-weight:800;color:${clr};min-width:28px;text-align:right">${v}</span></div>`};
+const m=r._m,ov=r.overview||{},cp=ov.competencies||{},sc=ov.scores||{},sb=ov.score_brief||{},sa=r.subject_analysis||{};
+const gpa=ov.gpa||0;
+const scoreBar=(v,mx=5)=>{const pct=Math.min(v/mx*100,100);const clr=v>=4?'var(--blue)':v>=3?'var(--teal)':v>=2?'var(--orange)':'var(--coral)';return`<div style="display:flex;align-items:center;gap:8px;margin:2px 0"><div style="flex:1;height:8px;background:var(--g6);border-radius:4px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${clr};border-radius:4px;transition:width .5s"></div></div><span style="font-size:14px;font-weight:800;color:${clr};min-width:36px;text-align:right">${v}</span></div>`};
+const gradeClr=(g)=>({S:'var(--blue)',A:'var(--green)',B:'var(--orange)',C:'var(--coral)'}[g]||'var(--g3)');
+const gradeBg=(g)=>({S:'var(--blue-bg)',A:'var(--green-bg)',B:'var(--orange-bg)',C:'var(--coral-bg)'}[g]||'var(--g7)');
+const gpaClr=gpa>=4.0?'var(--blue)':gpa>=3.5?'var(--teal)':gpa>=3.0?'var(--orange)':'var(--coral)';
 const kwds=ov.keywords||m.kw||[];
 // 요약 카드
 document.getElementById('tc-ov').innerHTML=`
@@ -928,17 +1191,45 @@ document.getElementById('tc-ov').innerHTML=`
 <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">${kwds.map(k=>`<span class="badge b-bl" style="font-size:12px;padding:4px 10px">#${k}</span>`).join('')}</div>
 <p style="font-size:13px;color:var(--g1);line-height:1.7">${ov.summary||''}</p>
 </div>
-<div style="min-width:220px;max-width:280px">
-<p style="font-size:12px;font-weight:700;color:var(--g2);margin-bottom:8px">4대 역량 평가</p>
-${[{k:'career',l:'🎯 진로'},{k:'academic',l:'📚 학업'},{k:'community',l:'🤝 공동체'},{k:'character',l:'💎 인성'}].map(x=>`<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:600">${x.l}</span><span style="font-size:10px;color:var(--g3)">${sb[x.k]||''}</span></div>${starBar(sc[x.k]||0)}</div>`).join('')}
+<div style="min-width:220px;max-width:300px">
+<div style="text-align:center;padding:16px;background:rgba(255,255,255,0.7);border-radius:16px;margin-bottom:12px">
+<p style="font-size:11px;font-weight:700;color:var(--g3);margin-bottom:4px">생기부 종합 평점</p>
+<p style="font-size:42px;font-weight:900;color:${gpaClr};line-height:1">${gpa.toFixed?gpa.toFixed(1):gpa}</p>
+<p style="font-size:11px;font-weight:600;color:${gpaClr};margin-top:2px">${ov.tier||''}</p>
+</div>
+<p style="font-size:12px;font-weight:700;color:var(--g2);margin-bottom:8px">3대 역량 평가</p>
+${[{k:'academic',l:'📚 학업'},{k:'career',l:'🎯 진로'},{k:'community',l:'🤝 공동체'}].map(x=>`<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:600">${x.l}</span><span style="font-size:10px;color:var(--g3)">${sb[x.k]||''}</span></div>${scoreBar(sc[x.k]||0)}</div>`).join('')}
 </div>
 </div>
+<p style="font-size:12px;color:var(--g2);margin-top:12px;line-height:1.6;background:rgba(255,255,255,0.5);padding:10px 14px;border-radius:10px">${ov.gpa_brief||''}</p>
 </div>
+${ov.change_analysis?`<div class="rb" style="border-left:4px solid var(--purple)"><h4>🔄 1학년 → 2학년 변화 분석</h4><p style="line-height:1.75">${ov.change_analysis}</p></div>`:''}
+${ov.grade3_direction?`<div class="rb" style="border-left:4px solid var(--blue)"><h4>🎯 3학년 전략 방향</h4><p style="line-height:1.75">${ov.grade3_direction}</p></div>`:''}
+${sa.analysis?`<div class="rb" style="border-left:4px solid ${gradeClr(sa.overall_grade)}">
+<h4>📘 교과 세특 전반 분석 <span style="display:inline-flex;align-items:center;gap:6px;margin-left:8px"><span class="badge" style="background:${gradeBg(sa.overall_grade)};color:${gradeClr(sa.overall_grade)};font-size:13px;padding:4px 12px">${sa.overall_grade}등급</span><span style="font-size:15px;font-weight:800;color:${gradeClr(sa.overall_grade)}">${sa.overall_score||''}</span></span></h4>
+<p style="margin:8px 0;line-height:1.75">${sa.analysis||''}</p>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin:12px 0">
+<div style="text-align:center;padding:10px;background:var(--blue-bg);border-radius:10px"><div style="font-size:18px;font-weight:900;color:var(--blue)">${sa.s_elements?'S':'0'}</div><div style="font-size:10px;font-weight:700;color:var(--blue)">S등급</div></div>
+<div style="text-align:center;padding:10px;background:var(--green-bg);border-radius:10px"><div style="font-size:18px;font-weight:900;color:var(--green)">${sa.a_elements?'A':'0'}</div><div style="font-size:10px;font-weight:700;color:var(--green)">A등급</div></div>
+<div style="text-align:center;padding:10px;background:var(--orange-bg);border-radius:10px"><div style="font-size:18px;font-weight:900;color:var(--orange)">${sa.b_elements?'B':'0'}</div><div style="font-size:10px;font-weight:700;color:var(--orange)">B등급</div></div>
+<div style="text-align:center;padding:10px;background:var(--coral-bg);border-radius:10px"><div style="font-size:18px;font-weight:900;color:var(--coral)">${sa.c_elements?'C':'0'}</div><div style="font-size:10px;font-weight:700;color:var(--coral)">C등급</div></div>
+</div>
+${sa.s_elements?`<div style="padding:10px 14px;background:var(--blue-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.65"><strong style="color:var(--blue)">S등급 요소:</strong> ${sa.s_elements}</div>`:''}
+${sa.a_elements?`<div style="padding:10px 14px;background:var(--green-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.65"><strong style="color:var(--green)">A등급 요소:</strong> ${sa.a_elements}</div>`:''}
+${sa.b_elements?`<div style="padding:10px 14px;background:var(--orange-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.65"><strong style="color:var(--orange)">B등급 요소:</strong> ${sa.b_elements}</div>`:''}
+${sa.c_elements?`<div style="padding:10px 14px;background:var(--coral-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.65"><strong style="color:var(--coral)">C등급 요소:</strong> ${sa.c_elements}</div>`:''}
+${(sa.subject_cards||[]).length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:12px">${(sa.subject_cards||[]).map(c=>{const gc=gradeClr(c.grade),gb=gradeBg(c.grade);return`<div style="padding:14px;border-radius:12px;border:1.5px solid ${gc};background:${gb}"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><strong style="font-size:13px">${c.name}</strong><span style="font-size:11px;font-weight:800;color:${gc};padding:2px 8px;background:rgba(255,255,255,0.7);border-radius:100px">${c.grade}등급${c.grade_num?' · '+c.grade_num+'학년':''}</span></div><p style="font-size:11px;color:var(--g1);line-height:1.6">${c.summary||''}</p>${c.highlight?`<p style="font-size:10px;color:${gc};font-weight:600;margin-top:4px">✦ ${c.highlight}</p>`:''}</div>`}).join('')}</div>`:''}
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+${(sa.strong_subjects||[]).length?`<div><span style="font-size:11px;font-weight:700;color:var(--green)">✦ 세특 우수 과목:</span> ${(sa.strong_subjects||[]).map(s=>`<span class="badge b-gr" style="margin:2px">${s}</span>`).join('')}</div>`:''}
+${(sa.weak_subjects||[]).length?`<div><span style="font-size:11px;font-weight:700;color:var(--coral)">→ 보완 필요 과목:</span> ${(sa.weak_subjects||[]).map(s=>`<span class="badge b-co" style="margin:2px">${s}</span>`).join('')}</div>`:''}
+</div></div>`:''}
 <div class="rb"><h4>💪 강점</h4>${(ov.strengths||[]).map(s=>`<p style="margin:3px 0"><span class="badge b-gr">✦</span> ${s}</p>`).join('')}</div>
 <div class="rb"><h4>📌 보완점</h4>${(ov.improvements||[]).map(s=>`<p style="margin:3px 0"><span class="badge b-co">→</span> ${s}</p>`).join('')}</div>
-<div class="rb"><h4>📊 4대 역량 상세</h4><div class="cg">
-${['career','academic','community','character'].map(k=>{const c=cp[k]||{},lb={career:'진로',academic:'학업',community:'공동체',character:'인성'};
-return`<div class="ci"><strong>${lb[k]}</strong><p><span class="badge b-bl">1학년</span> ${c.grade1||'-'}</p><p><span class="badge b-pu">2학년</span> ${c.grade2||'-'}</p><p><span class="badge b-gr">성장</span> ${c.growth||'-'}</p></div>`}).join('')}</div></div>`;
+<div class="rb"><h4>📊 3대 역량 상세 — 학년별 성장 분석</h4>
+<table class="tbl" style="font-size:12px"><thead><tr><th style="width:80px">역량</th><th>1학년</th><th>2학년</th><th>변화 포인트</th><th>3학년 집중</th></tr></thead><tbody>
+${['academic','career','community'].map(k=>{const c=cp[k]||{},lb={career:'🎯 진로',academic:'📚 학업',community:'🤝 공동체'};
+return`<tr><td style="font-weight:800;font-size:11px">${lb[k]}</td><td style="font-size:11px;line-height:1.6">${c.grade1||'-'}</td><td style="font-size:11px;line-height:1.6">${c.grade2||'-'}</td><td style="font-size:11px;line-height:1.6;color:var(--purple);font-weight:600">${c.growth||'-'}</td><td style="font-size:11px;line-height:1.6;color:var(--blue);font-weight:600">${c.grade3_focus||'-'}</td></tr>`}).join('')}
+</tbody></table></div>`;
 document.getElementById('tc-jh').innerHTML=rJH(r.jarhaeng||{});
 const se=r.setuk||{};
 document.getElementById('tc-se').innerHTML=`<div class="rb"><h4>🎯 세특 방향</h4><p>${se.direction||''}</p></div>${(se.subjects||[]).map(s=>`<div class="rb"><h4>📘 ${s.name}</h4><p><strong>주제:</strong> ${s.theme||''}</p><p><strong>이유:</strong> ${s.reason||''}</p><p>${(s.keywords||[]).map(k=>`<span class="badge b-bl" style="margin:2px">${k}</span>`).join(' ')}</p></div>`).join('')}`;
@@ -946,7 +1237,14 @@ const cl=r.club||{};
 // 동아리: quarterly(새) 또는 monthly(구) 호환
 const clubItems=cl.quarterly||cl.monthly||[];
 const isQuarterly=!!cl.quarterly;
-document.getElementById('tc-cl').innerHTML=`<div class="rb"><h4>🏫 ${cl.name||''}</h4><p>${cl.goal||''}</p></div><div class="rb"><h4>📅 ${isQuarterly?'분기별':'월별'} 계획</h4><table class="tbl"><tr><th>${isQuarterly?'분기':'월'}</th>${isQuarterly?'<th>핵심 목표</th>':''}<th>활동</th><th>기록 포인트</th></tr>${clubItems.map(m=>`<tr><td style="font-weight:700">${m.quarter||m.month}</td>${isQuarterly?`<td>${m.focus||''}</td>`:''}<td>${m.activities||m.activity||''}</td><td>${m.record||''}</td></tr>`).join('')}</table></div>`;
+document.getElementById('tc-cl').innerHTML=`${cl.overview?`<div class="rb" style="border-left:4px solid var(--purple)"><h4>📋 동아리 전반 분석</h4><p style="line-height:1.75">${cl.overview}</p></div>`:''}
+<div class="rb"><h4>🏫 ${cl.name||''}</h4><p>${cl.goal||''}</p></div>
+${(cl.projects||[]).length?`<div class="rb"><h4>💡 프로젝트 제안 (${(cl.projects||[]).length}개)</h4><div style="display:grid;gap:12px">${(cl.projects||[]).map((p,i)=>`<div style="padding:16px;border-radius:14px;border:2px solid ${['var(--blue)','var(--purple)','var(--teal)'][i%3]};background:${['var(--blue-bg)','var(--purple-bg)','var(--teal-bg)'][i%3]}">
+<div style="font-size:14px;font-weight:800;margin-bottom:6px;color:${['var(--blue)','var(--purple)','var(--teal)'][i%3]}">${String.fromCharCode(65+i)}. "${p.title}"</div>
+<p style="font-size:12px;line-height:1.7;margin-bottom:8px">${p.concept||''}</p>
+${(p.steps||[]).length?`<div style="font-size:11px;margin-bottom:6px"><strong>실행 단계:</strong><ol style="margin:4px 0 0 16px;line-height:1.8">${(p.steps||[]).map(s=>`<li>${s}</li>`).join('')}</ol></div>`:''}
+${p.record_points?`<p style="font-size:11px;color:var(--g1);font-weight:600;padding:6px 10px;background:rgba(255,255,255,0.6);border-radius:8px"><strong>생기부 포인트:</strong> ${p.record_points}</p>`:''}</div>`).join('')}</div></div>`:''}
+<div class="rb"><h4>📅 분기별 계획</h4><table class="tbl"><tr><th>분기</th><th>핵심 목표</th><th>활동</th><th>기록 포인트</th></tr>${clubItems.map(m=>`<tr><td style="font-weight:700">${m.quarter||m.month}</td><td>${m.focus||''}</td><td>${m.activities||m.activity||''}</td><td>${m.record||''}</td></tr>`).join('')}</table></div>`;
 const co=r.counsel||{};
 // counsel: 새(points/parent) 또는 구(talk_points/parent_points) 호환
 const coPoints=co.points||co.talk_points||[];
@@ -957,6 +1255,7 @@ const missing=[];
 const jh=r.jarhaeng||{};
 if(!jh.hangbal?.option1?.text)missing.push('행발');
 if(!(r.setuk?.subjects?.length))missing.push('세특');
+if(!r.subject_analysis?.analysis)missing.push('교과분석');
 if(!clubItems.length)missing.push('동아리 계획');
 if(!coPoints.length)missing.push('상담');
 if(missing.length){
@@ -967,11 +1266,11 @@ document.getElementById('tc-ov').prepend(warn);
 }
 st('ov')}
 
-function rJH(jh){return[{k:'jayul',l:'자율활동',b:1500},{k:'jinro',l:'진로활동',b:2100},{k:'dongari',l:'동아리활동',b:1500},{k:'hangbal',l:'행동특성및종합의견',b:1500}].map(a=>{
-const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{},b1=bl(o1.text||''),b2=bl(o2.text||'');
-return`<div class="rb"><h4>${a.l} <span class="badge b-gy">${a.b}B</span></h4><p style="margin-bottom:12px">${d.evaluation||''}</p>
-<div class="opt"><div class="oh"><span class="badge b-bl">1안</span> ${o1.title||''}</div><div class="ob">${o1.text||''}</div><div class="of"><span>✓ ${o1.focus||''}</span><span>→ ${o1.supplement||''}</span><span>${b1}/${a.b}B</span></div></div>
-<div class="opt"><div class="oh"><span class="badge b-pu">2안</span> ${o2.title||''}</div><div class="ob">${o2.text||''}</div><div class="of"><span>✓ ${o2.focus||''}</span><span>→ ${o2.supplement||''}</span><span>${b2}/${a.b}B</span></div></div></div>`}).join('')}
+function rJH(jh){const gradeClr=(g)=>({S:'var(--blue)',A:'var(--green)',B:'var(--orange)',C:'var(--coral)'}[g]||'var(--g3)');const gradeBg=(g)=>({S:'var(--blue-bg)',A:'var(--green-bg)',B:'var(--orange-bg)',C:'var(--coral-bg)'}[g]||'var(--g7)');return[{k:'jayul',l:'자율활동',b:1500},{k:'jinro',l:'진로활동',b:2100},{k:'dongari',l:'동아리활동',b:1500},{k:'hangbal',l:'행동특성및종합의견',b:1500}].map(a=>{
+const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{},b1=bl(o1.text||''),b2=bl(o2.text||''),gr=d.grade||'';
+return`<div class="rb"><h4>${a.l} <span class="badge b-gy">${a.b}B</span>${gr?` <span class="badge" style="background:${gradeBg(gr)};color:${gradeClr(gr)}">${gr}등급</span>`:''}</h4><p style="margin-bottom:12px">${d.evaluation||''}</p>
+<div class="opt"><div class="oh"><span class="badge b-bl">안전형(A)</span> ${o1.title||''}</div><div class="ob">${o1.text||''}</div><div class="of"><span>✓ ${o1.focus||''}</span><span>→ ${o1.supplement||''}</span><span>${b1}/${a.b}B</span></div></div>
+<div class="opt"><div class="oh"><span class="badge b-pu">도전형(S)</span> ${o2.title||''}</div><div class="ob">${o2.text||''}</div><div class="of"><span>✓ ${o2.focus||''}</span><span>→ ${o2.supplement||''}</span><span>${b2}/${a.b}B</span></div></div>${a.k==='hangbal'?'<div style="margin-top:8px;padding:8px 12px;background:var(--orange-bg);border-radius:8px;font-size:11px;color:var(--orange);font-weight:600">⚠️ 3학년 행발은 학종 수시에서 미반영됩니다 (1~2학년만 대학 제공). 정시 학생부반영 대학(서울대 등)에서는 활용 가능.</div>':''}</div>`}).join('')}
 
 function bl(s){return new Blob([s||'']).size}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -1024,30 +1323,33 @@ h3{font-size:15px;font-weight:700;color:#333D4B;margin:20px 0 10px;display:flex;
 </style>`}
 
 function buildPDFContent(result){
-const r=result,m=r._m||{},ov=r.overview||{},cp=ov.competencies||{},jh=r.jarhaeng||{},se=r.setuk||{},cl=r.club||{},co=r.counsel||{};
-const compLabels={career:'진로역량',academic:'학업역량',community:'공동체역량',character:'인성역량'};
-const compColors={career:'#3182F6',academic:'#7B61FF',community:'#00C471',character:'#FF9F43'};
+const r=result,m=r._m||{},ov=r.overview||{},cp=ov.competencies||{},jh=r.jarhaeng||{},se=r.setuk||{},cl=r.club||{},co=r.counsel||{},sa=r.subject_analysis||{},sc=ov.scores||{};
+const compLabels={academic:'학업역량',career:'진로역량',community:'공동체역량'};
+const compColors={academic:'#3182F6',career:'#7B61FF',community:'#00C471'};
+const gpa=ov.gpa||0;
+const gpaClr=gpa>=4.0?'#3182F6':gpa>=3.5?'#22B8CF':gpa>=3.0?'#FF9F43':'#FF6B6B';
+const grClr=(g)=>({S:'#3182F6',A:'#00C471',B:'#FF9F43',C:'#FF6B6B'}[g]||'#8B95A1');
 let compHtml='';
-['career','academic','community','character'].forEach(k=>{
+['academic','career','community'].forEach(k=>{
 const c=cp[k]||{};
 compHtml+=`<div class="comp-card" style="border-left:4px solid ${compColors[k]}">
-<div class="comp-title" style="color:${compColors[k]}">${compLabels[k]}</div>
+<div class="comp-title" style="color:${compColors[k]}">${compLabels[k]} <span style="font-size:14px;font-weight:900;margin-left:8px">${sc[k]||''}</span></div>
 <table class="comp-tbl"><tr><th style="width:80px">1학년</th><td>${c.grade1||'-'}</td></tr>
 <tr><th>2학년</th><td>${c.grade2||'-'}</td></tr>
 <tr><th style="color:${compColors[k]}">성장</th><td style="font-weight:600">${c.growth||'-'}</td></tr></table></div>`;
 });
 let jhHtml='';
 [{k:'jayul',l:'자율활동',lm:1500},{k:'jinro',l:'진로활동',lm:2100},{k:'dongari',l:'동아리활동',lm:1500},{k:'hangbal',l:'행동특성및종합의견',lm:1500}].forEach(a=>{
-const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{},b1=bl(o1.text||''),b2=bl(o2.text||'');
-jhHtml+=`<div class="section"><h3>${a.l} <span class="byte-tag">${a.lm}B</span></h3>
+const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{},b1=bl(o1.text||''),b2=bl(o2.text||''),gr=d.grade||'';
+jhHtml+=`<div class="section"><h3>${a.l} <span class="byte-tag">${a.lm}B</span>${gr?` <span style="background:${grClr(gr)}20;color:${grClr(gr)};padding:2px 8px;border-radius:100px;font-size:11px;font-weight:700">${gr}등급</span>`:''}</h3>
 <p class="eval">${d.evaluation||''}</p>
 <div class="opt-grid"><div class="opt-box">
-<div class="opt-hdr"><span class="opt-badge blue">1안</span> ${o1.title||''} <span class="byte-count ${b1>a.lm?'over':''}">${b1}/${a.lm}B</span></div>
+<div class="opt-hdr"><span class="opt-badge blue">안전형(A)</span> ${o1.title||''} <span class="byte-count ${b1>a.lm?'over':''}">${b1}/${a.lm}B</span></div>
 <div class="opt-body">${o1.text||''}</div>
 <div class="opt-meta">✓ ${o1.focus||''} · → ${o1.supplement||''}</div></div>
-<div class="opt-box"><div class="opt-hdr"><span class="opt-badge purple">2안</span> ${o2.title||''} <span class="byte-count ${b2>a.lm?'over':''}">${b2}/${a.lm}B</span></div>
+<div class="opt-box"><div class="opt-hdr"><span class="opt-badge purple">도전형(S)</span> ${o2.title||''} <span class="byte-count ${b2>a.lm?'over':''}">${b2}/${a.lm}B</span></div>
 <div class="opt-body">${o2.text||''}</div>
-<div class="opt-meta">✓ ${o2.focus||''} · → ${o2.supplement||''}</div></div></div></div>`;
+<div class="opt-meta">✓ ${o2.focus||''} · → ${o2.supplement||''}</div></div></div>${a.k==='hangbal'?'<p style="font-size:11px;color:#FF9F43;margin-top:8px;font-weight:600">⚠️ 3학년 행발: 학종 수시 미반영 (1~2학년만 제공). 정시 학생부반영 대학에서 활용 가능.</p>':''}</div>`;
 });
 let seHtml=(se.subjects||[]).map(s=>`<div class="setuk-card"><div class="setuk-name">${s.name||''}</div>
 <div class="setuk-theme">📌 ${s.theme||''}</div><div class="setuk-reason">${s.reason||''}</div>
@@ -1069,16 +1371,29 @@ return`<div class="info-bar">
 <div class="info-item">📅 <span>${m.dt||''}</span></div>
 <div class="info-item">⚡ <span>${(m.pri||[]).map((p,i)=>['①','②','③'][i]+p).join(' → ')}</span></div>
 </div>
+<div style="text-align:center;padding:16px 0;margin:10px 0;border:2px solid ${gpaClr};border-radius:14px;background:${gpaClr}08">
+<span style="font-size:13px;font-weight:700;color:#8B95A1">생기부 종합 평점</span>
+<span style="font-size:36px;font-weight:900;color:${gpaClr};margin:0 16px">${gpa.toFixed?gpa.toFixed(1):gpa}</span>
+<span style="font-size:13px;font-weight:700;color:${gpaClr}">${ov.tier||''}</span>
+<div style="font-size:11px;color:#8B95A1;margin-top:4px">${ov.gpa_brief||''}</div>
+</div>
 <h2>📊 종합 분석</h2><div class="summary">${ov.summary||''}</div>
 <div class="chips">${(ov.strengths||[]).map(s=>`<div class="chip-good">✦ ${s}</div>`).join('')}</div>
 <div class="chips">${(ov.improvements||[]).map(s=>`<div class="chip-imp">→ ${s}</div>`).join('')}</div>
-<h2>💪 4대 역량 분석</h2>${compHtml}
+${sa.analysis?`<h2>📘 교과 세특 분석</h2>
+<div style="display:flex;gap:12px;margin-bottom:12px">
+<span style="font-weight:800;color:${grClr(sa.overall_grade)}">${sa.overall_grade}등급 (${sa.overall_score||''})</span>
+<span style="font-size:12px;color:#8B95A1">S:${sa.s_elements||0} | A:${sa.a_elements||0} | B:${sa.b_elements||0} | C:${sa.c_elements||0}</span>
+</div>
+<div class="summary">${sa.analysis||''}</div>
+<div style="margin:8px 0;font-size:12px"><span style="color:#00C471;font-weight:700">✦ 우수: ${(sa.strong_subjects||[]).join(', ')}</span> &nbsp; <span style="color:#FF6B6B;font-weight:700">→ 보완: ${(sa.weak_subjects||[]).join(', ')}</span></div>`:''}
+<h2>💪 3대 역량 분석</h2>${compHtml}
 <h2>📝 자율·진로·동아리·행발 기재 예시</h2>${jhHtml}
 <h2>🎯 3학년 세특 방향</h2><div class="summary">${se.direction||''}</div>${seHtml}
 <h2>🏫 동아리 ${clIsQ?'분기별':'월별'} 계획</h2><div class="summary">${cl.goal||''}</div>
 <table class="club-tbl"><tr><th>${clIsQ?'분기':'월'}</th>${clIsQ?'<th>목표</th>':''}<th>활동 내용</th><th>기록 포인트</th></tr>${clHtml}</table>
 <h2>💬 상담 가이드</h2>${coHtml}
-<div class="footer">세공사 v3.0 · AI Powered · ${m.dt||''}</div>`;
+<div class="footer">세공사 v4.2 · AI Powered · ${m.dt||''}</div>`;
 }
 
 function dlPDF(){if(!cur)return;
@@ -1091,72 +1406,147 @@ ${buildPDFContent(cur)}
 </body></html>`);
 w.document.close();setTimeout(()=>w.print(),800)}
 
-function dlXL(){if(!cur||cur._err)return;const r=cur,m=r._m,jh=r.jarhaeng||{},ov=r.overview||{},sc=ov.scores||{},se=r.setuk||{},cl=r.club||{},co=r.counsel||{};
-const wb=XLSX.utils.book_new();
-const areas=[{k:'jayul',l:'자율활동',lm:1500},{k:'jinro',l:'진로활동',lm:2100},{k:'dongari',l:'동아리활동',lm:1500},{k:'hangbal',l:'행동특성및종합의견',lm:1500}];
+// === 엑셀 스타일 헬퍼 ===
+const XS={
+title:{font:{bold:true,sz:16,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'1B5BD6'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'medium',color:{rgb:'0F3A8C'}}}},
+hdr:{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'4472C4'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'2F5597'}}}},
+hdrSub:{font:{bold:true,sz:10,color:{rgb:'1F3864'}},fill:{fgColor:{rgb:'D6E4F0'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'8DB4E2'}}}},
+label:{font:{bold:true,sz:11,color:{rgb:'1F3864'}},fill:{fgColor:{rgb:'E9EFF7'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{right:{style:'thin',color:{rgb:'B4C6E7'}},bottom:{style:'thin',color:{rgb:'D6E4F0'}}}},
+body:{font:{sz:10,color:{rgb:'333D4B'}},alignment:{horizontal:'left',vertical:'top',wrapText:true},border:{bottom:{style:'hair',color:{rgb:'E5E8EB'}},right:{style:'hair',color:{rgb:'E5E8EB'}}}},
+bodyC:{font:{sz:10,color:{rgb:'333D4B'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'hair',color:{rgb:'E5E8EB'}}}},
+teacher:{font:{sz:10,color:{rgb:'1B5BD6'}},fill:{fgColor:{rgb:'F5F8FF'}},alignment:{horizontal:'left',vertical:'top',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'B4C6E7'}},right:{style:'thin',color:{rgb:'B4C6E7'}},left:{style:'thin',color:{rgb:'B4C6E7'}}}},
+byte:{font:{sz:9,color:{rgb:'8B95A1'}},alignment:{horizontal:'center',vertical:'center'}},
+byteOver:{font:{sz:9,bold:true,color:{rgb:'FF0000'}},alignment:{horizontal:'center',vertical:'center'}},
+info:{font:{bold:true,sz:11,color:{rgb:'1F3864'}},fill:{fgColor:{rgb:'F2F7FC'}},alignment:{vertical:'center',wrapText:true}},
+infoVal:{font:{bold:true,sz:11,color:{rgb:'FF0000'}},fill:{fgColor:{rgb:'F2F7FC'}},alignment:{vertical:'center'}},
+section:{font:{bold:true,sz:12,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'2F5597'}},alignment:{horizontal:'left',vertical:'center'},border:{bottom:{style:'medium',color:{rgb:'1F3864'}}}},
+score:{font:{bold:true,sz:14,color:{rgb:'1B5BD6'}},alignment:{horizontal:'center',vertical:'center'}},
+chip:{font:{bold:true,sz:10,color:{rgb:'3182F6'}},fill:{fgColor:{rgb:'EBF4FF'}},alignment:{horizontal:'left',vertical:'center',wrapText:true}},
+note:{font:{sz:9,italic:true,color:{rgb:'8B95A1'}},fill:{fgColor:{rgb:'FAFAFA'}},alignment:{horizontal:'left',vertical:'center',wrapText:true}},
+};
+function apS(ws,ref,st){if(!ws[ref])ws[ref]={v:'',t:'s'};ws[ref].s=st;}
+function setSt(ws,row,cols,style){cols.forEach(c=>{const ref=XLSX.utils.encode_cell({r:row,c});apS(ws,ref,style)})}
+function setRowSt(ws,row,numCols,style){for(let c=0;c<numCols;c++){const ref=XLSX.utils.encode_cell({r:row,c});apS(ws,ref,style)}}
 
-// ===== 시트1: 요약 카드 =====
+function dlXL(){if(!cur||cur._err)return;const r=cur,m=r._m,jh=r.jarhaeng||{},ov=r.overview||{},sc=ov.scores||{},sb=ov.score_brief||{},se=r.setuk||{},cl=r.club||{},co=r.counsel||{},sa=r.subject_analysis||{};
+const wb=XLSX.utils.book_new();
+const areas=[{k:'jayul',l:'자율활동',lm:1500,clr:'4472C4'},{k:'jinro',l:'진로활동',lm:2100,clr:'5B9BD5'},{k:'dongari',l:'동아리활동',lm:1500,clr:'70AD47'},{k:'hangbal',l:'행동특성및종합의견',lm:1500,clr:'ED7D31'}];
+
+// ===== 시트1: 요약카드 =====
 const s0=[];
-s0.push(['📊 생기부 성장분석 요약 카드']);
+s0.push(['📊 생기부 성장분석 요약 카드','','','','','','','','','']);
 s0.push([]);
 s0.push(['학년',m.sid?m.sid[0]:'','반',m.sid?m.sid.substring(1,3):'','번호',m.sid?m.sid.substring(3,5):'','성명',m.nm,'희망진로',m.cr]);
 s0.push([]);
-s0.push(['◆ 4대 역량 평가 (5점 만점)']);
+s0.push(['종합 평점 (5.0)',ov.gpa||0,'',ov.tier||'']);
+s0.push(['평점 근거',ov.gpa_brief||'']);
+s0.push([]);
 s0.push(['역량','점수','평가 요약']);
-s0.push(['🎯 진로역량',sc.career||'-',ov.score_brief?.career||'']);
-s0.push(['📚 학업역량',sc.academic||'-',ov.score_brief?.academic||'']);
-s0.push(['🤝 공동체역량',sc.community||'-',ov.score_brief?.community||'']);
-s0.push(['💎 인성역량',sc.character||'-',ov.score_brief?.character||'']);
+s0.push(['📚 학업역량',sc.academic||0,sb.academic||'']);
+s0.push(['🎯 진로역량',sc.career||0,sb.career||'']);
+s0.push(['🤝 공동체역량',sc.community||0,sb.community||'']);
 s0.push([]);
-s0.push(['◆ 핵심 키워드',(ov.keywords||[]).map(k=>'#'+k).join('  ')]);
+s0.push(['핵심 키워드',(ov.keywords||[]).map(k=>'#'+k).join('  ')]);
 s0.push([]);
-s0.push(['◆ 종합 평가']);
-s0.push([ov.summary||'']);
+s0.push(['종합 평가',ov.summary||'']);
 s0.push([]);
-s0.push(['◆ 강점']);
-(ov.strengths||[]).forEach(s=>s0.push(['✦ '+s]));
+s0.push(['강점']);
+(ov.strengths||[]).forEach(s=>s0.push(['✦',s]));
 s0.push([]);
-s0.push(['◆ 보완점']);
-(ov.improvements||[]).forEach(s=>s0.push(['→ '+s]));
+s0.push(['보완점']);
+(ov.improvements||[]).forEach(s=>s0.push(['→',s]));
+s0.push([]);
+s0.push(['교과 세특 분석',sa.overall_grade||'','평점: '+(sa.overall_score||'')]);
+s0.push(['분석',sa.analysis||'']);
+s0.push(['S등급 요소',sa.s_elements||'']);
+s0.push(['A등급 요소',sa.a_elements||'']);
+s0.push(['B등급 요소',sa.b_elements||'']);
+s0.push(['C등급 요소',sa.c_elements||'']);
+s0.push(['세특 우수 과목',(sa.strong_subjects||[]).join(', ')]);
+s0.push(['보완 필요 과목',(sa.weak_subjects||[]).join(', ')]);
 
 const ws0=XLSX.utils.aoa_to_sheet(s0);
-ws0['!cols']=[{wch:14},{wch:8},{wch:6},{wch:6},{wch:6},{wch:6},{wch:8},{wch:10},{wch:10},{wch:15}];
-ws0['!merges']=[{s:{r:0,c:0},e:{r:0,c:9}}];
+ws0['!cols']=[{wch:16},{wch:10},{wch:50},{wch:30}];
+ws0['!merges']=[{s:{r:0,c:0},e:{r:0,c:3}}];
+// 스타일 적용
+setRowSt(ws0,0,4,XS.title);
+setRowSt(ws0,2,11,XS.info);
+apS(ws0,XLSX.utils.encode_cell({r:2,c:1}),XS.infoVal);
+apS(ws0,XLSX.utils.encode_cell({r:2,c:3}),XS.infoVal);
+apS(ws0,XLSX.utils.encode_cell({r:2,c:5}),XS.infoVal);
+apS(ws0,XLSX.utils.encode_cell({r:2,c:8}),XS.infoVal);
+apS(ws0,XLSX.utils.encode_cell({r:2,c:10}),XS.infoVal);
+// 종합 평점 강조
+apS(ws0,XLSX.utils.encode_cell({r:4,c:0}),XS.label);
+apS(ws0,XLSX.utils.encode_cell({r:4,c:1}),{font:{bold:true,sz:18,color:{rgb:'1B5BD6'}},alignment:{horizontal:'center',vertical:'center'}});
+apS(ws0,XLSX.utils.encode_cell({r:4,c:3}),{font:{bold:true,sz:11,color:{rgb:'1B5BD6'}},alignment:{horizontal:'left',vertical:'center'}});
+setRowSt(ws0,7,3,XS.hdr);
+for(let i=8;i<=10;i++){apS(ws0,XLSX.utils.encode_cell({r:i,c:0}),XS.label);apS(ws0,XLSX.utils.encode_cell({r:i,c:1}),XS.score);apS(ws0,XLSX.utils.encode_cell({r:i,c:2}),XS.body)}
 XLSX.utils.book_append_sheet(wb,ws0,'요약카드');
 
-// ===== 시트2: 개인 상담 기록지 =====
+// ===== 시트2: 기재예시 (핵심!) =====
 const s1=[];
-s1.push(['생기부 성장분석 - 개인별 상담 기록지']);
+s1.push(['생기부 성장분석 - 개인별 기재 예시 및 교사 기입란','','','','','','','']);
 s1.push([]);
 s1.push(['학년',m.sid?m.sid[0]:'','반',m.sid?m.sid.substring(1,3):'','번호',m.sid?m.sid.substring(3,5):'','성명',m.nm]);
 s1.push([]);
-s1.push(['영역','제한(B)','AI 1안','Byte','AI 2안','Byte','교사 직접 기입란','Byte']);
+s1.push(['영역','등급','제한','안전형(A) 기재예시','Byte','도전형(S) 기재예시','Byte','✏️ 교사 직접 기입란','Byte']);
 areas.forEach(a=>{
 const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{};
 const t1=o1.text||'',t2=o2.text||'';
-s1.push([a.l,a.lm,t1,bl(t1),t2,bl(t2),'',0]);
+s1.push([a.l,d.grade||'',a.lm+'B',t1,bl(t1),t2,bl(t2),'',0]);
 });
 s1.push([]);
-s1.push(['[안내] AI 예시를 참고하여 교사 기입란에 직접 작성하세요. 바이트 제한 초과 시 빨간 숫자로 표시됩니다.']);
+s1.push(['💡 안내: 안전형(A)은 현실적 기재, 도전형(S)은 심화 탐구 기재입니다. 오른쪽 교사 기입란에 직접 작성하세요.','','','','','','','','']);
+s1.push(['⚠️ 3학년 활동이므로 기재예시는 조건부 제안(~할 경우, ~한다면) 형식입니다. 활동 완료 후 완료형으로 수정하세요.','','','','','','','','']);
 
 const ws1=XLSX.utils.aoa_to_sheet(s1);
-ws1['!cols']=[{wch:16},{wch:8},{wch:52},{wch:6},{wch:52},{wch:6},{wch:52},{wch:6}];
-ws1['!merges']=[{s:{r:0,c:0},e:{r:0,c:7}},{s:{r:10,c:0},e:{r:10,c:7}}];
-ws1['!rows']=[{hpt:30},{hpt:8},{hpt:24},{hpt:8},{hpt:24},{hpt:180},{hpt:200},{hpt:180},{hpt:180},{hpt:8},{hpt:20}];
+ws1['!cols']=[{wch:16},{wch:5},{wch:7},{wch:52},{wch:6},{wch:52},{wch:6},{wch:52},{wch:6}];
+ws1['!merges']=[{s:{r:0,c:0},e:{r:0,c:8}},{s:{r:10,c:0},e:{r:10,c:8}},{s:{r:11,c:0},e:{r:11,c:8}}];
+ws1['!rows']=[{hpt:36},{hpt:6},{hpt:26},{hpt:6},{hpt:28},{hpt:200},{hpt:220},{hpt:200},{hpt:200},{hpt:6},{hpt:24},{hpt:24}];
+
+// 스타일
+setRowSt(ws1,0,9,XS.title);
+setRowSt(ws1,2,9,XS.info);
+apS(ws1,XLSX.utils.encode_cell({r:2,c:1}),XS.infoVal);
+apS(ws1,XLSX.utils.encode_cell({r:2,c:3}),XS.infoVal);
+apS(ws1,XLSX.utils.encode_cell({r:2,c:5}),XS.infoVal);
+apS(ws1,XLSX.utils.encode_cell({r:2,c:8}),XS.infoVal);
+setRowSt(ws1,4,9,XS.hdr);
+// 교사 기입란 헤더는 특별 색
+apS(ws1,XLSX.utils.encode_cell({r:4,c:7}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'FF6B6B'}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+
+// 데이터행 스타일
+areas.forEach((a,i)=>{
+const row=5+i;
+apS(ws1,XLSX.utils.encode_cell({r:row,c:0}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:a.clr}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+apS(ws1,XLSX.utils.encode_cell({r:row,c:1}),XS.bodyC);
+apS(ws1,XLSX.utils.encode_cell({r:row,c:2}),XS.bodyC);
+apS(ws1,XLSX.utils.encode_cell({r:row,c:3}),XS.body);
+const b1=bl(jh[a.k]?.option1?.text||'');
+apS(ws1,XLSX.utils.encode_cell({r:row,c:4}),b1>a.lm?XS.byteOver:XS.byte);
+apS(ws1,XLSX.utils.encode_cell({r:row,c:5}),XS.body);
+const b2=bl(jh[a.k]?.option2?.text||'');
+apS(ws1,XLSX.utils.encode_cell({r:row,c:6}),b2>a.lm?XS.byteOver:XS.byte);
+apS(ws1,XLSX.utils.encode_cell({r:row,c:7}),XS.teacher);
+apS(ws1,XLSX.utils.encode_cell({r:row,c:8}),XS.byte);
+});
+setRowSt(ws1,10,9,XS.note);
+setRowSt(ws1,11,9,XS.note);
 XLSX.utils.book_append_sheet(wb,ws1,'기재예시');
 
-// ===== 시트3: 세특 + 동아리 + 상담 =====
+// ===== 시트3: 활동방향 =====
 const s3=[];
-s3.push(['3학년 활동 방향 - '+m.nm]);
+s3.push(['3학년 활동 방향 - '+m.nm,'','','']);
 s3.push([]);
-s3.push(['◆ 세특 방향']);
-s3.push([se.direction||'']);
+s3.push(['◆ 세특 방향','','','']);
+s3.push([se.direction||'','','','']);
 s3.push([]);
 s3.push(['과목','탐구 주제','적합 이유','키워드']);
 (se.subjects||[]).forEach(s=>s3.push([s.name,s.theme,s.reason,(s.keywords||[]).join(', ')]));
 s3.push([]);
-s3.push(['◆ 동아리: '+(cl.name||'')]);
-s3.push([cl.goal||'']);
+s3.push(['◆ 동아리: '+(cl.name||''),'','','']);
+s3.push([cl.goal||'','','','']);
 s3.push([]);
 const clubItems=cl.quarterly||cl.monthly||[];
 const isQ=!!cl.quarterly;
@@ -1165,102 +1555,169 @@ clubItems.forEach(c=>s3.push([c.quarter||c.month,isQ?(c.focus||''):'',c.activiti
 s3.push([]);
 const coPoints=co.points||co.talk_points||[];
 const coParent=co.parent||co.parent_points||[];
-s3.push(['◆ 상담 가이드']);
-s3.push(['상담 포인트']);
-coPoints.forEach(s=>s3.push(['• '+s]));
+s3.push(['◆ 상담 가이드','','','']);
+s3.push(['상담 포인트','','','']);
+coPoints.forEach(s=>s3.push(['• '+s,'','','']));
 s3.push([]);
-s3.push(['질문 예시']);
-(co.questions||[]).forEach(s=>s3.push(['"'+s+'"']));
+s3.push(['질문 예시','','','']);
+(co.questions||[]).forEach(s=>s3.push(['"'+s+'"','','','']));
 s3.push([]);
-s3.push(['학부모 전달사항']);
-coParent.forEach(s=>s3.push(['• '+s]));
+s3.push(['학부모 전달사항','','','']);
+coParent.forEach(s=>s3.push(['• '+s,'','','']));
 
 const ws3=XLSX.utils.aoa_to_sheet(s3);
 ws3['!cols']=[{wch:16},{wch:35},{wch:40},{wch:20}];
 ws3['!merges']=[{s:{r:0,c:0},e:{r:0,c:3}}];
+// 스타일
+setRowSt(ws3,0,4,XS.title);
+[2,s3.indexOf(s3.find(x=>x[0]?.startsWith?.('◆ 동아리')))||8].forEach(r=>{if(r>=0)setRowSt(ws3,r,4,XS.section)});
+const seHdrRow=5;
+setRowSt(ws3,seHdrRow,4,XS.hdrSub);
 XLSX.utils.book_append_sheet(wb,ws3,'활동방향');
 
-// ===== 시트4: 4대 역량 상세 =====
+// ===== 시트4: 역량분석 =====
 const s4=[];
-s4.push(['4대 역량 성장 분석 - '+m.nm]);
+s4.push(['3대 역량 성장 분석 - '+m.nm,'','','','']);
 s4.push([]);
-s4.push(['역량','1학년','2학년','성장 분석','점수(5)']);
+s4.push(['역량','1학년','2학년','성장 분석','점수']);
 const cp=ov.competencies||{};
-[{k:'career',l:'진로'},{k:'academic',l:'학업'},{k:'community',l:'공동체'},{k:'character',l:'인성'}].forEach(x=>{
+[{k:'academic',l:'📚 학업',clr:'4472C4'},{k:'career',l:'🎯 진로',clr:'5B9BD5'},{k:'community',l:'🤝 공동체',clr:'70AD47'}].forEach(x=>{
 const c=cp[x.k]||{};
 s4.push([x.l,c.grade1||'',c.grade2||'',c.growth||'',sc[x.k]||'']);
 });
 const ws4=XLSX.utils.aoa_to_sheet(s4);
-ws4['!cols']=[{wch:10},{wch:40},{wch:40},{wch:30},{wch:8}];
+ws4['!cols']=[{wch:12},{wch:40},{wch:40},{wch:30},{wch:8}];
 ws4['!merges']=[{s:{r:0,c:0},e:{r:0,c:4}}];
-ws4['!rows']=[{hpt:28},{hpt:8},{hpt:24},{hpt:120},{hpt:120},{hpt:120},{hpt:120}];
+ws4['!rows']=[{hpt:36},{hpt:6},{hpt:28},{hpt:140},{hpt:140},{hpt:140}];
+setRowSt(ws4,0,5,XS.title);
+setRowSt(ws4,2,5,XS.hdr);
+[{k:'academic',clr:'4472C4'},{k:'career',clr:'5B9BD5'},{k:'community',clr:'70AD47'}].forEach((x,i)=>{
+const row=3+i;
+apS(ws4,XLSX.utils.encode_cell({r:row,c:0}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:x.clr}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+[1,2,3].forEach(c=>apS(ws4,XLSX.utils.encode_cell({r:row,c}),XS.body));
+apS(ws4,XLSX.utils.encode_cell({r:row,c:4}),XS.score);
+});
 XLSX.utils.book_append_sheet(wb,ws4,'역량분석');
+
+// v4.2: 교사 메모 시트
+const _tnote=(stu[m.sid]&&stu[m.sid].teacherNote)||'';
+if(_tnote){
+const tnData=[['교사 상담 기록 — '+m.nm,'',''],['작성일: '+m.dt,'',''],[]];
+_tnote.split('\n').forEach(line=>tnData.push([line,'','']));
+const wsTN=XLSX.utils.aoa_to_sheet(tnData);
+wsTN['!cols']=[{wch:80},{wch:15},{wch:15}];
+wsTN['!merges']=[{s:{r:0,c:0},e:{r:0,c:2}}];
+setRowSt(wsTN,0,3,XS.title);
+setRowSt(wsTN,1,3,{font:{sz:9,color:{rgb:'8B95A1'}},alignment:{horizontal:'left',vertical:'center'}});
+for(let r=3;r<tnData.length;r++)apS(wsTN,XLSX.utils.encode_cell({r,c:0}),XS.body);
+XLSX.utils.book_append_sheet(wb,wsTN,'교사메모');
+}
 
 XLSX.writeFile(wb,`생기부_${m.sid}_${m.nm}.xlsx`)}
 
 function dlAll(){if(!Object.keys(stu).length){alert('분석된 학생이 없습니다');return}
 const wb=XLSX.utils.book_new();
-
-// ===== 시트1: 전체 요약 대시보드 =====
-const sd=[];
-sd.push(['📊 학급 생기부 분석 대시보드']);
-sd.push([]);
-sd.push(['번호','이름','진로','진로(5)','학업(5)','공동체(5)','인성(5)','키워드','강점 요약']);
 const allStu=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
-for(let i=1;i<=30;i++){
+
+// ===== 시트1: 학급 대시보드 =====
+const sd=[];
+sd.push(['📊 학급 생기부 분석 대시보드','','','','','','','','','']);
+sd.push([]);
+sd.push(['번호','이름','진로','종합평점','학업','진로','공동체','교과등급','키워드','강점 요약']);
+const _ts=classInfo.totalStudents||30;
+for(let i=1;i<=_ts;i++){
 const num=String(i).padStart(2,'0');
 const found=allStu.find(s=>s.sid&&s.sid.endsWith(num));
 if(found&&found.result&&!found.result._err){
-const fo=found.result.overview||{},fs=fo.scores||{};
-sd.push([num,found.name||'',found.career||'',fs.career||'',fs.academic||'',fs.community||'',fs.character||'',(fo.keywords||[]).map(k=>'#'+k).join(' '),(fo.strengths||[])[0]||'']);
-}else{
-sd.push([num,'','','','','','','','']);
-}
+const fo=found.result.overview||{},fs=fo.scores||{},fsa=found.result.subject_analysis||{};
+sd.push([num,found.name||'',found.career||'',fo.gpa||'',fs.academic||'',fs.career||'',fs.community||'',fsa.overall_grade||'',(fo.keywords||[]).map(k=>'#'+k).join(' '),(fo.strengths||[])[0]||'']);
+}else{sd.push([num,'','','','','','','','',''])}
 }
 const wsd=XLSX.utils.aoa_to_sheet(sd);
-wsd['!cols']=[{wch:6},{wch:8},{wch:12},{wch:8},{wch:8},{wch:8},{wch:8},{wch:25},{wch:45}];
-wsd['!merges']=[{s:{r:0,c:0},e:{r:0,c:8}}];
+wsd['!cols']=[{wch:6},{wch:8},{wch:12},{wch:8},{wch:6},{wch:6},{wch:6},{wch:6},{wch:25},{wch:45}];
+wsd['!merges']=[{s:{r:0,c:0},e:{r:0,c:9}}];
+setRowSt(wsd,0,10,XS.title);
+setRowSt(wsd,2,10,XS.hdr);
+for(let i=3;i<3+_ts;i++){
+apS(wsd,XLSX.utils.encode_cell({r:i,c:0}),XS.bodyC);
+apS(wsd,XLSX.utils.encode_cell({r:i,c:1}),{font:{bold:true,sz:10,color:{rgb:'333D4B'}},alignment:{horizontal:'center',vertical:'center'}});
+apS(wsd,XLSX.utils.encode_cell({r:i,c:3}),{font:{bold:true,sz:12,color:{rgb:'1B5BD6'}},alignment:{horizontal:'center',vertical:'center'}});
+for(let c=4;c<=6;c++)apS(wsd,XLSX.utils.encode_cell({r:i,c}),XS.score);
+apS(wsd,XLSX.utils.encode_cell({r:i,c:7}),XS.bodyC);
+apS(wsd,XLSX.utils.encode_cell({r:i,c:8}),XS.chip);
+apS(wsd,XLSX.utils.encode_cell({r:i,c:9}),XS.body);
+}
 XLSX.utils.book_append_sheet(wb,wsd,'학급대시보드');
 
-// ===== 시트2: 전체 기재 일람표 =====
+// ===== 시트2: 기재 일람표 =====
 const s1=[];
-s1.push(['생기부 전체 학생 기재 일람표']);
+s1.push(['생기부 전체 학생 기재 일람표','','','','','','','','','','']);
 s1.push(['번호','이름','진로','자율활동 (1500B)','B','진로활동 (2100B)','B','동아리활동 (1500B)','B','행발 (1500B)','B']);
-for(let i=1;i<=30;i++){
+for(let i=1;i<=_ts;i++){
 const num=String(i).padStart(2,'0');
 const found=allStu.find(s=>s.sid&&s.sid.endsWith(num));
 if(found&&found.result&&!found.result._err){
 const fj=found.result.jarhaeng||{};
-const ja=fj.jayul?.option1?.text||'';
-const ji=fj.jinro?.option1?.text||'';
-const dg=fj.dongari?.option1?.text||'';
-const hb=fj.hangbal?.option1?.text||'';
+const ja=fj.jayul?.option1?.text||'',ji=fj.jinro?.option1?.text||'',dg=fj.dongari?.option1?.text||'',hb=fj.hangbal?.option1?.text||'';
 s1.push([num,found.name||'',found.career||'',ja,bl(ja),ji,bl(ji),dg,bl(dg),hb,bl(hb)]);
-}else{
-s1.push([num,'','','',0,'',0,'',0,'',0]);
-}
+}else{s1.push([num,'','','',0,'',0,'',0,'',0])}
 }
 const ws1=XLSX.utils.aoa_to_sheet(s1);
 ws1['!cols']=[{wch:6},{wch:8},{wch:12},{wch:52},{wch:5},{wch:55},{wch:5},{wch:52},{wch:5},{wch:52},{wch:5}];
 ws1['!merges']=[{s:{r:0,c:0},e:{r:0,c:10}}];
-ws1['!rows']=[{hpt:28},{hpt:22},...Array(30).fill({hpt:160})];
+ws1['!rows']=[{hpt:36},{hpt:26},...Array(30).fill({hpt:160})];
+setRowSt(ws1,0,11,XS.title);
+setRowSt(ws1,1,11,XS.hdr);
+for(let i=2;i<32;i++){
+apS(ws1,XLSX.utils.encode_cell({r:i,c:0}),XS.bodyC);
+apS(ws1,XLSX.utils.encode_cell({r:i,c:1}),{font:{bold:true,sz:10,color:{rgb:'333D4B'}},alignment:{horizontal:'center',vertical:'center'}});
+[3,5,7,9].forEach(c=>apS(ws1,XLSX.utils.encode_cell({r:i,c}),XS.body));
+[4,6,8,10].forEach(c=>apS(ws1,XLSX.utils.encode_cell({r:i,c}),XS.byte));
+}
 XLSX.utils.book_append_sheet(wb,ws1,'기재일람');
 
 // ===== 개별 학생 시트 =====
+const areasDef=[{k:'jayul',l:'자율활동',lm:1500,clr:'4472C4'},{k:'jinro',l:'진로활동',lm:2100,clr:'5B9BD5'},{k:'dongari',l:'동아리활동',lm:1500,clr:'70AD47'},{k:'hangbal',l:'행발',lm:1500,clr:'ED7D31'}];
 allStu.forEach(s=>{
 if(!s.result||s.result._err)return;
-const r=s.result,jh=r.jarhaeng||{};
-const d=[['생기부 개인 상담 기록 - '+s.sid+' '+s.name],
+const rr=s.result,jh=rr.jarhaeng||{};
+const d=[['생기부 개인 상담 기록 - '+s.sid+' '+s.name+(rr.overview?.gpa?' (평점:'+rr.overview.gpa+')':''),'','','','','','','',''],
 [],
-['영역','제한(B)','AI 1안','Byte','AI 2안','Byte','교사 기입란','Byte']];
-[{k:'jayul',l:'자율활동',lm:1500},{k:'jinro',l:'진로활동',lm:2100},{k:'dongari',l:'동아리활동',lm:1500},{k:'hangbal',l:'행발',lm:1500}].forEach(a=>{
+['영역','등급','제한','안전형(A)','Byte','도전형(S)','Byte','✏️ 교사 기입란','Byte']];
+areasDef.forEach(a=>{
 const ar=jh[a.k]||{},o1=ar.option1||{},o2=ar.option2||{};
-d.push([a.l,a.lm,o1.text||'',bl(o1.text||''),o2.text||'',bl(o2.text||''),'',0]);
+d.push([a.l,ar.grade||'',a.lm+'B',o1.text||'',bl(o1.text||''),o2.text||'',bl(o2.text||''),'',0]);
 });
 const ws=XLSX.utils.aoa_to_sheet(d);
-ws['!cols']=[{wch:16},{wch:7},{wch:52},{wch:5},{wch:52},{wch:5},{wch:52},{wch:5}];
-ws['!merges']=[{s:{r:0,c:0},e:{r:0,c:7}}];
-ws['!rows']=[{hpt:28},{hpt:8},{hpt:24},{hpt:180},{hpt:200},{hpt:180},{hpt:180}];
+ws['!cols']=[{wch:16},{wch:5},{wch:7},{wch:52},{wch:5},{wch:52},{wch:5},{wch:52},{wch:5}];
+ws['!merges']=[{s:{r:0,c:0},e:{r:0,c:8}}];
+ws['!rows']=[{hpt:36},{hpt:6},{hpt:28},{hpt:200},{hpt:220},{hpt:200},{hpt:200}];
+setRowSt(ws,0,9,XS.title);
+setRowSt(ws,2,9,XS.hdr);
+apS(ws,XLSX.utils.encode_cell({r:2,c:7}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'FF6B6B'}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+areasDef.forEach((a,i)=>{
+const row=3+i;
+apS(ws,XLSX.utils.encode_cell({r:row,c:0}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:a.clr}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+apS(ws,XLSX.utils.encode_cell({r:row,c:1}),XS.bodyC);
+apS(ws,XLSX.utils.encode_cell({r:row,c:2}),XS.bodyC);
+apS(ws,XLSX.utils.encode_cell({r:row,c:3}),XS.body);
+apS(ws,XLSX.utils.encode_cell({r:row,c:4}),XS.byte);
+apS(ws,XLSX.utils.encode_cell({r:row,c:5}),XS.body);
+apS(ws,XLSX.utils.encode_cell({r:row,c:6}),XS.byte);
+apS(ws,XLSX.utils.encode_cell({r:row,c:7}),XS.teacher);
+apS(ws,XLSX.utils.encode_cell({r:row,c:8}),XS.byte);
+});
+// v4.2: 교사 메모가 있으면 하단에 추가
+if(s.teacherNote){
+const tnRow=d.length;
+d.push([]);d.push(['📝 교사 상담 기록','','','','','','','','']);
+d.push([s.teacherNote,'','','','','','','','']);
+const ws2=XLSX.utils.aoa_to_sheet(d);
+// 기존 스타일 재적용 필요하므로 ws에 직접 추가
+ws[XLSX.utils.encode_cell({r:tnRow+1,c:0})]={v:'📝 교사 상담 기록',t:'s',s:{font:{bold:true,sz:11,color:{rgb:'FF6B6B'}}}};
+ws[XLSX.utils.encode_cell({r:tnRow+2,c:0})]={v:s.teacherNote,t:'s',s:XS.body};
+ws['!ref']=XLSX.utils.encode_range({s:{r:0,c:0},e:{r:tnRow+2,c:8}});
+}
 const sheetName=(s.sid+'_'+s.name).substring(0,31);
 XLSX.utils.book_append_sheet(wb,ws,sheetName);
 });
@@ -1273,12 +1730,15 @@ document.getElementById('stuCnt').textContent=okCount+'명 완료'+(e.length>okC
 if(!e.length){l.innerHTML='<div style="padding:20px;color:var(--g4);text-align:center;font-size:14px">아직 분석된 학생이 없습니다</div>';return}
 l.innerHTML=e.map(s=>{
 const hasErr=!s.result||s.result._err;
+const num=s.sid.length>=5?s.sid.substring(3):s.sid;
 return`<div class="si" style="cursor:pointer${hasErr?';opacity:.5':''}" onclick="viewStudent('${s.sid}')">
-<span><span class="num">${s.sid}</span><strong>${s.name}</strong>${hasErr?'<span style="color:var(--coral);font-size:11px;margin-left:6px">⚠ 재분석 필요</span>':''}</span>
-<span style="display:flex;align-items:center;gap:8px">
+<span><span class="num">${num}번</span><strong>${s.name}</strong>${hasErr?'<span style="color:var(--coral);font-size:11px;margin-left:6px">⚠ 재분석</span>':''}</span>
+<span style="display:flex;align-items:center;gap:6px">
 <span class="meta">${s.career} · ${s.date}</span>
 ${hasErr?'':'<button class="btn btn-sm" style="padding:4px 10px;font-size:11px;background:var(--green-bg);color:var(--green);border:none;border-radius:6px;cursor:pointer" onclick="event.stopPropagation();dlStudentPDF(\''+s.sid+'\')">PDF</button>'}
+<button style="padding:4px 8px;font-size:11px;background:var(--coral-bg);color:var(--coral);border:none;border-radius:6px;cursor:pointer;font-weight:600" onclick="event.stopPropagation();delStudent('${s.sid}')">✕</button>
 </span></div>`}).join('')}
+function delStudent(sid){if(!confirm((stu[sid]?.name||sid)+' 학생 데이터를 삭제하시겠습니까?'))return;delete stu[sid];saveClassStudents();rStu();updateBanner();if(cur&&cur._m&&cur._m.sid===sid){cur=null;document.getElementById('resS').style.display='none'}}
 
 function next(){document.getElementById('resS').style.display='none';
 ['tc-ov','tc-jh','tc-se','tc-cl','tc-co'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=''});
