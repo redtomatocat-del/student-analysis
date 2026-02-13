@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>세공사 v4.2 — 생기부 성장분석기</title>
+<title>세공사 v5.2 — 생기부 전략 분석</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
@@ -11,7 +11,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
 --bg:#F4F5F7;--white:#FFF;--black:#191F28;--g1:#333D4B;--g2:#4E5968;--g3:#8B95A1;--g4:#B0B8C1;--g5:#D1D6DB;--g6:#E5E8EB;--g7:#F2F4F6;
---blue:#3182F6;--blue-bg:#EBF4FF;--coral:#FF6B6B;--coral-bg:#FFF0F0;--green:#00C471;--green-bg:#E8FAF0;--purple:#7B61FF;--purple-bg:#F0EDFF;--orange:#FF9F43;--orange-bg:#FFF5EB;--teal:#22B8CF;--teal-bg:#E3FAFC;
+--blue:#3182F6;--blue-bg:#EBF4FF;--coral:#FF6B6B;--coral-bg:#FFF0F0;--green:#00C471;--green-bg:#E8FAF0;--purple:#7B61FF;--purple-bg:#F0EDFF;--orange:#FF9F43;--orange-bg:#FFF5EB;--teal:#22B8CF;--teal-bg:#E3FAFC;--gold:#FFB800;--gold-bg:#FFF8E1;
 --sh:0 2px 8px rgba(0,0,0,0.04);--sh2:0 4px 16px rgba(0,0,0,0.06);
 --r:20px;--rm:16px;--rs:12px;--rx:10px;
 }
@@ -178,8 +178,8 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <div class="class-banner-empty" id="classBannerEmpty" style="display:none"><div style="font-size:24px">🏫</div><div><strong>학급을 먼저 설정해주세요</strong><br><span style="font-size:12px;opacity:.7">아래에서 학교, 학년, 반, 담임교사를 입력하세요</span></div></div>
 
 <div class="hdr">
-<h1>📊 생기부 성장분석기</h1>
-<div class="hdr-badge"><span class="dot"></span>v4.2</div>
+<h1>📊 세공사 — 생기부 전략 분석</h1>
+<div class="hdr-badge"><span class="dot"></span>v5.2</div>
 </div>
 
 <!-- Flow Steps -->
@@ -245,11 +245,42 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <!-- Student Info -->
 <div class="card no-print">
 <div class="card-top"><div class="c-icon green">👤</div><div><div class="c-title">학생 정보</div><div class="c-desc">PDF 업로드 시 자동 추출 · 수정 가능</div></div></div>
-<div class="row r4">
+<div class="row r5">
 <div><label>번호</label><select id="sNo"><option value="">선택</option></select></div>
 <div><label>이름</label><input type="text" id="sName" placeholder="홍길동"/></div>
 <div><label>희망 진로</label><input type="text" id="sCareer" placeholder="간호사"/></div>
 <div><label>동아리명</label><input type="text" id="sClub" placeholder="과학탐구반"/></div>
+</div>
+<div style="margin-top:10px;padding:12px 16px;background:linear-gradient(135deg,#F8F9FA 0%,#EDF2FF 50%,#F3F0FF 100%);border-radius:12px;border:1px solid var(--g6)">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+<span style="font-size:12px;font-weight:800;color:var(--g2)">📊 내신 등급</span>
+<span id="naesinStatus" style="font-size:10px;color:var(--g4);font-weight:600">PDF 업로드 시 자동 계산</span>
+</div>
+<div class="row r4" style="gap:8px">
+<div style="flex:1">
+<label style="font-size:10px;color:#3182F6;font-weight:700">전체교과</label>
+<input type="number" id="sNaesinAll" min="1" max="9" step="0.1" style="text-align:center;font-weight:800;font-size:16px;color:#3182F6;border:2px solid #DDE2E8;border-radius:10px;padding:10px 4px;width:100%;background:white;transition:all .2s" onfocus="this.style.borderColor='#3182F6';this.style.boxShadow='0 0 0 3px rgba(49,130,246,0.15)'" onblur="this.style.borderColor=this.value?'#3182F6':'#DDE2E8';this.style.background=this.value?'#EBF4FF':'white';this.style.boxShadow='none'"/>
+</div>
+<div style="flex:1">
+<label style="font-size:10px;color:#7B61FF;font-weight:700">국영수사</label>
+<input type="number" id="sNaesinMSS" min="1" max="9" step="0.1" style="text-align:center;font-weight:800;font-size:16px;color:#7B61FF;border:2px solid #DDE2E8;border-radius:10px;padding:10px 4px;width:100%;background:white;transition:all .2s" onfocus="this.style.borderColor='#7B61FF';this.style.boxShadow='0 0 0 3px rgba(123,97,255,0.15)'" onblur="this.style.borderColor=this.value?'#7B61FF':'#DDE2E8';this.style.background=this.value?'#F0EDFF':'white';this.style.boxShadow='none'"/>
+</div>
+<div style="flex:1">
+<label style="font-size:10px;color:#22B8CF;font-weight:700">국영수과</label>
+<input type="number" id="sNaesinMSN" min="1" max="9" step="0.1" style="text-align:center;font-weight:800;font-size:16px;color:#22B8CF;border:2px solid #DDE2E8;border-radius:10px;padding:10px 4px;width:100%;background:white;transition:all .2s" onfocus="this.style.borderColor='#22B8CF';this.style.boxShadow='0 0 0 3px rgba(34,184,207,0.15)'" onblur="this.style.borderColor=this.value?'#22B8CF':'#DDE2E8';this.style.background=this.value?'#E3FAFC':'white';this.style.boxShadow='none'"/>
+</div>
+<div style="flex:1.2">
+<label style="font-size:10px;color:var(--g3);font-weight:700">반영 기준</label>
+<select id="sNaesinType" style="width:100%;padding:10px 4px;border-radius:10px;border:2px solid var(--g5);font-size:12px;font-weight:700;background:white">
+<option value="all">전체교과</option><option value="mss">국영수사</option><option value="msn">국영수과</option><option value="best">자동 최유리</option>
+</select>
+</div>
+</div>
+<div style="font-size:9px;color:var(--g4);margin-top:6px;text-align:right">⚠️ AI 자동 추출값 — 오차 가능, 교사 확인 후 수정하세요</div>
+</div>
+<div class="row r2" style="margin-top:8px">
+<div><label>희망 대학</label><input type="text" id="sUniv" placeholder="한양대, 경북대 (선택)"/></div>
+<div><label>희망 전공</label><input type="text" id="sMajor" placeholder="행정학과, 경찰학과 (선택)"/></div>
 </div>
 <div style="margin-top:8px"><label>학번 미리보기</label><div class="stu-id" id="stuIdPreview">3 - -- - --</div></div>
 </div>
@@ -259,10 +290,10 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <div class="grid2">
 
 <div class="card no-print">
-<div class="card-top"><div class="c-icon purple">🎯</div><div><div class="c-title">우선순위 설정</div><div class="c-desc">보고서 작성 방향</div></div></div>
+<div class="card-top"><div class="c-icon purple">🎯</div><div><div class="c-title">전략 방향 설정</div><div class="c-desc">기재예시·세특·상담 방향만 변경 · 점수에 영향 없음</div></div></div>
 <div class="presets">
-<div class="pre" onclick="setP('top')" id="pTop" style="--ac:#3182F6;--abg:#EBF4FF"><span class="em">🏆</span><span class="tx">1~2등급</span></div>
-<div class="pre" onclick="setP('mid')" id="pMid" style="--ac:#7B61FF;--abg:#F0EDFF"><span class="em">🎯</span><span class="tx">3~5등급</span></div>
+<div class="pre" onclick="setP('top')" id="pTop" style="--ac:#3182F6;--abg:#EBF4FF"><span class="em">🏆</span><span class="tx">학업 중심</span></div>
+<div class="pre" onclick="setP('mid')" id="pMid" style="--ac:#7B61FF;--abg:#F0EDFF"><span class="em">🎯</span><span class="tx">진로 중심</span></div>
 <div class="pre" onclick="setP('cus')" id="pCus" style="--ac:#4E5968;--abg:#F2F4F6"><span class="em">⚙️</span><span class="tx">직접설정</span></div>
 </div>
 <div id="cusP" class="hidden" style="margin-top:10px">
@@ -296,6 +327,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 <!-- Go -->
 <button class="btn btn-blue btn-full no-print" id="goBtn" onclick="analyze()" disabled style="margin-top:14px;padding:16px;font-size:16px;border-radius:var(--r)">🔍 AI 종합 분석 시작</button>
+<button class="btn btn-ghost btn-full no-print" id="reBtn" onclick="reAnalyze()" style="display:none;margin-top:6px;padding:12px;font-size:14px;border-radius:var(--r);border:1.5px solid var(--purple);color:var(--purple)">🔄 부분 재분석 (기재예시·세특·상담만 · 토큰 절약)</button>
 <div class="pw no-print" id="pW"><div class="ptr"><div class="pfl" id="pF"></div></div><div class="ptx" id="pT"></div></div>
 <div id="errMsg" style="display:none;margin:10px 0;padding:14px 18px;background:#FFF0F0;border:1.5px solid #FF6B6B;border-radius:12px;color:#FF6B6B;font-size:14px;font-weight:600" class="no-print"></div>
 
@@ -304,8 +336,8 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <div class="card">
 <div class="tabs">
 <div class="tab on" onclick="st('ov')">📊 종합</div>
-<div class="tab" onclick="st('jh')">📝 자율·진로·행발</div>
-<div class="tab" onclick="st('se')">🎯 세특</div>
+<div class="tab" onclick="st('jh')">📝 자율·진로</div>
+<div class="tab" onclick="st('se')">📘 교과세특</div>
 <div class="tab" onclick="st('cl')">🏫 동아리</div>
 <div class="tab" onclick="st('co')">💬 상담</div>
 </div>
@@ -499,7 +531,7 @@ const prompt=bp(nm,cr,cl,kw,me);
 const r=await fetch('https://api.anthropic.com/v1/messages',{
 method:'POST',
 headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-body:JSON.stringify({model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929',max_tokens:16000,stream:true,messages:[{role:'user',content:prompt}]})
+body:JSON.stringify({model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929',max_tokens:32000,stream:true,messages:[{role:'user',content:prompt}]})
 });
 if(!r.ok)throw new Error('API 오류 ('+r.status+')');
 const reader=r.body.getReader();const decoder=new TextDecoder();let fullText='',buffer='';
@@ -516,12 +548,24 @@ try{const evt=JSON.parse(data);if(evt.type==='content_block_delta'&&evt.delta?.t
 // 파싱
 const sid=q.sid||getStuId()||('30'+String(i+1).padStart(3,'0'));
 const result=pr(fullText,nm,cr,cl,sid,kw);
-// AI가 추출한 이름 반영
+// AI가 추출한 이름/내신 반영
 if(!result._err&&result.student_info){
 if(result.student_info.name)q.name=result.student_info.name;
 if(result.student_info.career_hope)cr=result.student_info.career_hope;
 }
-stu[sid]={name:q.name||nm,career:cr,club:cl,sid,date:new Date().toLocaleDateString('ko-KR'),result,teacherNote:''};
+const _bNa=result.student_info?.naesin_all||0;
+const _bNm=result.student_info?.naesin_mss||0;
+const _bNn=result.student_info?.naesin_msn||0;
+// 내신 반영하여 종합 평점 재계산
+if(result.overview&&result.overview._gbGpa>0&&_bNa>0){
+const _bSel=Math.min(...[_bNa,_bNm,_bNn].filter(v=>v>0))||_bNa;
+result.overview.gpa=calcTotalGpa(result.overview._gbGpa,_bSel);
+result.overview.tier=getTier(result.overview.gpa);
+result.overview.naesin=_bSel;result.overview.naesinAll=_bNa;result.overview.naesinMSS=_bNm;result.overview.naesinMSN=_bNn;
+result.overview.naesinType='자동최유리';
+result.overview.gpa_brief=`생기부 평점 ${result.overview._gbGpa.toFixed(1)}, 내신(자동최유리) ${_bSel.toFixed(1)}등급 반영 기반. ${result.overview.tier}.`;
+}
+stu[sid]={name:q.name||nm,career:cr,club:cl,sid,naesin:_bNa,naesinAll:_bNa,naesinMSS:_bNm,naesinMSN:_bNn,naesinType:'best',date:new Date().toLocaleDateString('ko-KR'),result,teacherNote:''};
 saveClassStudents();
 q.status='done';done++;
 }catch(e){
@@ -697,8 +741,31 @@ document.getElementById('sNo').value=sid.substring(3,5);
 document.getElementById('sName').value=s.name||'';
 document.getElementById('sCareer').value=s.career||'';
 document.getElementById('sClub').value=s.club||'';
+// v5.0 내신 3칸 로드 (구 버전 호환: naesin만 있으면 전체교과에 넣기)
+if(s.naesinAll||s.naesinMSS||s.naesinMSN){
+document.getElementById('sNaesinAll').value=s.naesinAll||'';
+document.getElementById('sNaesinMSS').value=s.naesinMSS||'';
+document.getElementById('sNaesinMSN').value=s.naesinMSN||'';
+document.getElementById('sNaesinType').value=s.naesinType||'all';
+}else if(s.naesin){
+document.getElementById('sNaesinAll').value=s.naesin;
+document.getElementById('sNaesinMSS').value='';
+document.getElementById('sNaesinMSN').value='';
+document.getElementById('sNaesinType').value='all';
+}
+document.getElementById('sUniv').value=s.univ||'';
+document.getElementById('sMajor').value=s.major||'';
 updPreview();
-// 결과 표시
+// 결과 표시 전에 점수 재계산 (이전 버전 캐시 호환)
+injectScores(cur);
+// 내신 반영 재계산
+const _nd=getNaesinData();
+if(cur.overview&&cur.overview._gbGpa>0&&_nd.selected>0){
+cur.overview.gpa=calcTotalGpa(cur.overview._gbGpa,_nd.selected);
+cur.overview.tier=getTier(cur.overview.gpa);
+cur.overview.naesin=_nd.selected;
+cur.overview.naesinType=_nd.typeLabel;
+}
 rR(cur);
 // v4.2: 교사 메모 로드
 loadTeacherNote(sid);
@@ -735,7 +802,7 @@ const ci=classInfo;
 w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${ci.school||''} ${ci.grade||'3'}학년 ${parseInt(ci.cls)||''}반 생기부 전체 보고서</title>
 ${getPDFStyles()}
 </head><body>
-<div class="cover"><h1>📊 생기부 성장분석 보고서</h1>
+<div class="cover"><h1>📊 생기부 전략 분석 보고서</h1>
 <div class="sub">${ci.school||''} ${ci.grade||'3'}학년 ${parseInt(ci.cls)||''}반 · 담임: ${ci.teacher||''} · ${students.length}명</div></div>
 <div style="page-break-after:always"></div>
 ${allHtml}
@@ -784,7 +851,6 @@ function chk(){
 const ready=!!(key&&pdf);
 const btn=document.getElementById('goBtn');
 btn.disabled=!ready;
-console.log('[chk] key:',!!key,'pdf:',!!pdf,'ready:',ready);
 if(!ready){
 let msg=[];
 if(!key)msg.push('API Key 필요');
@@ -813,7 +879,7 @@ showStatus('📄 PDF 분석 중...',10);
 try{
 showStatus('🤖 AI 심층 분석 중... (1~3분 소요)',30);
 
-const body={model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929',max_tokens:16000,stream:true,messages:[{role:'user',content:bp(nm,cr,cl,kw,me)}]};
+const body={model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929',max_tokens:32000,stream:true,messages:[{role:'user',content:bp(nm,cr,cl,kw,me)}]};
 
 const r=await fetch('https://api.anthropic.com/v1/messages',{
 method:'POST',
@@ -874,6 +940,25 @@ showStatus('📋 보고서 생성 중...',90);
 }
 cur=pr(tx,nm,cr,cl,sid,kw);
 
+// v5.0: 내신 반영하여 종합 평점 계산
+if(cur&&!cur._err&&cur.overview){
+const nd=getNaesinData();
+const gbGpa=cur.overview._gbGpa||0;
+if(gbGpa>0){
+cur.overview.gpa_gb=gbGpa;
+cur.overview.gpa=calcTotalGpa(gbGpa,nd.selected);
+cur.overview.tier=getTier(cur.overview.gpa);
+cur.overview.naesin=nd.selected;
+cur.overview.naesinType=nd.typeLabel;
+cur.overview.naesinAll=nd.all;
+cur.overview.naesinMSS=nd.mss;
+cur.overview.naesinMSN=nd.msn;
+if(!cur.overview.gpa_brief||cur.overview.gpa_brief===''){
+cur.overview.gpa_brief=`생기부 평점 ${gbGpa.toFixed(1)}${nd.selected>0?', 내신('+nd.typeLabel+') '+nd.selected.toFixed(1)+'등급 반영':''} 기반. ${cur.overview.tier}.`;
+}
+}
+}
+
 // AI가 추출한 학생 정보로 빈 필드 채우기
 if(!cur._err&&cur.student_info){
 const si=cur.student_info;
@@ -885,6 +970,25 @@ if(si.student_num&&!document.getElementById('sNo').value){
 document.getElementById('sNo').value=String(parseInt(si.student_num)).padStart(2,'0');
 }
 if(si.career_hope&&!document.getElementById('sCareer').value)document.getElementById('sCareer').value=si.career_hope;
+// v5.0: AI가 계산한 내신 3종 자동 채우기 (빈 칸만)
+if(si.naesin_all&&si.naesin_all>0&&!document.getElementById('sNaesinAll').value){
+document.getElementById('sNaesinAll').value=si.naesin_all;
+const el=document.getElementById('sNaesinAll');el.style.borderColor='#3182F6';el.style.background='#EBF4FF';
+}
+if(si.naesin_mss&&si.naesin_mss>0&&!document.getElementById('sNaesinMSS').value){
+document.getElementById('sNaesinMSS').value=si.naesin_mss;
+const el=document.getElementById('sNaesinMSS');el.style.borderColor='#7B61FF';el.style.background='#F0EDFF';
+}
+if(si.naesin_msn&&si.naesin_msn>0&&!document.getElementById('sNaesinMSN').value){
+document.getElementById('sNaesinMSN').value=si.naesin_msn;
+const el=document.getElementById('sNaesinMSN');el.style.borderColor='#22B8CF';el.style.background='#E3FAFC';
+}
+// AI 분석으로 내신이 채워졌으면 상태 메시지 업데이트
+const hasAnyNaesin=document.getElementById('sNaesinAll').value||document.getElementById('sNaesinMSS').value||document.getElementById('sNaesinMSN').value;
+if(hasAnyNaesin){
+const nStat=document.getElementById('naesinStatus');
+if(nStat){nStat.textContent='✅ AI 분석으로 추출 완료 (교사 확인 필요)';nStat.style.color='#22B8CF';}
+}
 updPreview();
 nm=document.getElementById('sName').value||nm;
 cr=document.getElementById('sCareer').value||cr;
@@ -893,9 +997,30 @@ sid=getStuId()||sid;
 if(cur._m){cur._m.nm=nm;cur._m.cr=cr;cur._m.cl=cl;cur._m.sid=sid;}
 }
 
-stu[sid]={name:nm,career:cr,club:cl,sid,date:new Date().toLocaleDateString('ko-KR'),result:cur,teacherNote:(stu[sid]&&stu[sid].teacherNote)||''};
+// v5.0: 내신 자동채우기 후 종합 평점 재계산
+if(cur&&!cur._err&&cur.overview){
+const nd2=getNaesinData();
+const gbGpa2=cur.overview._gbGpa||cur.overview.gpa_gb||0;
+if(gbGpa2>0){
+cur.overview.gpa_gb=gbGpa2;
+cur.overview.gpa=calcTotalGpa(gbGpa2,nd2.selected);
+cur.overview.tier=getTier(cur.overview.gpa);
+cur.overview.naesin=nd2.selected;
+cur.overview.naesinType=nd2.typeLabel;
+cur.overview.naesinAll=nd2.all;
+cur.overview.naesinMSS=nd2.mss;
+cur.overview.naesinMSN=nd2.msn;
+cur.overview.gpa_brief=`생기부 평점 ${gbGpa2.toFixed(1)}${nd2.selected>0?', 내신('+nd2.typeLabel+') '+nd2.selected.toFixed(1)+'등급 반영':''} 기반. ${cur.overview.tier}.`;
+}
+}
+
+const _nd=getNaesinData();
+const _univ=document.getElementById('sUniv')?.value||'';
+const _major=document.getElementById('sMajor')?.value||'';
+stu[sid]={name:nm,career:cr,club:cl,sid,univ:_univ,major:_major,naesin:_nd.selected,naesinAll:_nd.all,naesinMSS:_nd.mss,naesinMSN:_nd.msn,naesinType:_nd.type,date:new Date().toLocaleDateString('ko-KR'),result:cur,teacherNote:(stu[sid]&&stu[sid].teacherNote)||''};
 saveClassStudents();
 rR(cur);rStu();updateBanner();loadTeacherNote(sid);showStatus('✅ 분석 완료!',100);
+document.getElementById('reBtn').style.display='';
 setTimeout(()=>{document.getElementById('pW').style.display='none';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').textContent='🔍 AI 종합 분석 시작'},1500);
 
 }catch(e){
@@ -907,6 +1032,121 @@ document.getElementById('goBtn').textContent='🔍 AI 종합 분석 시작 (재�
 }}
 function showStatus(t,p){document.getElementById('pF').style.width=p+'%';document.getElementById('pT').textContent=t;console.log('[status]',p+'%',t)}
 // sp는 showStatus로 대체됨
+
+// === v5.0: 부분 재분석 (기재예시·세특추천·상담만, 점수/rating_matrix 유지) ===
+async function reAnalyze(){
+if(!cur||cur._err){alert('먼저 전체 분석을 실행해주세요.');return}
+if(!pdf){alert('PDF가 없습니다. 전체 분석을 다시 실행해주세요.');return}
+const nm=document.getElementById('sName').value||'학생';
+const cr=document.getElementById('sCareer').value||'미정';
+const cl=document.getElementById('sClub').value||'';
+const sid=getStuId();
+const kw=getKW();
+const me=document.getElementById('memo').value;
+const nd=getNaesinData();
+
+// 기존 결과에서 보존할 데이터
+const keepRM=JSON.stringify(cur.rating_matrix||{});
+const keepOv=JSON.stringify({summary:cur.overview?.summary,change_analysis:cur.overview?.change_analysis,scores:cur.overview?.scores,_gbGpa:cur.overview?._gbGpa,gpa_gb:cur.overview?.gpa_gb,competencies:cur.overview?.competencies,keywords:cur.overview?.keywords});
+
+const rePrompt=`당신은 대한민국 고등학교 생기부 전문 분석가입니다.
+이미 1차 분석이 완료된 학생의 보고서를 **전략 방향 변경**에 따라 부분 재생성합니다.
+
+[학생 정보]
+- 이름: ${nm} | 진로: ${cr} | 동아리: ${cl}
+- 키워드: ${kw.join(', ')||'미지정'}
+${me?'- 메모: '+me:''}
+- 전략 초점: ${pri[0]} 중심
+
+[⚠️ 유지할 데이터 — 절대 변경하지 마세요]
+rating_matrix: ${keepRM}
+overview 핵심: ${keepOv}
+
+[재생성 대상만 JSON으로 출력]
+1. jarhaeng: 자율/진로/동아리/행발 기재예시 (option1 안전형, option2 도전형)
+   - 전략 초점(${pri[0]})에 맞춰 기재예시 재작성
+   - 등급(grade)과 evaluation은 유지, option1/option2의 text/focus/supplement만 재작성
+   - 바이트 제한: 자율1500B, 진로2100B, 동아리1500B, 행발1500B
+   - ⚠️ 미래형/가정법 톤 필수! 완료형 금지!
+2. setuk: 세특 방향 (direction + subjects 3~4개)
+3. counsel: 상담 가이드 (points 3개, questions 3개, parent 2개)
+
+[생기부 원문]
+${pdf.length>30000?pdf.substring(0,30000)+'\n[⚠ 원문 일부 생략]':pdf}
+
+[필수 규칙]
+- JSON만 출력
+- jarhaeng, setuk, counsel 3개 섹션만 출력
+- 다른 섹션(student_info, rating_matrix, overview, subject_analysis, club) 출력 금지
+
+{"jarhaeng":{...},"setuk":{...},"counsel":{...}}`;
+
+document.getElementById('reBtn').disabled=true;
+document.getElementById('reBtn').textContent='🔄 재분석 중...';
+document.getElementById('pW').style.display='';
+showStatus('🔄 부분 재분석 중... (기재예시·세특·상담)',10);
+
+try{
+const apiKey=document.getElementById('apiKey').value;
+const body={model:document.getElementById('modelSel')?.value||'claude-sonnet-4-5-20250929',max_tokens:16000,stream:true,messages:[{role:'user',content:rePrompt}]};
+const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+const reader=resp.body.getReader();const dec=new TextDecoder();let tx='';
+while(true){
+const{done,value}=await reader.read();
+if(done)break;
+const chunk=dec.decode(value,{stream:true});
+const lines=chunk.split('\n');
+for(const line of lines){
+if(!line.startsWith('data: '))continue;
+try{
+const d=JSON.parse(line.slice(6));
+if(d.type==='content_block_delta'&&d.delta?.text){tx+=d.delta.text;showStatus(`🔄 재분석 중... (${tx.length}자)`,30+Math.min(tx.length/5000*50,50))}
+}catch(e){}
+}
+}
+showStatus('📋 결과 병합 중...',85);
+
+// 부분 결과 파싱
+let partial;
+try{
+let cleaned=tx.replace(/```json\s*/gi,'').replace(/```\s*/gi,'').trim();
+const s=cleaned.indexOf('{'),e=cleaned.lastIndexOf('}');
+if(s>=0&&e>s)cleaned=cleaned.substring(s,e+1);
+partial=JSON.parse(cleaned);
+}catch(pe){
+showStatus('❌ 재분석 파싱 실패',0);
+document.getElementById('reBtn').disabled=false;
+document.getElementById('reBtn').textContent='🔄 부분 재분석 (기재예시·세특·상담만 · 토큰 절약)';
+return;
+}
+
+// 기존 결과에 병합
+if(partial.jarhaeng)cur.jarhaeng=partial.jarhaeng;
+if(partial.setuk)cur.setuk=partial.setuk;
+if(partial.counsel)cur.counsel=partial.counsel;
+
+// 내신 재계산 (내신 기준이 바뀌었을 수 있으므로)
+if(cur.overview&&cur.overview._gbGpa>0){
+cur.overview.gpa=calcTotalGpa(cur.overview._gbGpa,nd.selected);
+cur.overview.tier=getTier(cur.overview.gpa);
+cur.overview.naesin=nd.selected;
+cur.overview.naesinType=nd.typeLabel;
+cur.overview.naesinAll=nd.all;
+cur.overview.naesinMSS=nd.mss;
+cur.overview.naesinMSN=nd.msn;
+cur.overview.gpa_brief=`생기부 평점 ${cur.overview._gbGpa.toFixed(1)}${nd.selected>0?', 내신('+nd.typeLabel+') '+nd.selected.toFixed(1)+'등급 반영':''} 기반. ${cur.overview.tier}.`;
+}
+
+// 저장 및 렌더링
+const _nd2=getNaesinData();
+stu[sid]={...stu[sid],result:cur,naesin:_nd2.selected,naesinAll:_nd2.all,naesinMSS:_nd2.mss,naesinMSN:_nd2.msn,naesinType:_nd2.type,date:new Date().toLocaleDateString('ko-KR')};
+saveClassStudents();
+rR(cur);showStatus('✅ 부분 재분석 완료!',100);
+setTimeout(()=>{document.getElementById('pW').style.display='none'},1500);
+}catch(e){showStatus('❌ 오류: '+e.message,0)}
+document.getElementById('reBtn').disabled=false;
+document.getElementById('reBtn').textContent='🔄 부분 재분석 (기재예시·세특·상담만 · 토큰 절약)';
+}
 
 // PDF에서 학생 정보 자동 추출 (이름, 학번만 — 진로/동아리는 오탐 많아서 AI에게 맡김)
 function autoFillStudent(txt){
@@ -925,7 +1165,7 @@ for(const p of namePatterns){
 const m=txt.match(p);
 if(m&&m[1]&&m[1].length>=2&&m[1].length<=4){foundName=m[1];break}
 }
-if(foundName)document.getElementById('sName').value=foundName;
+if(foundName&&!document.getElementById('sName').value)document.getElementById('sName').value=foundName;
 
 // === 학년반번호 추출 ===
 const gradePatterns=[
@@ -940,16 +1180,173 @@ if(m){fg=m[1];fc=m[2];fn=m[3];break}
 }
 if(!fc){
 const m=txt.match(/(\d)(\d{2})(\d{2})\s*[가-힣]{2,4}/);
-if(m){fg=m[1];fc=m[2];fn=m[3]}
+if(m){
+const parsedClass=parseInt(m[2]);
+const parsedNo=parseInt(m[3]);
+// 반이 1~15, 번호가 1~40 범위일 때만 유효
+if(parsedClass>=1&&parsedClass<=15&&parsedNo>=1&&parsedNo<=40){
+fg=m[1];fc=m[2];fn=m[3];
 }
-if(fc){
+}
+}
+if(fc&&!document.getElementById('sNo').value){
 document.getElementById('sGrade').value=fg||'3';
 document.getElementById('sClass').value=String(parseInt(fc)).padStart(2,'0');
 document.getElementById('sNo').value=String(parseInt(fn)).padStart(2,'0');
 updPreview();
 }
 
-// === 진로/동아리는 자동추출하지 않음 (오탐 많아서 AI 분석 후 채움) ===
+// === 진로 추출 (희망분야/희망진로 패턴) ===
+if(!document.getElementById('sCareer').value){
+const careerPatterns=[
+/희망\s*분야\s*[:\s]*([가-힣a-zA-Z\/·]{2,15})/,
+/희망\s*진로\s*[:\s]*([가-힣a-zA-Z\/·]{2,15})/,
+/진로\s*희망\s*[:\s]*([가-힣a-zA-Z\/·]{2,15})/,
+/장래\s*희망\s*[:\s]*([가-힣a-zA-Z\/·]{2,15})/,
+];
+for(const p of careerPatterns){
+const cm=txt.match(p);
+if(cm&&cm[1]){
+const career=cm[1].trim();
+if(career.length>=2&&career.length<=15){
+document.getElementById('sCareer').value=career;
+filled.push('진로');
+break;
+}
+}
+}
+}
+// === 동아리는 자동추출하지 않음 (오탐 많아서 AI 분석 후 채움) ===
+
+// === v5.0: 내신 3종 자동 파싱 ===
+try{
+const nStat=document.getElementById('naesinStatus');
+if(nStat)nStat.textContent='🔄 성적표 분석 중...';
+if(nStat)nStat.style.color='var(--blue)';
+
+const gradeRows=[];
+
+// 국영수사과 과목 분류
+const korSubjects=['국어','문학','독서','화법과작문','화법','작문','언어와매체','언어','매체','독서와문법','실용국어','심화국어','고전읽기','고전과윤리'];
+const engSubjects=['영어','영어Ⅰ','영어Ⅱ','영어1','영어2','영어회화','실용영어','영어독해와작문','진로영어','영미문학읽기'];
+const mathSubjects=['수학','수학Ⅰ','수학Ⅱ','수학1','수학2','미적분','확률과통계','기하','실용수학','경제수학','수학과제탐구','인공지능수학'];
+const socSubjects=['한국사','사회','통합사회','사회문화','사회·문화','정치와법','경제','생활과윤리','윤리와사상','한국지리','세계지리','동아시아사','세계사','여행지리','사회문제탐구'];
+const sciSubjects=['과학','통합과학','물리학Ⅰ','물리학Ⅱ','물리학1','물리학2','화학Ⅰ','화학Ⅱ','화학1','화학2','생명과학Ⅰ','생명과학Ⅱ','생명과학1','생명과학2','지구과학Ⅰ','지구과학Ⅱ','지구과학1','지구과학2','과학탐구실험','물리','화학','생명과학','지구과학','융합과학'];
+
+// 디버그: 성적표 영역 추출
+const scoreIdx=txt.search(/학기\s*(교과|과목|학점|단위)/);
+const scoreArea=scoreIdx>=0?txt.substring(scoreIdx, Math.min(scoreIdx+1500, txt.length)):txt.substring(0,800);
+console.log('[내신파싱] 성적표 영역 발견:', scoreIdx>=0?'위치 '+scoreIdx:'❌ 못찾음');
+console.log('[내신파싱] 성적표 텍스트 샘플:', scoreArea.substring(0,600));
+
+// 다양한 정규식 패턴 (실제 생기부 형식 기반)
+// 실제 형식: 과목명 학점수 원점수/평균(표편) 성취도(수강자수) 석차등급
+// 예: 국어 3 73/67.7(16.4) C(232) 5
+// 예: 수학Ⅱ 4 88/77.4(11.1) B(223) 3
+// 예: 사회·문화 4 84/66.0(16.7) B(81) 3
+// P(pass) 과목은 석차등급 없음 → 제외
+const patterns=[
+// 패턴A: 과목명 학점수 원점수/평균(표편) 성취도(수강자수) 석차등급
+/([가-힣a-zA-ZⅠⅡ·\s]{2,15}?)\s+(\d)\s+\d{1,3}\s*\/\s*[\d.]+\s*\(\s*[\d.]+\s*\)\s+[A-E]\s*\(\s*\d+\s*\)\s+(\d)/g,
+// 패턴B: 탭/여러공백 구분 버전
+/([가-힣a-zA-ZⅠⅡ·\s]{2,15}?)\s{2,}(\d)\s{2,}\d{1,3}\s*\/\s*[\d.]+\s*\(\s*[\d.]+\s*\)\s+[A-E]\s*\(\s*\d+\s*\)\s+(\d)/g,
+// 패턴C: 더 유연 - 성취도 없이 바로 등급 (일부 PDF 추출 형태)
+/([가-힣a-zA-ZⅠⅡ·]{2,12}(?:\s*[ⅠⅡI1-9])?)\s+(\d)\s+\d{2,3}\s*\/\s*[\d.]+\s*\([\d.]+\)\s+\w\s*\(\d+\)\s+(\d)/g,
+];
+
+for(const pat of patterns){
+let m;
+pat.lastIndex=0;
+while((m=pat.exec(txt))!==null){
+const subj=m[1].trim();
+const unit=parseInt(m[2]);
+const grade=parseInt(m[3]);
+if(unit>=1&&unit<=6&&grade>=1&&grade<=9&&subj.length>=2){
+if(!gradeRows.find(r=>r.subj===subj&&r.unit===unit&&r.grade===grade)){
+gradeRows.push({subj,unit,grade});
+}
+}
+}
+if(gradeRows.length>=5)break;
+}
+
+// 패턴 매칭 실패 시: 라인 기반 파싱 (PDF.js가 표를 줄 단위로 추출하는 경우)
+if(gradeRows.length<3){
+console.log('[내신파싱] 정규식 실패, 라인 기반 파싱 시도...');
+const allSubjects=[...korSubjects,...engSubjects,...mathSubjects,...socSubjects,...sciSubjects,'정보','보건','기술가정','기술·가정','제2외국어','일본어','중국어','한문','진로와직업','음악','미술','체육'];
+const lines=txt.split(/\n/);
+for(let i=0;i<lines.length;i++){
+const line=lines[i].trim();
+// 과목명이 포함된 줄에서 숫자들 추출
+for(const subName of allSubjects){
+if(line.includes(subName)){
+// 같은 줄 또는 인접 줄에서 학점수, 석차등급 찾기
+const context=line+' '+(lines[i+1]||'')+' '+(lines[i-1]||'');
+// 학점수(1~6) 원점수/평균(표편) 성취도(수강자수) 석차등급(1~9) 패턴
+const rm=context.match(new RegExp(subName.replace(/[·\s]/g,'\\s*')+'[^\\d]*(\\d)\\s+\\d{2,3}\\s*\\/\\s*[\\d.]+\\s*\\([\\d.]+\\)\\s+[A-EP]\\s*\\(\\d+\\)\\s+(\\d)'));
+if(rm){
+const unit=parseInt(rm[1]);
+const grade=parseInt(rm[2]);
+if(unit>=1&&unit<=6&&grade>=1&&grade<=9){
+if(!gradeRows.find(r=>r.subj===subName))gradeRows.push({subj:subName,unit,grade});
+}
+}
+break;
+}
+}
+}
+} // if(gradeRows.length<3) 닫기
+
+console.log('[내신파싱] 발견된 과목:', gradeRows.length, gradeRows.map(r=>r.subj+'('+r.unit+'단위,'+r.grade+'등급)'));
+
+if(gradeRows.length>=3){
+const classify=(subj)=>{
+const s=subj.replace(/\s/g,'');
+return{
+isKor:korSubjects.some(k=>s.includes(k.replace(/\s/g,''))),
+isEng:engSubjects.some(k=>s.includes(k.replace(/\s/g,''))),
+isMath:mathSubjects.some(k=>s.includes(k.replace(/\s/g,''))),
+isSoc:socSubjects.some(k=>s.includes(k.replace(/\s/g,''))),
+isSci:sciSubjects.some(k=>s.includes(k.replace(/\s/g,'')))
+};
+};
+
+let sumAll=0,unitAll=0,sumMSS=0,unitMSS=0,sumMSN=0,unitMSN=0;
+gradeRows.forEach(r=>{
+sumAll+=r.grade*r.unit;unitAll+=r.unit;
+const c=classify(r.subj);
+if(c.isKor||c.isEng||c.isMath||c.isSoc){sumMSS+=r.grade*r.unit;unitMSS+=r.unit;}
+if(c.isKor||c.isEng||c.isMath||c.isSci){sumMSN+=r.grade*r.unit;unitMSN+=r.unit;}
+});
+
+const nAll=unitAll>0?Math.round(sumAll/unitAll*10)/10:0;
+const nMSS=unitMSS>0?Math.round(sumMSS/unitMSS*10)/10:0;
+const nMSN=unitMSN>0?Math.round(sumMSN/unitMSN*10)/10:0;
+
+if(nAll>0&&!document.getElementById('sNaesinAll').value){
+document.getElementById('sNaesinAll').value=nAll;
+const el=document.getElementById('sNaesinAll');el.style.borderColor='#3182F6';el.style.background='#EBF4FF';
+}
+if(nMSS>0&&!document.getElementById('sNaesinMSS').value){
+document.getElementById('sNaesinMSS').value=nMSS;
+const el=document.getElementById('sNaesinMSS');el.style.borderColor='#7B61FF';el.style.background='#F0EDFF';
+}
+if(nMSN>0&&!document.getElementById('sNaesinMSN').value){
+document.getElementById('sNaesinMSN').value=nMSN;
+const el=document.getElementById('sNaesinMSN');el.style.borderColor='#22B8CF';el.style.background='#E3FAFC';
+}
+if(nStat){nStat.textContent='✅ '+gradeRows.length+'과목 추출 완료 (교사 확인 필요)';nStat.style.color='var(--teal)';}
+filled.push('내신('+gradeRows.length+'과목)');
+console.log('[내신파싱 성공]','전체:'+nAll,'국영수사:'+nMSS,'국영수과:'+nMSN);
+}else{
+if(nStat){nStat.textContent='⚠️ 성적표 자동 추출 실패 — 직접 입력해주세요';nStat.style.color='var(--orange)';}
+console.log('[내신파싱] 과목 부족(',gradeRows.length,'개) — 직접 입력 필요');
+}
+}catch(ne){
+console.warn('[내신파싱 실패]',ne);
+const nStat=document.getElementById('naesinStatus');
+if(nStat){nStat.textContent='⚠️ 자동 추출 실패 — 직접 입력해주세요';nStat.style.color='var(--orange)';}
+}
 
 chk();
 const filled=[];
@@ -962,14 +1359,25 @@ if(sub)sub.textContent+=` · 자동추출: ${filled.join(', ')} ✓`;
 }catch(e){console.warn('[autoFill]',e)}
 }
 
-function bp(nm,cr,cl,kw,me){return`당신은 대한민국 고등학교 학교생활기록부(생기부) 전문 분석가이자 학생부종합전형 평가 전문가입니다.
+function bp(nm,cr,cl,kw,me){
+const _univ=document.getElementById('sUniv')?.value||'';
+const _major=document.getElementById('sMajor')?.value||'';
+return`당신은 대한민국 고등학교 학교생활기록부(생기부) 전문 분석가이자 학생부종합전형 평가 전문가입니다.
 학생의 1~2학년 생기부를 냉정하고 객관적으로 분석하여 3학년 전략 보고서를 JSON으로 작성합니다.
 
 [학생 정보]
 - 이름: ${nm} | 진로: ${cr} | 동아리: ${cl}
+${_univ||_major?`- 희망 대학/전공: ${_univ||'미정'} ${_major||'미정'}
+  ⚠️ 대학별 평가 특성 반영 필수:
+  - 이 대학의 학생부종합전형에서 중시하는 인재상·핵심역량을 파악하여 전체 분석에 반영
+  - 해당 학과의 교과 연계를 파악하여 세특/기재예시 방향 설정
+  - 예: 경북대 행정학과 → '지역사회 기여' 역량 중시, 사회과학 방법론·정책분석 교과 연계
+  - 예: 한양대 행정학과 → 실용적 문제해결 강조, 데이터 분석·행정법 교과 연계
+  - 3학년 전략·세특·기재예시를 이 대학/전공 합격에 최적화할 것`:''}
 - 키워드: ${kw.join(', ')||'미지정'}
 ${me?'- 메모: '+me:''}
-- 우선순위: 1순위 ${pri[0]} → 2순위 ${pri[1]} → 3순위 ${pri[2]}
+- 전략 초점: ${pri[0]} 중심 (기재예시·세특추천·상담방향을 이 역량 중심으로 작성. ⚠️ 점수/등급 판정에는 영향 없음!)
+- ⚠️ 전공 맥락 일관성: 이 학생의 희망 진로·학과에 맞지 않는 조언 금지! (예: 행정학과인데 "자연과학 심화" 조언 금지, 간호학과인데 "사회과학 방법론 심화" 금지)
 
 [2026 대입 제도 핵심]
 - 평가 역량: 학업역량(성취도·태도·탐구력), 진로역량(교과이수·진로탐색), 공동체역량(협업·나눔·성실·리더십)
@@ -977,11 +1385,12 @@ ${me?'- 메모: '+me:''}
 - 행발 3학년: 학종 수시 미반영(1~2학년만 제공), 정시 학생부반영 대학(서울대 등)에서만 활용
 - 비교과(자율동아리·교내수상·독서·개인봉사) 대학 미제공
 
-[등급 판정 기준 — S/A/B/C]
-S등급: 심화탐구 + 방법론·도구·결과 3점 세트 + 후속연구 질문 + 교과 개념 재해석. 독서 연계 시 "개념을 적용하여 재해석" 수준.
-A등급: 구체적 데이터 제시 + 분석기준 2~3개 + 결과물 명확. 교과 연계 활동이 구체적.
-B등급: 동기+수행+느낀점 구조. 활동 나열은 있으나 사고 과정·심화 부족.
-C등급: 수동적 참여 기록, 복붙·성적 나열, 구체성 없음, "~에 대해 알게 됨" 수준.
+[등급 판정 기준 — 5단계 S+/S/A/B/C]
+S+(5.0): 독자적 방법론(코딩/실험설계/데이터 직접 생성), 대학 학부 수준 연구, 방법론·도구·결과 3점 세트 + 후속연구 질문 + 교과 개념 재해석·재구성. 매우 드묾.
+S(4.5): 이론 연결 탄탄 + 후속연구 + 구체적 사례 분석. 독서→개념 적용→재해석 수준. 교과 심화 활동이 명확. 상위 5~10%.
+A(4.0): 교과 연계 탐구 + 독서 확장 + 논리적 분석. 구체적 데이터 제시 + 분석기준 2~3개 + 결과물 명확. 상위 20~30%.
+B(3.0): 수업 내 활동 충실 + 기본적 연계, 동기+수행+느낀점 구조. "~알게 됨", "~에 관심을 갖게 됨" 수준. 가장 흔한 등급.
+C(2.0): 피상적 참여, 수동적 참여 기록, 복붙·성적 나열, 구체성 없음. 특기할 내용 없음.
 
 [바이트 제한] 한글1자=3B, 영문/숫자=1B
 자율:1500B | 진로:2100B | 동아리:1500B | 행발:1500B
@@ -991,89 +1400,238 @@ ${pdf.length>45000?pdf.substring(0,45000)+'\n[⚠ 원문 일부 생략]':pdf}
 
 [분석 지침]
 
-0. student_info: 생기부에서 이름/학년/반/번호/진로/동아리 추출
+0. student_info: 생기부에서 이름/학년/반/번호/진로/동아리 추출 + 내신 계산
+- 생기부 성적표에서 과목별 석차등급과 단위수를 읽어 아래 계산:
+  * naesin_all: 전체 교과 평균 등급 (모든 과목, 단위수 가중평균, 소수점 첫째자리)
+  * naesin_mss: 국어+영어+수학+사회 계열 과목 평균 등급 (한국사/사회문화/정치와법/경제/생활과윤리/한국지리/세계지리/동아시아사/세계사/윤리와사상 포함)
+  * naesin_msn: 국어+영어+수학+과학 계열 과목 평균 등급 (물리/화학/생명과학/지구과학/통합과학 포함)
+  * grade_trend: 학기별 내신 등급 추이 배열 (매우 중요!)
+    각 학기별로: {"semester":"1-1", "all":0, "mss":0, "msn":0, "key_subjects":[{"name":"과목명","grade":등급숫자}]}
+    예: [{"semester":"1-1","all":4.2,"mss":3.8,"msn":4.5,"key_subjects":[{"name":"국어","grade":3},{"name":"수학","grade":5}]}, ...]
+    - 1-1, 1-2, 2-1, 2-2 총 4학기
+    - all/mss/msn: 해당 학기의 평균등급 (단위수 가중평균)
+    - key_subjects: 해당 학기의 주요 과목별 등급 (국어/영어/수학 + 사회or과학 계열 2~3개)
+    - 석차등급이 없는 과목(A/B 성취평가제)은 제외
+- 계산 시 단위수 가중평균 사용.
+- 1학년+2학년 전체 포함 (학기별로 분리).
+
+0.5 rating_matrix: 영역×역량 2차원 등급 매트릭스 — 반드시 먼저 작성!
+아래 12칸에 대해 각각 S+/S/A/B/C 등급을 판정하라.
+
+         | 자율(jayul) | 진로(jinro) | 교과세특(subject) | 동아리(club) |
+---------|-------------|-------------|-------------------|--------------|
+학업(academic)  |             |             |                   |              |
+진로(career)    |             |             |                   |              |
+공동체(community)|            |             |                   |              |
+
+- 각 칸: 해당 영역에서 해당 역량이 드러나는 정도
+- 교과세특(subject)은 전체 교과세특을 종합한 등급
+- 12칸 모두 채울 것. 근거 부족하면 B로 기본값
+- 프로그램이 이 매트릭스에서 가중평균으로 점수를 자동 산출함
+- ⚠️ 등급은 냉정하게! S+는 매우 드물고, 대부분은 A~B가 적절
 
 1. overview: 종합 분석 — 가장 중요! 충실하게!
-- summary: 전체 성장 서사 5~7문장. 1학년에서 어떻게 시작해서, 2학년에서 어떻게 발전했는지 구체적으로 서술. 단순 나열 아님, 스토리로 엮을 것.
-- change_analysis: 1학년→2학년 변화 분석 3~5문장. 어떤 역량이 눈에 띄게 성장했고, 어떤 부분은 정체했는지. 양적(활동 수)·질적(심화도) 변화 모두 기술.
-- grade3_direction: 3학년 전략 방향 총괄 안내 3~5문장. 현재 생기부 수준에서 3학년에 무엇을 집중해야 경쟁력이 올라가는지. 구체적이고 실행 가능한 조언.
-- strengths: 강점 3개 (각 2문장, 구체적 활동·과목·사례 근거 필수)
-- improvements: 보완점 2개 (구체적 대안 포함, 3학년에 어떻게 보완할지)
-- gpa: 생기부 종합 평점 (5.0 만점, 소수점 첫째자리. 예: 3.8, 4.2). S등급 요소 비율·A등급 비율·전체 기록 밀도 기반.
-  평점 기준: 4.5~5.0 최상위권(S등급 다수), 4.0~4.4 상위권(A등급 주축), 3.5~3.9 중상위권(A/B 혼재), 3.0~3.4 중위권(B등급 주축), 2.5~2.9 중하위권(B/C 혼재), 2.0~2.4 하위권(C등급 주축)
-- gpa_brief: 평점 산출 근거 2문장 (S/A/B/C 분포 기반)
-- tier: 평점 기반 대략적 생기부 경쟁력 티어. "최상위권(인서울 상위·의약학)", "상위권(인서울 중상위)", "중상위권(인서울 중위)", "중위권(지방거점국립)", "중하위권(지방권 일반)" 중 택1
-- scores: 3대 역량 점수 (5.0 만점, 소수점 첫째자리). 생기부 내용 기반 냉정한 평가
-  * academic: 학업역량 (성취도, 학업태도, 탐구력)
-  * career: 진로역량 (교과이수 노력, 진로탐색 깊이)
-  * community: 공동체역량 (협업, 나눔, 성실, 리더십)
-- score_brief: 각 역량 점수 근거 한줄
-- competencies: 3대 역량별로 학년별 분석을 역량 성장 테이블로 제시
-  * academic/career/community 각각: grade1(1학년 상태 3문장), grade2(2학년 상태 3문장), growth(1→2학년 핵심 변화 포인트 2문장), grade3_focus(3학년 집중 포인트 2문장)
-- keywords: 이 학생을 대표하는 핵심 키워드 3~5개
+- summary: 전체 성장 서사 5~7문장. 1학년에서 어떻게 시작해서, 2학년에서 어떻게 발전했는지.
+  ⚠️ 희망 대학이 있으면, 그 대학의 인재상·핵심역량·전형 특징을 반영하여 분석할 것.
+- change_analysis: 1학년→2학년 변화 분석 3~5문장.
+- grade3_direction: 3학년 전략 방향 3~5문장.
+  ⚠️ 3대 역량(학업/진로/공동체) 중 부족한 부분을 3학년에 어떻게 보완할지 구체적으로!
+  ⚠️ 희망 대학이 있으면, 그 대학에서 중시하는 역량을 중심으로 전략 제시.
+- strengths: 강점 3개 (각 2문장, 구체적 근거)
+- improvements: 보완점 2개 (구체적 대안 포함)
+- ⚠️ gpa, gpa_brief, tier, scores 필드는 0 또는 빈문자열로 비워두세요. 프로그램이 자동 계산.
+- score_brief: AI가 직접 작성 — 각 역량의 핵심 특징과 현 수준을 구체적으로 한줄 (예: "교과 개념의 진로 적용이 뛰어나나, 자연과학 탐구와 연계 보완 필요")
+- competencies: 3대 역량별 grade1(1학년 3문장), grade2(2학년 3문장), growth(변화 2문장), grade3_focus(3학년 집중 2문장)
+- keywords: 핵심 키워드 3~5개
 
 2. subject_analysis: 교과 세특 전반 분석 — 핵심!
-- overall_grade: 교과 세특 전반 등급 (S/A/B/C)
-- overall_score: 교과 세특 전반 평점 (5.0 만점, 소수점 첫째자리)
-- s_elements: S등급 요소 — 구체적 과목명+내용 포함하여 기술 (예: "2회. 정치와법에서 범죄지수 상관분석(방법론·데이터·결과물 완비), 사회문화에서 가스라이팅 4단계 통제구조 분석")
+- overall_grade: 교과 세특 전반 등급 (S+/S/A/B/C)
+- overall_score: 교과 세특 전반 평점 (5.0 만점)
+- s_elements: S+/S등급 요소 — 구체적 과목명+내용 포함하여 기술
 - a_elements: A등급 요소 — 동일 형식
 - b_elements: B등급 요소 — 횟수와 주요 패턴
 - c_elements: C등급 요소 — 횟수와 주요 패턴
-- analysis: 교과 세특 전반 종합 분석 3~4문장
+- analysis: 종합 분석 3~4문장
 - subject_cards: 과목별 세특 분석 카드 배열. 각 카드:
-  {"name":"과목명","grade":"S/A/B/C","grade_num":"학년","summary":"이 과목 세특의 핵심 내용과 등급 판정 근거 2~3문장","highlight":"가장 인상적인 활동이나 탐구"}
-  → 세특 기록이 있는 과목만 포함 (6~12개 정도)
-- strong_subjects: 세특이 잘 쓰여진 과목 2~3개(과목명만)
-- weak_subjects: 세특 보완 필요 과목 2~3개(과목명만)
+  {"name":"과목명","grade":"S+/S/A/B/C","grade_num":"학년","summary":"핵심 내용과 등급 근거 2~3문장","highlight":"가장 인상적 활동"}
+  → 세특 기록이 있는 과목만 (6~12개)
+- strong_subjects: 우수 과목 2~3개(과목명만)
+- weak_subjects: 보완 필요 과목 2~3개(과목명만)
 
 3. jarhaeng: 자율/진로/동아리/행발 기재 예시 — 가장 중요!
 각 영역별:
-- grade: 1~2학년 해당 영역 기록 등급 (S/A/B/C)
-- evaluation: 현재 기록 수준 평가 + 3학년 보완 방향 (2문장)
-- option1: 안전형(A등급 기준) — 1~2학년 확인된 역량 기반 현실적 기재
-- option2: 도전형(S등급 기준) — 심화 탐구·방법론 강화한 상위 기재
+- grade: 1~2학년 해당 영역 기록 등급 (S+/S/A/B/C)
+- evaluation: ⚠️ 매우 상세하게! 최소 5문장. 반드시 아래 4요소 포함:
+  ① 현재 등급 판정 근거: 왜 이 등급인지 구체적 활동/내용으로 설명 (예: "1학년 모의국제회의 경험+2학년 범죄통계 분석이 결합되어 진로 탐색의 깊이가 A급")
+  ② 현재 기록의 구체적 강점 (과목명·활동명 포함)
+  ③ 현재 기록의 약점·빈 곳 (구체적으로 뭐가 빠져있는지)
+  ④ 3학년에 이 등급을 한 단계 끌어올리려면 (A→S로 가려면 뭘 해야 하는지)
+- s_elements: S급 요소 (구체적 활동명 포함, 없으면 빈 문자열)
+- a_elements: A급 요소 (구체적 활동명 포함, 없으면 빈 문자열)
+- b_elements: B급 요소 (구체적 활동명 포함, 없으면 빈 문자열)
+- c_elements: C급 요소 (구체적 활동명 포함, 없으면 빈 문자열)
+- option1: 안전형(A등급 기준) — 현실적 기재
+- option2: 도전형(S등급 기준) — 심화 탐구 기재
   * 공통 필드: title, text, focus, supplement
   * text 규칙:
-    ⚠️ 3학년 활동이므로 반드시 조건부 제안 형식 사용!
+    ⚠️ 3학년 활동이므로 반드시 조건부 제안 형식!
     "~할 경우", "~한다면", "~을 계획하고 있으며" 등 미래형·가정법 톤.
-    또는 "이런 활동을 수행한다면 → 이렇게 기재 가능" 구조.
-    절대 아직 하지 않은 활동을 완료형("~하였음","~수행함")으로 쓰지 말 것!
-    "~함","~보임" 문체는 활동 완료 후 기재 시에만 사용.
+    절대 완료형("~하였음","~수행함") 금지!
     바이트 제한 내 완성 문장. 구체적 활동명/역할/과정/예상결과 필수.
-- hangbal 특별 규칙: 3학년 행발은 학종 수시 미반영임을 유의. "정시 학생부반영 대학 대비" 또는 "기록 관리 차원"으로 안내.
+  * ⚠️ 3학년 활동 제안 원칙 (매우 중요!):
+    1) 1~2학년 활동의 연장선/마무리/심화가 기본. 완전히 새로운 주제 시작 금지!
+    2) 성취기준 교과 연계가 우선 (예: 경제 수업에서 배운 수요공급 → 실증 분석). 전공 심화는 보조적.
+    3) 고등학생 수준에 맞는 현실적 활동 제안. 대학원 수준 연구 제안 금지.
+    4) 1~2학년에서 이미 한 활동을 "확장·심화·체계화"하는 방향이 가장 자연스러움.
+- hangbal 특별 규칙: 3학년 행발은 학종 수시 미반영. 기록 관리 차원에서 성실하게 작성하되, "정시대비"라는 표현은 사용하지 말 것.
 
-4. setuk: 세특 방향 — 간결하게
-- direction: 전체 방향 2문장
-- subjects: 3~4개 과목. 각각 name, theme(구체적 주제), reason(적합 이유 1문장), keywords(3개)
+4. setuk: 3학년 세특 방향 — ⚠️ 핵심 규칙!
+- direction: 전체 방향 2~3문장 (대학/전공 특성 반영)
+- subjects: 3~5개 과목. name, theme, reason, keywords(3개)
+  ⚠️ 반드시 "3학년에 새로 수강하는 과목"만 제안! 1~2학년에 이미 이수한 과목 금지!
+  예: 1학년 수학/통합사회/통합과학, 2학년 수학Ⅱ/정치와법/사회문화 이수 → 3학년 제안은 화법과작문/경제/생활과윤리/확률과통계/미적분 등 아직 안 들은 것
+  ⚠️ 진로선택과목(사회과제연구/여행지리/사회문제탐구 등) 반드시 1개 이상 포함!
+  ⚠️ 학생의 전공 계열에 맞는 과목만 제안 (행정학 → 경제·정치와법·사회문화, 간호 → 생명과학Ⅱ·화학Ⅱ)
 
-5. club: 동아리 계획 — 전반 분석 + 프로젝트 2~3개 제안
-- name: 동아리명
-- overview: 1~2학년 동아리 활동 전반 분석 2~3문장 (무엇을 했고, 어떤 성과가 있었고, 3학년에 무엇을 발전시킬지)
-- goal: 3학년 동아리 활동 목표 2문장
-- projects: 프로젝트 2~3개 제안 배열. 각 프로젝트:
-  {"title":"프로젝트명","concept":"컨셉 및 진로 연계 방향 2~3문장","steps":["실행 단계1","단계2","단계3","단계4","단계5"],"record_points":"기대 역량 강화 및 생기부 포인트 2문장"}
+5. club: 동아리 프로젝트 계획
+- name, overview(1~2학년 분석 2~3문장), goal(3학년 목표 2문장)
+- projects: 프로젝트 2~3개 제안
+  ⚠️ 반드시 1~2학년 동아리 활동의 연장선에서 제안! 완전히 새로운 프로젝트 금지.
+  1~2학년에서 한 것을 "체계화·심화·결과물 완성" 방향으로.
+  성취기준 교과 연계 우선, 전공 심화는 보조.
+  {"title":"","concept":"1~2학년 활동과의 연결고리 + 진로 연계 2~3문장","steps":["단계1","단계2","단계3","단계4","단계5"],"record_points":"기대 역량 2문장"}
 - quarterly: 3개 분기
-  [{"quarter":"1분기(3~5월)","focus":"","activities":"","record":""},
-   {"quarter":"2분기(6~8월)","focus":"","activities":"","record":""},
-   {"quarter":"3분기(9~11월)","focus":"","activities":"","record":""}]
 
-6. counsel: 상담 가이드 — 핵심만
-- points: 상담 시 다룰 핵심 3개 (각 1~2문장)
-- questions: 학생에게 던질 질문 3개
-- parent: 학부모 전달 사항 2개
+6. counsel: 상담 가이드 — ⚠️ 희망 대학이 있으면 반드시 입시 분석 포함!
+- points: 핵심 3개 (각 1~2문장)
+- grade_analysis: 성적 분석 포인트 2~3개 (각 1~2문장)
+  ⚠️ 반드시 학기별 내신 추이를 기반으로!
+  예: "1-1 → 2-2 전체교과 4.2→3.5로 꾸준히 상승", "수학 5등급→3등급 급상승, 학습법 변화 확인 필요"
+  취약 과목, 상승/하락 과목, 3학년 목표 등급 포함
+- univ_analysis: 대학 입시 분석 (희망 대학이 있을 때만, 없으면 빈 객체 {})
+  ⚠️ 반드시 해당 대학·학과의 최신 입시 정보를 기반으로 상세 분석!
+  {
+    "univ_name": "대학명",
+    "major_name": "학과명",
+    "admission_type": "학생부종합전형 이름 (예: 가천바람개비1, 경북대 지역인재 등)",
+    "talent_profile": "이 대학이 원하는 인재상 2~3문장",
+    "key_competencies": ["이 학과가 중시하는 역량 3개"],
+    "avg_grade": "최근 합격자 평균 내신 등급대 (예: 3.0~4.0등급)",
+    "competition_rate": "최근 경쟁률 (예: 5.2:1)",
+    "fit_analysis": "이 학생의 생기부가 이 대학에 얼마나 맞는지 3~5문장 (강점/약점/보완점 구체적으로)",
+    "strategy": "합격을 위한 3학년 전략 3~5문장 (무엇을 보완하고 무엇을 강조할지)",
+    "risk_factors": ["지원 시 리스크 요인 2~3개"],
+    "alternative_majors": ["같은 대학 내 대안 학과 1~2개 (적합도 높은 순)"]
+  }
+- curriculum_summary: 교과+생기부 총정리 3~5문장
+  ⚠️ 희망 대학 관점에서 이 학생의 교과(내신등급+세특)+비교과(자율/진로/동아리)를 종합 진단
+  "이 학생은 [대학]에 지원하기 위해 교과에서는 ~이 강점이고 ~이 약점이며, 비교과에서는 ~이 잘 되어있고 ~을 보완해야 한다"
+- questions: 질문 3개
+- parent: 학부모 전달 2개
 
 [필수 규칙]
 - JSON만 출력 (백틱/설명 금지)
 - 빈 문자열 "" 금지, 모든 필드 채울 것
-- 출력 순서: student_info → overview → subject_analysis → jarhaeng → setuk → club → counsel
+- 출력 순서: student_info → rating_matrix → overview → subject_analysis → jarhaeng → setuk → club → counsel
 - ⚠️ 모든 섹션 빠짐없이 완성할 것
-- 평점은 반드시 냉정하게. 과대평가 금지. B등급 다수면 3.0~3.5가 맞음.
+- rating_matrix 등급은 반드시 냉정하게. B등급이 기본이고 S+는 매우 드묾.
 
 [JSON 구조]
-{"student_info":{"name":"","grade":"","class_num":"","student_num":"","career_hope":"","club":""},"overview":{"summary":"","change_analysis":"","grade3_direction":"","strengths":["","",""],"improvements":["",""],"gpa":0.0,"gpa_brief":"","tier":"","scores":{"academic":0.0,"career":0.0,"community":0.0},"score_brief":{"academic":"","career":"","community":""},"competencies":{"academic":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"career":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"community":{"grade1":"","grade2":"","growth":"","grade3_focus":""}},"keywords":[]},"subject_analysis":{"overall_grade":"","overall_score":0.0,"s_elements":"","a_elements":"","b_elements":"","c_elements":"","analysis":"","subject_cards":[{"name":"","grade":"","grade_num":"","summary":"","highlight":""}],"strong_subjects":[],"weak_subjects":[]},"jarhaeng":{"jayul":{"grade":"","evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"jinro":{"grade":"","evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"dongari":{"grade":"","evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"hangbal":{"grade":"","evaluation":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}}},"setuk":{"direction":"","subjects":[{"name":"","theme":"","reason":"","keywords":[]}]},"club":{"name":"","overview":"","goal":"","projects":[{"title":"","concept":"","steps":[],"record_points":""}],"quarterly":[{"quarter":"1분기(3~5월)","focus":"","activities":"","record":""},{"quarter":"2분기(6~8월)","focus":"","activities":"","record":""},{"quarter":"3분기(9~11월)","focus":"","activities":"","record":""}]},"counsel":{"points":[],"questions":[],"parent":[]}}`}
+{"student_info":{"name":"","grade":"","class_num":"","student_num":"","career_hope":"","club":"","naesin_all":0,"naesin_mss":0,"naesin_msn":0,"grade_trend":[{"semester":"1-1","all":0,"mss":0,"msn":0,"key_subjects":[{"name":"","grade":0}]},{"semester":"1-2","all":0,"mss":0,"msn":0,"key_subjects":[]},{"semester":"2-1","all":0,"mss":0,"msn":0,"key_subjects":[]},{"semester":"2-2","all":0,"mss":0,"msn":0,"key_subjects":[]}]},"rating_matrix":{"academic":{"jayul":"B","jinro":"B","subject":"B","club":"B"},"career":{"jayul":"B","jinro":"B","subject":"B","club":"B"},"community":{"jayul":"B","jinro":"B","subject":"B","club":"B"}},"overview":{"summary":"","change_analysis":"","grade3_direction":"","strengths":["","",""],"improvements":["",""],"gpa":0,"gpa_brief":"","tier":"","scores":{"academic":0,"career":0,"community":0},"score_brief":{"academic":"","career":"","community":""},"competencies":{"academic":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"career":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"community":{"grade1":"","grade2":"","growth":"","grade3_focus":""}},"keywords":[]},"subject_analysis":{"overall_grade":"","overall_score":0.0,"s_elements":"","a_elements":"","b_elements":"","c_elements":"","analysis":"","subject_cards":[{"name":"","grade":"","grade_num":"","summary":"","highlight":""}],"strong_subjects":[],"weak_subjects":[]},"jarhaeng":{"jayul":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"jinro":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"dongari":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"hangbal":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}}},"setuk":{"direction":"","subjects":[{"name":"","theme":"","reason":"","keywords":[]}]},"club":{"name":"","overview":"","goal":"","projects":[{"title":"","concept":"","steps":[],"record_points":""}],"quarterly":[{"quarter":"1분기(3~5월)","focus":"","activities":"","record":""},{"quarter":"2분기(6~8월)","focus":"","activities":"","record":""},{"quarter":"3분기(9~11월)","focus":"","activities":"","record":""}]},"counsel":{"points":[],"grade_analysis":[],"univ_analysis":{},"curriculum_summary":"","questions":[],"parent":[]}}`}
+
+// === v5.0: 전역 등급 색상 함수 (S+ 지원) ===
+const GRADE_CLR=(g)=>({"S+":'var(--gold)',S:'var(--blue)',A:'var(--green)',B:'var(--orange)',C:'var(--coral)'}[g]||'var(--g3)');
+const GRADE_BG=(g)=>({"S+":'var(--gold-bg)',S:'var(--blue-bg)',A:'var(--green-bg)',B:'var(--orange-bg)',C:'var(--coral-bg)'}[g]||'var(--g7)');
+
+// === v5.0: rating_matrix → 점수 자동 계산 ===
+const GRADE_SCORE={"S+":5.0,"S":4.5,"A":4.0,"B":3.0,"C":2.0};
+const AREA_WEIGHT={jayul:0.13,jinro:0.20,subject:0.55,club:0.12};
+
+function calcFromMatrix(rm){
+if(!rm)return null;
+const caps=['academic','career','community'];
+const areas=['jayul','jinro','subject','club'];
+const scores={};
+caps.forEach(cap=>{
+let total=0,wSum=0;
+areas.forEach(area=>{
+const grade=(rm[cap]||{})[area]||'B';
+const score=GRADE_SCORE[grade]||3.0;
+const w=AREA_WEIGHT[area];
+total+=score*w;wSum+=w;
+});
+scores[cap]=Math.round((total/wSum)*100)/100;
+});
+const gbGpa=Math.round(((scores.academic+scores.career+scores.community)/3)*100)/100;
+return{scores,gbGpa};
+}
+
+function gradeToScore(g){
+const map={1:5.0,2:4.5,3:4.0,4:3.5,5:3.0,6:2.5,7:2.0,8:1.5,9:1.0};
+return map[Math.round(g)]||3.0;
+}
+
+function calcTotalGpa(gbGpa,naesinGrade){
+if(!naesinGrade||naesinGrade<=0)return gbGpa;
+const ns=gradeToScore(naesinGrade);
+return Math.round((gbGpa*0.6+ns*0.4)*100)/100;
+}
+
+function getTier(t){
+if(t>=4.9)return'최상위권 (서울대·의약학)';
+if(t>=4.5)return'상위권 (연고대·서성한)';
+if(t>=4.0)return'인서울 상위 (중경외시·한양대급)';
+if(t>=3.5)return'인서울 중하위 / 지거국 상위';
+if(t>=3.0)return'지거국 하위·지방사립 상위 (경계선)';
+if(t>=2.5)return'지방 사립 중위 (영남대·계명대급)';
+return'지방 사립 하위 (교과전형 권장)';
+}
+
+// === v5.0: 내신 3칸 입력 헬퍼 ===
+function getNaesinData(){
+const all=parseFloat(document.getElementById('sNaesinAll')?.value)||0;
+const mss=parseFloat(document.getElementById('sNaesinMSS')?.value)||0;
+const msn=parseFloat(document.getElementById('sNaesinMSN')?.value)||0;
+const type=document.getElementById('sNaesinType')?.value||'all';
+let selected=0;
+if(type==='all')selected=all;
+else if(type==='mss')selected=mss;
+else if(type==='msn')selected=msn;
+else if(type==='best'){
+const vals=[all,mss,msn].filter(v=>v>0);
+selected=vals.length?Math.min(...vals):0;
+}
+const typeLabel={all:'전체교과',mss:'국영수사',msn:'국영수과',best:'자동최유리'}[type]||'전체교과';
+return{all,mss,msn,type,typeLabel,selected};
+}
+
+function injectScores(o){
+if(!o||!o.rating_matrix){console.warn('[injectScores] rating_matrix 없음');return;}
+const calc=calcFromMatrix(o.rating_matrix);
+if(!calc){console.warn('[injectScores] calcFromMatrix 실패');return;}
+if(!o.overview)o.overview={};
+o.overview.scores={academic:calc.scores.academic,career:calc.scores.career,community:calc.scores.community};
+o.overview._gbGpa=calc.gbGpa;
+o.overview.gpa_gb=calc.gbGpa;
+// gpa도 여기서 기본 설정 (내신 반영은 나중에 덮어씀)
+if(!o.overview.gpa||o.overview.gpa<=0){
+o.overview.gpa=calc.gbGpa;
+o.overview.tier=getTier(calc.gbGpa);
+o.overview.gpa_brief='생기부 평점 '+calc.gbGpa.toFixed(1)+' 기반. '+getTier(calc.gbGpa)+'.';
+}
+// score_brief 자동 생성 (AI가 안 줬을 때)
+if(!o.overview.score_brief||!o.overview.score_brief.academic){
+const sb={};
+['academic','career','community'].forEach(k=>{
+const v=calc.scores[k];
+sb[k]=v>=4.0?'매우 우수':v>=3.5?'우수':v>=3.0?'보통':v>=2.5?'보완 필요':'미흡';
+});
+o.overview.score_brief=sb;
+}
+}
 
 function pr(tx,nm,cr,cl,sid,kw){
-function makeMeta(){return{nm,cr,cl,sid,kw,pri:[...pri],dt:new Date().toLocaleDateString('ko-KR')}}
+function makeMeta(){return{nm,cr,cl,sid,kw,pri:[...pri],univ:document.getElementById('sUniv')?.value||'',major:document.getElementById('sMajor')?.value||'',dt:new Date().toLocaleDateString('ko-KR')}}
 
 function cleanAndExtract(str){
 str=str.replace(/```json\s*/gi,'').replace(/```\s*/gi,'').trim();
@@ -1082,16 +1640,16 @@ if(s<0||e<=s)return null;
 return str.substring(s,e+1);
 }
 
-console.log('[PR] len='+tx.length+' start='+tx.substring(0,150));
+console.debug('[PR] len='+tx.length+' start='+tx.substring(0,150));
 
 // 1차: 기본 파싱
 try{
 let c=cleanAndExtract(tx);
 if(c){
-console.log('[PR] JSON extracted, len='+c.length);
+console.debug('[PR] JSON extracted, len='+c.length);
 c=c.replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ');
-const o=JSON.parse(c);o._m=makeMeta();console.log('[PR] 1차 OK');return o;
-}else{console.log('[PR] 1차: JSON 블록 없음')}
+const o=JSON.parse(c);o._m=makeMeta();injectScores(o);return o;
+}else{console.debug('[PR] 1차: JSON 블록 없음')}
 }catch(e1){console.log('[PR] 1차 fail:',e1.message)}
 
 // 2차: 제어문자 제거 + 문자열 내 줄바꿈 처리
@@ -1107,7 +1665,7 @@ if(inStr&&(ch==='\n'||ch==='\r')){result+=' ';continue}
 if(inStr&&ch==='\t'){result+=' ';continue}
 result+=ch;prev=ch;
 }
-const o=JSON.parse(result);o._m=makeMeta();return o;
+const o=JSON.parse(result);o._m=makeMeta();injectScores(o);return o;
 }
 }catch(e2){console.log('[PR] 2차 fail:',e2.message)}
 
@@ -1116,7 +1674,7 @@ try{
 let c=cleanAndExtract(tx);
 if(c){
 c=c.replace(/[\r\n\t]/g,' ').replace(/\s{2,}/g,' ').replace(/[\x00-\x1F\x7F]/g,'');
-const o=JSON.parse(c);o._m=makeMeta();return o;
+const o=JSON.parse(c);o._m=makeMeta();injectScores(o);return o;
 }
 }catch(e3){console.log('[PR] 3차 fail:',e3.message)}
 
@@ -1132,7 +1690,7 @@ while(close<open){c+='}';close++}
 while(cA<oA){c+=']';cA++}
 // trailing comma 제거
 c=c.replace(/,\s*([}\]])/g,'$1');
-const o=JSON.parse(c);o._m=makeMeta();return o;
+const o=JSON.parse(c);o._m=makeMeta();injectScores(o);return o;
 }
 }catch(e4){console.log('[PR] 4차 fail:',e4.message)}
 
@@ -1154,7 +1712,7 @@ let ob=0,cb=0,oA=0,cA=0;
 for(const ch of r){if(ch==='{')ob++;if(ch==='}')cb++;if(ch==='[')oA++;if(ch===']')cA++;}
 while(cb<ob){r+='}';cb++}
 while(cA<oA){r+=']';cA++}
-const o=JSON.parse(r);o._m=makeMeta();console.log('[PR] 5차 OK');return o;
+const o=JSON.parse(r);o._m=makeMeta();injectScores(o);return o;
 }
 }catch(e5){console.log('[PR] 5차 fail:',e5.message)}
 
@@ -1163,93 +1721,441 @@ console.log('[PR] 모든 파싱 실패. Raw 앞 500자:', tx.substring(0,500));
 return{_m:makeMeta(),_raw:tx,_err:true};
 }
 
+// === 내신 추이 그래프 ===
+function drawGradeTrend(gt){
+const cvs=document.getElementById('gradeTrendChart');
+if(!cvs||!gt||!gt.length)return;
+const ctx=cvs.getContext('2d');
+const W=cvs.width,H=cvs.height;
+const pad={t:30,r:30,b:35,l:45};
+const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+
+ctx.clearRect(0,0,W,H);
+
+// 데이터 준비
+const labels=gt.map(s=>s.semester);
+const series=[
+{key:'all',label:'전체교과',color:'#3182F6',data:gt.map(s=>s.all||0)},
+{key:'mss',label:'국영수사',color:'#7B61FF',data:gt.map(s=>s.mss||0)},
+{key:'msn',label:'국영수과',color:'#22B8CF',data:gt.map(s=>s.msn||0)}
+].filter(s=>s.data.some(v=>v>0));
+
+if(!series.length)return;
+
+// Y축: 등급 (1=최상위, 9=최하위) → 위가 1, 아래가 9
+const allVals=series.flatMap(s=>s.data).filter(v=>v>0);
+const minG=Math.max(1,Math.floor(Math.min(...allVals))-0.5);
+const maxG=Math.min(9,Math.ceil(Math.max(...allVals))+0.5);
+const yRange=maxG-minG||1;
+
+function toX(i){return pad.l+i*(pw/(labels.length-1||1))}
+function toY(v){return pad.t+(v-minG)/yRange*ph}
+
+// 그리드
+ctx.strokeStyle='#E5E8EB';ctx.lineWidth=0.5;
+for(let g=Math.ceil(minG);g<=Math.floor(maxG);g++){
+const y=toY(g);
+ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+ctx.fillStyle='#8B95A1';ctx.font='11px -apple-system,sans-serif';ctx.textAlign='right';
+ctx.fillText(g+'등급',pad.l-6,y+4);
+}
+
+// X축 라벨
+ctx.fillStyle='#4E5968';ctx.font='bold 11px -apple-system,sans-serif';ctx.textAlign='center';
+labels.forEach((l,i)=>{ctx.fillText(l,toX(i),H-pad.b+20)});
+
+// 선 그리기
+series.forEach(s=>{
+const pts=s.data.map((v,i)=>({x:toX(i),y:toY(v),v})).filter(p=>p.v>0);
+if(pts.length<2)return;
+
+// 선
+ctx.strokeStyle=s.color;ctx.lineWidth=2.5;ctx.lineJoin='round';
+ctx.beginPath();pts.forEach((p,i)=>{i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y)});ctx.stroke();
+
+// 점 + 값
+pts.forEach(p=>{
+ctx.fillStyle='white';ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fill();
+ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.stroke();
+ctx.fillStyle=s.color;ctx.font='bold 10px -apple-system,sans-serif';ctx.textAlign='center';
+ctx.fillText(p.v.toFixed(1),p.x,p.y-10);
+});
+});
+
+// 범례
+const leg=document.getElementById('gradeTrendLegend');
+if(leg)leg.innerHTML=series.map(s=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:3px;background:${s.color};border-radius:2px"></span><span style="color:${s.color};font-weight:600">${s.label}</span></span>`).join('');
+
+// 주요 과목 상세
+const det=document.getElementById('gradeTrendDetail');
+if(det&&gt.some(s=>(s.key_subjects||[]).length)){
+det.innerHTML=`<div style="display:grid;grid-template-columns:repeat(${gt.length},1fr);gap:6px;margin-top:6px">
+${gt.map(s=>`<div style="padding:8px;background:var(--g7);border-radius:8px">
+<div style="font-size:10px;font-weight:700;color:var(--g3);margin-bottom:4px">${s.semester}</div>
+${(s.key_subjects||[]).map(k=>{
+const gc=k.grade<=2?'#3182F6':k.grade<=4?'#22B8CF':k.grade<=6?'#FF9F43':'#FF6B6B';
+return`<div style="display:flex;justify-content:space-between;font-size:10px;margin:2px 0"><span>${k.name}</span><span style="font-weight:800;color:${gc}">${k.grade}</span></div>`}).join('')}
+</div>`).join('')}
+</div>`;
+}
+}
+
 function rR(r){document.getElementById('resS').style.display='block';
 var _tna=document.getElementById('teacherNoteArea');if(_tna)_tna.style.display='';
 if(r._err){
 const raw=r._raw||'';
-const preview=raw.substring(0,500);
 const hasJson=raw.includes('{')&&raw.includes('}');
 document.getElementById('tc-ov').innerHTML=`<div class="rb"><h4>⚠ 파싱 실패</h4>
-<p style="margin:8px 0;font-size:13px;color:var(--g2)">${hasJson?'JSON 구조가 손상되었습니다. AI 응답에 JSON 외 텍스트가 포함되었을 수 있습니다.':'AI가 JSON 형식으로 응답하지 않았습니다.'}</p>
-<p style="margin:8px 0;font-size:12px;color:var(--g3)">💡 해결방법: ⚙️ → "전체 초기화" 후 같은 PDF로 재분석해보세요.</p>
+<p style="margin:8px 0;font-size:13px;color:var(--g2)">${hasJson?'JSON 구조가 손상되었습니다.':'AI가 JSON 형식으로 응답하지 않았습니다.'}</p>
+<p style="margin:8px 0;font-size:12px;color:var(--g3)">💡 ⚙️ → "전체 초기화" 후 같은 PDF로 재분석해보세요.</p>
 <details><summary style="cursor:pointer;font-size:12px;color:var(--blue);font-weight:600">AI 원본 응답 보기 (${raw.length}자)</summary>
 <pre style="white-space:pre-wrap;font-size:11px;color:var(--g3);max-height:400px;overflow-y:auto;margin-top:8px;padding:12px;background:var(--g7);border-radius:8px">${esc(raw)}</pre></details></div>`;return}
 const m=r._m,ov=r.overview||{},cp=ov.competencies||{},sc=ov.scores||{},sb=ov.score_brief||{},sa=r.subject_analysis||{};
-const gpa=ov.gpa||0;
-const scoreBar=(v,mx=5)=>{const pct=Math.min(v/mx*100,100);const clr=v>=4?'var(--blue)':v>=3?'var(--teal)':v>=2?'var(--orange)':'var(--coral)';return`<div style="display:flex;align-items:center;gap:8px;margin:2px 0"><div style="flex:1;height:8px;background:var(--g6);border-radius:4px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${clr};border-radius:4px;transition:width .5s"></div></div><span style="font-size:14px;font-weight:800;color:${clr};min-width:36px;text-align:right">${v}</span></div>`};
-const gradeClr=(g)=>({S:'var(--blue)',A:'var(--green)',B:'var(--orange)',C:'var(--coral)'}[g]||'var(--g3)');
-const gradeBg=(g)=>({S:'var(--blue-bg)',A:'var(--green-bg)',B:'var(--orange-bg)',C:'var(--coral-bg)'}[g]||'var(--g7)');
-const gpaClr=gpa>=4.0?'var(--blue)':gpa>=3.5?'var(--teal)':gpa>=3.0?'var(--orange)':'var(--coral)';
+const gbGpa=ov.gpa_gb||ov._gbGpa||0;
+const gpa=ov.gpa||gbGpa||0;
+const gradeClr=GRADE_CLR;
+const gradeBg=GRADE_BG;
+const gbGpaClr=gbGpa>=4.0?'#3182F6':gbGpa>=3.5?'#22B8CF':gbGpa>=3.0?'#FF9F43':'#FF6B6B';
+const gpaClr=gpa>=4.0?'#3182F6':gpa>=3.5?'#22B8CF':gpa>=3.0?'#FF9F43':'#FF6B6B';
 const kwds=ov.keywords||m.kw||[];
-// 요약 카드
+const rm=r.rating_matrix;
+const tierEmoji=gpa>=4.5?'🏆':gpa>=4.0?'⭐':gpa>=3.5?'💎':gpa>=3.0?'📈':'📊';
+
+// ====== 종합 탭 (큰 그림만, 세세한 교과분석은 교과세특 탭으로) ======
 document.getElementById('tc-ov').innerHTML=`
-<div class="rb" style="background:linear-gradient(135deg,#EBF4FF 0%,#F0EDFF 50%,#E3FAFC 100%);border:none;padding:24px">
-<div style="display:flex;gap:20px;flex-wrap:wrap;align-items:start">
-<div style="flex:1;min-width:200px">
-<h4 style="font-size:20px;margin-bottom:4px">${m.nm}</h4>
-<p style="font-size:13px;color:var(--g2);margin-bottom:12px">${m.sid} · 희망진로: ${m.cr}</p>
-<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">${kwds.map(k=>`<span class="badge b-bl" style="font-size:12px;padding:4px 10px">#${k}</span>`).join('')}</div>
-<p style="font-size:13px;color:var(--g1);line-height:1.7">${ov.summary||''}</p>
+<div style="background:linear-gradient(135deg,#EBF4FF 0%,#F0EDFF 50%,#E3FAFC 100%);border-radius:16px;padding:28px;margin-bottom:16px">
+<div style="display:flex;gap:24px;flex-wrap:wrap;align-items:start">
+<div style="flex:1;min-width:240px">
+<h4 style="font-size:22px;margin-bottom:6px">${m.nm}</h4>
+<p style="font-size:13px;color:var(--g2);margin-bottom:4px">${m.sid} · 희망진로: ${m.cr}</p>
+${m.univ||m.major?`<p style="font-size:13px;color:#7B61FF;font-weight:700;margin-bottom:8px">🎓 ${m.univ||''} ${m.major||''}</p>`:''}
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0">${kwds.map(k=>`<span class="badge b-bl" style="font-size:12px;padding:4px 10px">#${k}</span>`).join('')}</div>
+<p style="font-size:13px;color:var(--g1);line-height:1.8;margin-top:12px">${ov.summary||''}</p>
 </div>
-<div style="min-width:220px;max-width:300px">
-<div style="text-align:center;padding:16px;background:rgba(255,255,255,0.7);border-radius:16px;margin-bottom:12px">
-<p style="font-size:11px;font-weight:700;color:var(--g3);margin-bottom:4px">생기부 종합 평점</p>
-<p style="font-size:42px;font-weight:900;color:${gpaClr};line-height:1">${gpa.toFixed?gpa.toFixed(1):gpa}</p>
-<p style="font-size:11px;font-weight:600;color:${gpaClr};margin-top:2px">${ov.tier||''}</p>
+<div style="min-width:240px;max-width:320px">
+<div style="background:white;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);overflow:hidden;margin-bottom:12px">
+<div style="display:flex">
+<div style="flex:1;text-align:center;padding:16px 12px;border-right:1px solid var(--g6)">
+<p style="font-size:10px;font-weight:700;color:var(--g3);margin-bottom:4px">생기부 평점</p>
+<p style="font-size:28px;font-weight:900;color:${gbGpaClr};line-height:1">${gbGpa>0?gbGpa.toFixed(1):'-'}</p>
 </div>
-<p style="font-size:12px;font-weight:700;color:var(--g2);margin-bottom:8px">3대 역량 평가</p>
-${[{k:'academic',l:'📚 학업'},{k:'career',l:'🎯 진로'},{k:'community',l:'🤝 공동체'}].map(x=>`<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:600">${x.l}</span><span style="font-size:10px;color:var(--g3)">${sb[x.k]||''}</span></div>${scoreBar(sc[x.k]||0)}</div>`).join('')}
+<div style="flex:1;text-align:center;padding:16px 12px">
+<p style="font-size:10px;font-weight:700;color:var(--g3);margin-bottom:4px">종합 평점</p>
+<p style="font-size:28px;font-weight:900;color:${gpaClr};line-height:1">${gpa>0?gpa.toFixed(1):'-'}</p>
 </div>
 </div>
-<p style="font-size:12px;color:var(--g2);margin-top:12px;line-height:1.6;background:rgba(255,255,255,0.5);padding:10px 14px;border-radius:10px">${ov.gpa_brief||''}</p>
+${ov.naesin>0?`<div style="text-align:center;padding:6px;background:var(--g7);font-size:10px;color:var(--g3)">내신 ${ov.naesinType||''} ${ov.naesin.toFixed(1)}등급 반영</div>`:''}
+<div style="text-align:center;padding:10px;background:${gpaClr}15;border-top:1px solid var(--g6)">
+<p style="font-size:13px;font-weight:800;color:${gpaClr}">${tierEmoji} ${ov.tier||''}</p>
 </div>
-${ov.change_analysis?`<div class="rb" style="border-left:4px solid var(--purple)"><h4>🔄 1학년 → 2학년 변화 분석</h4><p style="line-height:1.75">${ov.change_analysis}</p></div>`:''}
-${ov.grade3_direction?`<div class="rb" style="border-left:4px solid var(--blue)"><h4>🎯 3학년 전략 방향</h4><p style="line-height:1.75">${ov.grade3_direction}</p></div>`:''}
-${sa.analysis?`<div class="rb" style="border-left:4px solid ${gradeClr(sa.overall_grade)}">
-<h4>📘 교과 세특 전반 분석 <span style="display:inline-flex;align-items:center;gap:6px;margin-left:8px"><span class="badge" style="background:${gradeBg(sa.overall_grade)};color:${gradeClr(sa.overall_grade)};font-size:13px;padding:4px 12px">${sa.overall_grade}등급</span><span style="font-size:15px;font-weight:800;color:${gradeClr(sa.overall_grade)}">${sa.overall_score||''}</span></span></h4>
-<p style="margin:8px 0;line-height:1.75">${sa.analysis||''}</p>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin:12px 0">
-<div style="text-align:center;padding:10px;background:var(--blue-bg);border-radius:10px"><div style="font-size:18px;font-weight:900;color:var(--blue)">${sa.s_elements?'S':'0'}</div><div style="font-size:10px;font-weight:700;color:var(--blue)">S등급</div></div>
-<div style="text-align:center;padding:10px;background:var(--green-bg);border-radius:10px"><div style="font-size:18px;font-weight:900;color:var(--green)">${sa.a_elements?'A':'0'}</div><div style="font-size:10px;font-weight:700;color:var(--green)">A등급</div></div>
-<div style="text-align:center;padding:10px;background:var(--orange-bg);border-radius:10px"><div style="font-size:18px;font-weight:900;color:var(--orange)">${sa.b_elements?'B':'0'}</div><div style="font-size:10px;font-weight:700;color:var(--orange)">B등급</div></div>
-<div style="text-align:center;padding:10px;background:var(--coral-bg);border-radius:10px"><div style="font-size:18px;font-weight:900;color:var(--coral)">${sa.c_elements?'C':'0'}</div><div style="font-size:10px;font-weight:700;color:var(--coral)">C등급</div></div>
 </div>
-${sa.s_elements?`<div style="padding:10px 14px;background:var(--blue-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.65"><strong style="color:var(--blue)">S등급 요소:</strong> ${sa.s_elements}</div>`:''}
-${sa.a_elements?`<div style="padding:10px 14px;background:var(--green-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.65"><strong style="color:var(--green)">A등급 요소:</strong> ${sa.a_elements}</div>`:''}
-${sa.b_elements?`<div style="padding:10px 14px;background:var(--orange-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.65"><strong style="color:var(--orange)">B등급 요소:</strong> ${sa.b_elements}</div>`:''}
-${sa.c_elements?`<div style="padding:10px 14px;background:var(--coral-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.65"><strong style="color:var(--coral)">C등급 요소:</strong> ${sa.c_elements}</div>`:''}
-${(sa.subject_cards||[]).length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:12px">${(sa.subject_cards||[]).map(c=>{const gc=gradeClr(c.grade),gb=gradeBg(c.grade);return`<div style="padding:14px;border-radius:12px;border:1.5px solid ${gc};background:${gb}"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><strong style="font-size:13px">${c.name}</strong><span style="font-size:11px;font-weight:800;color:${gc};padding:2px 8px;background:rgba(255,255,255,0.7);border-radius:100px">${c.grade}등급${c.grade_num?' · '+c.grade_num+'학년':''}</span></div><p style="font-size:11px;color:var(--g1);line-height:1.6">${c.summary||''}</p>${c.highlight?`<p style="font-size:10px;color:${gc};font-weight:600;margin-top:4px">✦ ${c.highlight}</p>`:''}</div>`}).join('')}</div>`:''}
-<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
-${(sa.strong_subjects||[]).length?`<div><span style="font-size:11px;font-weight:700;color:var(--green)">✦ 세특 우수 과목:</span> ${(sa.strong_subjects||[]).map(s=>`<span class="badge b-gr" style="margin:2px">${s}</span>`).join('')}</div>`:''}
-${(sa.weak_subjects||[]).length?`<div><span style="font-size:11px;font-weight:700;color:var(--coral)">→ 보완 필요 과목:</span> ${(sa.weak_subjects||[]).map(s=>`<span class="badge b-co" style="margin:2px">${s}</span>`).join('')}</div>`:''}
-</div></div>`:''}
-<div class="rb"><h4>💪 강점</h4>${(ov.strengths||[]).map(s=>`<p style="margin:3px 0"><span class="badge b-gr">✦</span> ${s}</p>`).join('')}</div>
-<div class="rb"><h4>📌 보완점</h4>${(ov.improvements||[]).map(s=>`<p style="margin:3px 0"><span class="badge b-co">→</span> ${s}</p>`).join('')}</div>
-<div class="rb"><h4>📊 3대 역량 상세 — 학년별 성장 분석</h4>
-<table class="tbl" style="font-size:12px"><thead><tr><th style="width:80px">역량</th><th>1학년</th><th>2학년</th><th>변화 포인트</th><th>3학년 집중</th></tr></thead><tbody>
-${['academic','career','community'].map(k=>{const c=cp[k]||{},lb={career:'🎯 진로',academic:'📚 학업',community:'🤝 공동체'};
-return`<tr><td style="font-weight:800;font-size:11px">${lb[k]}</td><td style="font-size:11px;line-height:1.6">${c.grade1||'-'}</td><td style="font-size:11px;line-height:1.6">${c.grade2||'-'}</td><td style="font-size:11px;line-height:1.6;color:var(--purple);font-weight:600">${c.growth||'-'}</td><td style="font-size:11px;line-height:1.6;color:var(--blue);font-weight:600">${c.grade3_focus||'-'}</td></tr>`}).join('')}
-</tbody></table></div>`;
+<div style="background:white;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
+<p style="font-size:11px;font-weight:700;color:var(--g2);margin-bottom:10px">3대 역량</p>
+${[{k:'academic',l:'학업',e:'📚',c:'#3182F6'},{k:'career',l:'진로',e:'🎯',c:'#7B61FF'},{k:'community',l:'공동체',e:'🤝',c:'#22B8CF'}].map(x=>{
+const v=sc[x.k]||0;const pct=Math.min(v/5*100,100);
+return`<div style="margin-bottom:8px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+<span style="font-size:11px;font-weight:700">${x.e} ${x.l}</span>
+<span style="font-size:14px;font-weight:900;color:${x.c}">${v}</span>
+</div>
+<div style="height:6px;background:var(--g6);border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${x.c};border-radius:3px;transition:width .5s"></div></div>
+<p style="font-size:9px;color:var(--g4);margin-top:2px">${sb[x.k]||''}</p>
+</div>`}).join('')}
+</div>
+</div>
+</div>
+</div>
+<div style="margin-bottom:16px">
+<div onclick="this.querySelector('.guide-body').style.display=this.querySelector('.guide-body').style.display==='none'?'block':'none';this.querySelector('.guide-arrow').textContent=this.querySelector('.guide-body').style.display==='none'?'▶':'▼'" style="cursor:pointer;padding:12px 16px;background:white;border-radius:12px;border:1.5px solid #E5E8EB;display:flex;align-items:center;gap:8px">
+<span style="font-size:14px">📖</span>
+<span style="font-size:13px;font-weight:700;color:var(--g1)">평가 기준 안내</span>
+<span class="guide-arrow" style="font-size:10px;color:var(--g4);margin-left:auto">▶</span>
+</div>
+<div class="guide-body" style="display:none;padding:16px;background:white;border-radius:0 0 12px 12px;border:1.5px solid #E5E8EB;border-top:none;margin-top:-2px">
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+<div style="padding:12px;background:#EBF4FF;border-radius:10px">
+<div style="font-size:11px;font-weight:800;color:#3182F6;margin-bottom:8px">📊 등급 체계</div>
+<div style="display:flex;gap:4px;flex-wrap:wrap">
+${[{g:'S+',s:'5.0',c:'var(--gold)',bg:'var(--gold-bg)'},{g:'S',s:'4.5',c:'var(--blue)',bg:'var(--blue-bg)'},{g:'A',s:'4.0',c:'var(--green)',bg:'var(--green-bg)'},{g:'B',s:'3.0',c:'var(--orange)',bg:'var(--orange-bg)'},{g:'C',s:'2.0',c:'var(--coral)',bg:'var(--coral-bg)'}].map(x=>`<span style="padding:3px 8px;border-radius:6px;font-size:10px;font-weight:800;background:${x.bg};color:${x.c}">${x.g}(${x.s})</span>`).join('')}
+</div>
+<p style="font-size:10px;color:var(--g3);margin-top:6px;line-height:1.5">B가 기본 등급. S+는 최상위 대학 합격생 수준으로 매우 드뭄.</p>
+</div>
+<div style="padding:12px;background:#F0EDFF;border-radius:10px">
+<div style="font-size:11px;font-weight:800;color:#7B61FF;margin-bottom:8px">🧮 Rating Matrix</div>
+<p style="font-size:10px;color:var(--g2);line-height:1.6">4개 영역(자율·진로·교과세특·동아리) × 3개 역량(학업·진로·공동체) = <strong>12칸</strong> 등급 매트릭스.<br>가중치: 교과세특(55%) > 진로(20%) > 자율(13%) > 동아리(12%)</p>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+<div style="padding:12px;background:#E3FAFC;border-radius:10px">
+<div style="font-size:11px;font-weight:800;color:#22B8CF;margin-bottom:8px">📈 이중 평점</div>
+<p style="font-size:10px;color:var(--g2);line-height:1.6"><strong>생기부 평점</strong> = Rating Matrix 가중합산 (활동 기록만)<br><strong>종합 평점</strong> = 생기부(60%) + 내신(40%)<br>내신이 좋으면 종합 평점이 올라가고, 나쁘면 내려감.</p>
+</div>
+<div style="padding:12px;background:#FFF8F0;border-radius:10px">
+<div style="font-size:11px;font-weight:800;color:#FF9F43;margin-bottom:8px">🏆 티어 기준</div>
+<div style="font-size:10px;color:var(--g2);line-height:1.7">
+4.5+ 최상위권 (서울 상위 10개교)<br>
+4.0+ 인서울 상위 (서울 중상위권)<br>
+3.5+ 지거국 상위 (거점국립대)<br>
+3.0+ 중위권 (지방 국립/사립)<br>
+3.0↓ 하위권
+</div>
+</div>
+</div>
+
+<div style="padding:10px 12px;background:var(--g7);border-radius:8px;font-size:10px;color:var(--g3);line-height:1.6">
+💡 <strong>참고:</strong> 등급과 점수는 실제 합격 사례(한양대/경북대/단국대 생기부)를 기반으로 설정된 기준이며, 학생의 생기부 텍스트를 AI가 분석한 결과입니다. 절대적 입시 결과를 보장하지 않으므로 참고 자료로 활용하세요.
+</div>
+</div>
+</div>
+${rm?`<div class="rb">
+<h4>📊 Rating Matrix — 영역×역량 등급</h4>
+<p style="font-size:11px;color:var(--g3);margin-bottom:10px">교과세특(55%) > 진로(20%) > 자율(13%) > 동아리(12%) 가중 반영</p>
+<table class="tbl" style="text-align:center;font-size:13px;border-collapse:collapse">
+<thead><tr><th style="text-align:left;padding:12px">역량</th>${[{l:'자율'},{l:'진로'},{l:'교과세특'},{l:'동아리'}].map(a=>`<th style="padding:12px">${a.l}</th>`).join('')}<th style="padding:12px;background:var(--g7)">종합 점수</th></tr></thead>
+<tbody>${[{k:'academic',l:'📚 학업'},{k:'career',l:'🎯 진로'},{k:'community',l:'🤝 공동체'}].map(c=>{
+const capScore=sc[c.k]||0;
+const scoreClr=capScore>=4.0?'#3182F6':capScore>=3.5?'#22B8CF':capScore>=3.0?'#FF9F43':'#FF6B6B';
+return`<tr><td style="font-weight:800;font-size:12px;text-align:left;padding:12px">${c.l}</td>${['jayul','jinro','subject','club'].map(a=>{
+const g=(rm[c.k]||{})[a]||'B';
+return`<td style="background:${gradeBg(g)};color:${gradeClr(g)};font-weight:900;padding:14px 8px;font-size:16px">${g}</td>`;
+}).join('')}<td style="font-weight:900;font-size:16px;color:${scoreClr};background:${scoreClr}11;padding:14px 8px">${capScore.toFixed(1)}</td></tr>`}).join('')}
+</tbody></table>
+<div style="text-align:right;margin-top:8px;font-size:12px"><strong>생기부 평점: </strong><span style="font-size:16px;font-weight:900;color:${gbGpaClr}">${gbGpa>0?gbGpa.toFixed(1):'-'}</span><span style="font-size:11px;color:var(--g3)"> / 5.0</span></div>
+</div>`:''}
+<div class="rb" id="gradeTrendBox" style="display:none">
+<h4>📈 내신 등급 추이</h4>
+<canvas id="gradeTrendChart" width="680" height="260" style="width:100%;max-height:260px"></canvas>
+<div id="gradeTrendLegend" style="display:flex;gap:16px;justify-content:center;margin-top:8px;font-size:11px"></div>
+<div id="gradeTrendDetail" style="margin-top:10px"></div>
+</div>
+${ov.change_analysis?`<div class="rb" style="border-left:4px solid #7B61FF"><h4>🔄 1→2학년 변화</h4><p style="line-height:1.8">${ov.change_analysis}</p></div>`:''}
+${ov.grade3_direction?`<div class="rb" style="border-left:4px solid #3182F6"><h4>🎯 3학년 전략 방향</h4><p style="line-height:1.8">${ov.grade3_direction}</p></div>`:''}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="rb"><h4>💪 강점</h4>${(ov.strengths||[]).map(s=>`<p style="margin:4px 0;font-size:13px;line-height:1.7"><span style="color:#00C471;font-weight:800">✦</span> ${s}</p>`).join('')}</div>
+<div class="rb"><h4>📌 보완점</h4>${(ov.improvements||[]).map(s=>`<p style="margin:4px 0;font-size:13px;line-height:1.7"><span style="color:#FF6B6B;font-weight:800">→</span> ${s}</p>`).join('')}</div>
+</div>
+<div class="rb">
+<h4>📊 3대 역량 요약</h4>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+${[{k:'academic',l:'📚 학업',c:'#3182F6'},{k:'career',l:'🎯 진로',c:'#7B61FF'},{k:'community',l:'🤝 공동체',c:'#22B8CF'}].map(x=>{
+const c=cp[x.k]||{};const v=sc[x.k]||0;
+return`<div style="padding:14px;border-radius:12px;border:1.5px solid ${x.c}33;background:${x.c}08">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<span style="font-size:13px;font-weight:800;color:${x.c}">${x.l}</span>
+<span style="font-size:18px;font-weight:900;color:${x.c}">${v.toFixed?v.toFixed(1):v}</span>
+</div>
+<p style="font-size:11px;line-height:1.6;color:var(--g2)">${c.growth||sb[x.k]||''}</p>
+<p style="font-size:10px;color:${x.c};font-weight:600;margin-top:4px">${c.grade3_focus?'→ '+c.grade3_focus:''}</p>
+</div>`}).join('')}
+</div>
+<p style="text-align:right;font-size:11px;color:var(--g4);margin-top:8px">💬 학년별 상세 분석은 <strong>상담</strong> 탭에서 확인</p>
+</div>`;
+
+// ====== 내신 추이 그래프 ======
+const gt=r.student_info?.grade_trend||[];
+if(gt.length>0&&gt.some(s=>s.all>0)){
+document.getElementById('gradeTrendBox').style.display='block';
+setTimeout(()=>drawGradeTrend(gt),100);
+}else{document.getElementById('gradeTrendBox').style.display='none';}
+
+// ====== 기재예시 탭 (자율/진로/행발만, 동아리 제외) ======
 document.getElementById('tc-jh').innerHTML=rJH(r.jarhaeng||{});
+
+// ====== 교과세특 탭 (전반 분석 + 과목카드 + 3학년 제안 통합) ======
 const se=r.setuk||{};
-document.getElementById('tc-se').innerHTML=`<div class="rb"><h4>🎯 세특 방향</h4><p>${se.direction||''}</p></div>${(se.subjects||[]).map(s=>`<div class="rb"><h4>📘 ${s.name}</h4><p><strong>주제:</strong> ${s.theme||''}</p><p><strong>이유:</strong> ${s.reason||''}</p><p>${(s.keywords||[]).map(k=>`<span class="badge b-bl" style="margin:2px">${k}</span>`).join(' ')}</p></div>`).join('')}`;
+document.getElementById('tc-se').innerHTML=`
+${sa.analysis?`<div class="rb" style="border-left:4px solid ${gradeClr(sa.overall_grade)}">
+<h4>📘 교과세특 전반 분석 <span class="badge" style="background:${gradeBg(sa.overall_grade)};color:${gradeClr(sa.overall_grade)};font-size:13px;padding:4px 12px;margin-left:8px">${sa.overall_grade}등급</span><span style="font-size:15px;font-weight:800;color:${gradeClr(sa.overall_grade)};margin-left:6px">${sa.overall_score||''}</span></h4>
+<p style="margin:10px 0;line-height:1.8;font-size:13px">${sa.analysis||''}</p>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin:14px 0">
+${[{g:'S',c:'var(--blue)',bg:'var(--blue-bg)',t:sa.s_elements},{g:'A',c:'var(--green)',bg:'var(--green-bg)',t:sa.a_elements},{g:'B',c:'var(--orange)',bg:'var(--orange-bg)',t:sa.b_elements},{g:'C',c:'var(--coral)',bg:'var(--coral-bg)',t:sa.c_elements}].map(x=>`<div style="text-align:center;padding:12px;background:${x.bg};border-radius:10px"><div style="font-size:20px;font-weight:900;color:${x.c}">${x.g}</div><div style="font-size:10px;font-weight:700;color:${x.c}">${x.g}등급</div></div>`).join('')}
+</div>
+${sa.s_elements?`<div style="padding:10px 14px;background:var(--blue-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.7"><strong style="color:var(--blue)">S등급 요소:</strong> ${sa.s_elements}</div>`:''}
+${sa.a_elements?`<div style="padding:10px 14px;background:var(--green-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.7"><strong style="color:var(--green)">A등급 요소:</strong> ${sa.a_elements}</div>`:''}
+${sa.b_elements?`<div style="padding:10px 14px;background:var(--orange-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.7"><strong style="color:var(--orange)">B등급 요소:</strong> ${sa.b_elements}</div>`:''}
+${sa.c_elements?`<div style="padding:10px 14px;background:var(--coral-bg);border-radius:10px;margin:6px 0;font-size:12px;line-height:1.7"><strong style="color:var(--coral)">C등급 요소:</strong> ${sa.c_elements}</div>`:''}
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
+${(sa.strong_subjects||[]).length?`<div><span style="font-size:11px;font-weight:700;color:var(--green)">✦ 우수:</span> ${(sa.strong_subjects||[]).map(s=>`<span class="badge b-gr" style="margin:2px">${s}</span>`).join('')}</div>`:''}
+${(sa.weak_subjects||[]).length?`<div><span style="font-size:11px;font-weight:700;color:var(--coral)">→ 보완:</span> ${(sa.weak_subjects||[]).map(s=>`<span class="badge b-co" style="margin:2px">${s}</span>`).join('')}</div>`:''}
+</div>
+</div>`:''}
+${(sa.subject_cards||[]).length?`<div class="rb"><h4>📋 과목별 분석</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:12px">${(sa.subject_cards||[]).map(c=>{
+const gc=gradeClr(c.grade),gb=gradeBg(c.grade);
+return`<div style="padding:14px;border-radius:12px;border:1.5px solid ${gc};background:${gb}">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+<strong style="font-size:13px">${c.name}</strong>
+<span style="font-size:11px;font-weight:800;color:${gc};padding:2px 8px;background:rgba(255,255,255,0.7);border-radius:100px">${c.grade}등급${c.grade_num?' · '+c.grade_num+'학년':''}</span>
+</div>
+<p style="font-size:11px;color:var(--g1);line-height:1.6">${c.summary||''}</p>
+${c.highlight?`<p style="font-size:10px;color:${gc};font-weight:600;margin-top:4px">✦ ${c.highlight}</p>`:''}</div>`}).join('')}</div>
+</div>`:''}
+${se.direction?`<div class="rb" style="border-left:4px solid #3182F6;background:linear-gradient(135deg,#FAFBFF,#EBF4FF)">
+<h4>🎯 3학년 세특 전략</h4>
+<p style="margin:8px 0;line-height:1.8;font-size:13px">${se.direction}</p>
+</div>`:''}
+${(se.subjects||[]).length?`<div class="rb"><h4>📘 3학년 세특 제안 (${(se.subjects||[]).length}과목)</h4>
+<div style="display:grid;gap:12px;margin-top:10px">${(se.subjects||[]).map((s,i)=>{
+const clrs=['#3182F6','#7B61FF','#22B8CF','#FF9F43'];
+const c=clrs[i%4];
+return`<div style="padding:16px;border-radius:12px;border:2px solid ${c}33;background:${c}08">
+<div style="font-size:14px;font-weight:800;color:${c};margin-bottom:6px">📘 ${s.name}</div>
+<p style="font-size:12px;line-height:1.7;margin-bottom:6px"><strong>주제:</strong> ${s.theme||''}</p>
+<p style="font-size:12px;line-height:1.7;margin-bottom:6px"><strong>이유:</strong> ${s.reason||''}</p>
+<div style="display:flex;flex-wrap:wrap;gap:4px">${(s.keywords||[]).map(k=>`<span class="badge b-bl" style="font-size:10px">${k}</span>`).join('')}</div>
+</div>`}).join('')}</div>
+</div>`:''}`;
+
+// ====== 동아리 탭 (등급분석 + 기재예시 + 프로젝트) ======
 const cl=r.club||{};
-// 동아리: quarterly(새) 또는 monthly(구) 호환
 const clubItems=cl.quarterly||cl.monthly||[];
-const isQuarterly=!!cl.quarterly;
-document.getElementById('tc-cl').innerHTML=`${cl.overview?`<div class="rb" style="border-left:4px solid var(--purple)"><h4>📋 동아리 전반 분석</h4><p style="line-height:1.75">${cl.overview}</p></div>`:''}
-<div class="rb"><h4>🏫 ${cl.name||''}</h4><p>${cl.goal||''}</p></div>
-${(cl.projects||[]).length?`<div class="rb"><h4>💡 프로젝트 제안 (${(cl.projects||[]).length}개)</h4><div style="display:grid;gap:12px">${(cl.projects||[]).map((p,i)=>`<div style="padding:16px;border-radius:14px;border:2px solid ${['var(--blue)','var(--purple)','var(--teal)'][i%3]};background:${['var(--blue-bg)','var(--purple-bg)','var(--teal-bg)'][i%3]}">
-<div style="font-size:14px;font-weight:800;margin-bottom:6px;color:${['var(--blue)','var(--purple)','var(--teal)'][i%3]}">${String.fromCharCode(65+i)}. "${p.title}"</div>
+const jhDongari=r.jarhaeng?.dongari||{};
+const jhDo1=jhDongari.option1||{},jhDo2=jhDongari.option2||{};
+const dgHasEl=jhDongari.s_elements||jhDongari.a_elements||jhDongari.b_elements||jhDongari.c_elements;
+document.getElementById('tc-cl').innerHTML=`
+${jhDongari.evaluation?`<div class="rb" style="border-left:4px solid ${gradeClr(jhDongari.grade)||'#7B61FF'}">
+<h4>🏫 동아리활동 <span class="badge" style="background:${gradeBg(jhDongari.grade)};color:${gradeClr(jhDongari.grade)};font-size:13px;padding:4px 12px">${jhDongari.grade||'?'}등급</span> <span class="badge b-gy">1500B</span></h4>
+<p style="margin:10px 0;line-height:1.85;font-size:13px">${jhDongari.evaluation}</p>
+${dgHasEl?`<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:12px 0">
+${[{g:'S',c:'var(--blue)',bg:'var(--blue-bg)'},{g:'A',c:'var(--green)',bg:'var(--green-bg)'},{g:'B',c:'var(--orange)',bg:'var(--orange-bg)'},{g:'C',c:'var(--coral)',bg:'var(--coral-bg)'}].map(x=>`<div style="text-align:center;padding:10px;background:${x.bg};border-radius:8px"><div style="font-size:18px;font-weight:900;color:${x.c}">${x.g}</div><div style="font-size:9px;font-weight:700;color:${x.c}">${x.g}등급</div></div>`).join('')}
+</div>
+${jhDongari.s_elements?`<div style="padding:8px 12px;background:var(--blue-bg);border-radius:8px;margin:4px 0;font-size:11px;line-height:1.7"><strong style="color:var(--blue)">S등급:</strong> ${jhDongari.s_elements}</div>`:''}
+${jhDongari.a_elements?`<div style="padding:8px 12px;background:var(--green-bg);border-radius:8px;margin:4px 0;font-size:11px;line-height:1.7"><strong style="color:var(--green)">A등급:</strong> ${jhDongari.a_elements}</div>`:''}
+${jhDongari.b_elements?`<div style="padding:8px 12px;background:var(--orange-bg);border-radius:8px;margin:4px 0;font-size:11px;line-height:1.7"><strong style="color:var(--orange)">B등급:</strong> ${jhDongari.b_elements}</div>`:''}
+${jhDongari.c_elements?`<div style="padding:8px 12px;background:var(--coral-bg);border-radius:8px;margin:4px 0;font-size:11px;line-height:1.7"><strong style="color:var(--coral)">C등급:</strong> ${jhDongari.c_elements}</div>`:''}
+`:''}
+${jhDo1.text||jhDo2.text?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+<div style="background:#FAFCFF;border-radius:12px;padding:16px;border:1.5px solid #3182F633">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="badge b-bl" style="font-size:12px;padding:4px 14px">안전형(A)</span><span style="font-size:11px;color:var(--g3);font-weight:600">${bl(jhDo1.text||'')}/1500B</span></div>
+<div style="font-weight:700;font-size:13px;margin-bottom:8px">${jhDo1.title||''}</div>
+<div style="font-size:12px;line-height:1.8">${jhDo1.text||''}</div>
+<div style="margin-top:10px;padding:8px 12px;background:white;border-radius:8px;font-size:11px;line-height:1.6">✓ ${jhDo1.focus||''}<br>→ ${jhDo1.supplement||''}</div>
+</div>
+<div style="background:#FCFAFF;border-radius:12px;padding:16px;border:1.5px solid #7B61FF33">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="badge b-pu" style="font-size:12px;padding:4px 14px">도전형(S)</span><span style="font-size:11px;color:var(--g3);font-weight:600">${bl(jhDo2.text||'')}/1500B</span></div>
+<div style="font-weight:700;font-size:13px;margin-bottom:8px">${jhDo2.title||''}</div>
+<div style="font-size:12px;line-height:1.8">${jhDo2.text||''}</div>
+<div style="margin-top:10px;padding:8px 12px;background:white;border-radius:8px;font-size:11px;line-height:1.6">✓ ${jhDo2.focus||''}<br>→ ${jhDo2.supplement||''}</div>
+</div>
+</div>`:''}
+</div>`:''}
+${cl.overview?`<div class="rb"><h4>📋 동아리 전반 분석</h4><p style="line-height:1.8">${cl.overview}</p></div>`:''}
+<div class="rb"><h4>🎯 ${cl.name||''} — 3학년 계획</h4><p style="line-height:1.7">${cl.goal||''}</p></div>
+${(cl.projects||[]).length?`<div class="rb"><h4>💡 프로젝트 제안</h4><div style="display:grid;gap:12px">${(cl.projects||[]).map((p,i)=>{
+const pc=['#3182F6','#7B61FF','#22B8CF'][i%3];
+return`<div style="padding:16px;border-radius:14px;border:2px solid ${pc}33;background:${pc}08">
+<div style="font-size:14px;font-weight:800;margin-bottom:6px;color:${pc}">${String.fromCharCode(65+i)}. ${p.title}</div>
 <p style="font-size:12px;line-height:1.7;margin-bottom:8px">${p.concept||''}</p>
-${(p.steps||[]).length?`<div style="font-size:11px;margin-bottom:6px"><strong>실행 단계:</strong><ol style="margin:4px 0 0 16px;line-height:1.8">${(p.steps||[]).map(s=>`<li>${s}</li>`).join('')}</ol></div>`:''}
-${p.record_points?`<p style="font-size:11px;color:var(--g1);font-weight:600;padding:6px 10px;background:rgba(255,255,255,0.6);border-radius:8px"><strong>생기부 포인트:</strong> ${p.record_points}</p>`:''}</div>`).join('')}</div></div>`:''}
+${(p.steps||[]).length?`<div style="font-size:11px;margin-bottom:6px"><strong>실행:</strong><ol style="margin:4px 0 0 16px;line-height:1.8">${(p.steps||[]).map(s=>`<li>${s}</li>`).join('')}</ol></div>`:''}
+${p.record_points?`<p style="font-size:11px;font-weight:600;padding:6px 10px;background:rgba(255,255,255,0.6);border-radius:8px">📝 ${p.record_points}</p>`:''}</div>`}).join('')}</div></div>`:''}
 <div class="rb"><h4>📅 분기별 계획</h4><table class="tbl"><tr><th>분기</th><th>핵심 목표</th><th>활동</th><th>기록 포인트</th></tr>${clubItems.map(m=>`<tr><td style="font-weight:700">${m.quarter||m.month}</td><td>${m.focus||''}</td><td>${m.activities||m.activity||''}</td><td>${m.record||''}</td></tr>`).join('')}</table></div>`;
+
+// ====== 상담 탭 ======
 const co=r.counsel||{};
-// counsel: 새(points/parent) 또는 구(talk_points/parent_points) 호환
 const coPoints=co.points||co.talk_points||[];
 const coParent=co.parent||co.parent_points||[];
-document.getElementById('tc-co').innerHTML=`<div class="rb"><h4>💬 상담 포인트</h4>${coPoints.map(s=>`<p style="margin:3px 0">• ${s}</p>`).join('')}</div><div class="rb"><h4>❓ 질문 예시</h4>${(co.questions||[]).map(s=>`<p style="margin:3px 0">"${s}"</p>`).join('')}</div><div class="rb"><h4>👨‍👩‍👧 학부모 전달사항</h4>${coParent.map(s=>`<p style="margin:3px 0">• ${s}</p>`).join('')}</div>${(co.recommended_activities||[]).length?`<div class="rb"><h4>🚀 추천 활동</h4>${co.recommended_activities.map(s=>`<p style="margin:3px 0">✦ ${s}</p>`).join('')}</div>`:''}`;
+const coGrade=co.grade_analysis||[];
+
+// 역량별 등급 판정 (점수 → 등급)
+function capGrade(v){return v>=4.5?'S':v>=4.0?'A':v>=3.0?'B':v>=2.0?'C':'D'}
+const capData=[
+{k:'academic',l:'📚 학업역량',c:'#3182F6',v:sc.academic||0},
+{k:'career',l:'🎯 진로역량',c:'#7B61FF',v:sc.career||0},
+{k:'community',l:'🤝 공동체역량',c:'#22B8CF',v:sc.community||0}
+];
+const totalScore=capData.reduce((s,x)=>s+x.v,0);
+const avgScore=capData.length?Math.round((totalScore/capData.length)*100)/100:0;
+const totalGrade=capGrade(avgScore);
+
+document.getElementById('tc-co').innerHTML=`
+<div class="rb" style="border-left:4px solid ${gradeClr(totalGrade)}">
+<h4>📊 3대 역량 종합 진단 <span class="badge" style="background:${gradeBg(totalGrade)};color:${gradeClr(totalGrade)};font-size:14px;padding:4px 14px;margin-left:8px">${totalGrade}등급</span><span style="font-size:17px;font-weight:900;color:${gradeClr(totalGrade)};margin-left:8px">${avgScore.toFixed(1)}</span><span style="font-size:11px;color:var(--g3)"> / 5.0</span></h4>
+<p style="margin:10px 0;font-size:12px;color:var(--g2)">자율·진로·교과세특·동아리 4개 영역 × 학업·진로·공동체 3개 역량 = Rating Matrix 가중합산</p>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0">
+${capData.map(x=>{
+const g=capGrade(x.v);
+return`<div style="text-align:center;padding:16px 10px;border-radius:12px;border:2px solid ${x.c}33;background:${x.c}08">
+<div style="font-size:22px;font-weight:900;color:${x.c}">${g}</div>
+<div style="font-size:10px;font-weight:700;color:${x.c};margin-top:2px">${x.v.toFixed(1)}점</div>
+<div style="font-size:11px;color:var(--g2);margin-top:4px">${x.l}</div>
+</div>`}).join('')}
+</div>
+</div>
+
+${capData.map(x=>{
+const g=capGrade(x.v);const c=cp[x.k]||{};const rm_row=rm?rm[x.k]:{};
+return`<div class="rb" style="border-left:4px solid ${x.c}">
+<h4 style="display:flex;justify-content:space-between;align-items:center">${x.l} <span style="display:flex;align-items:center;gap:8px"><span class="badge" style="background:${gradeBg(g)};color:${gradeClr(g)};font-size:13px;padding:4px 12px">${g}등급</span><span style="font-size:17px;font-weight:900;color:${x.c}">${x.v.toFixed(1)}</span></span></h4>
+${rm_row?`<div style="display:flex;gap:6px;margin:10px 0;flex-wrap:wrap">
+${[{a:'jayul',l:'자율'},{a:'jinro',l:'진로'},{a:'subject',l:'교과세특'},{a:'club',l:'동아리'}].map(ar=>{
+const ag=rm_row[ar.a]||'B';
+return`<span style="padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;background:${gradeBg(ag)};color:${gradeClr(ag)}">${ar.l}: ${ag}</span>`}).join('')}
+</div>`:''}
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-top:8px">
+<div style="padding:10px;border-radius:8px;background:white;border:1px solid ${x.c}11"><div style="font-size:10px;color:var(--g4);font-weight:700;margin-bottom:4px">1학년</div><div style="font-size:11px;line-height:1.6">${c.grade1||'-'}</div></div>
+<div style="padding:10px;border-radius:8px;background:white;border:1px solid ${x.c}11"><div style="font-size:10px;color:var(--g4);font-weight:700;margin-bottom:4px">2학년</div><div style="font-size:11px;line-height:1.6">${c.grade2||'-'}</div></div>
+<div style="padding:10px;border-radius:8px;background:${x.c}11"><div style="font-size:10px;color:${x.c};font-weight:700;margin-bottom:4px">변화 포인트</div><div style="font-size:11px;line-height:1.6;color:${x.c};font-weight:600">${c.growth||'-'}</div></div>
+<div style="padding:10px;border-radius:8px;background:${x.c}18"><div style="font-size:10px;color:${x.c};font-weight:700;margin-bottom:4px">3학년 집중</div><div style="font-size:11px;line-height:1.6;color:${x.c};font-weight:700">${c.grade3_focus||'-'}</div></div>
+</div>
+</div>`}).join('')}
+
+${coGrade.length?`<div class="rb" style="border-left:4px solid #FF9F43">
+<h4>📈 성적 분석 · 내신 추이</h4>
+${coGrade.map(s=>`<div style="margin:8px 0;padding:12px 16px;background:#FFF8F0;border-radius:10px;font-size:13px;line-height:1.8">📊 ${s}</div>`).join('')}
+</div>`:''}
+
+${(()=>{const ua=co.univ_analysis||{};if(!ua.univ_name)return'';return`
+<div class="rb" style="border-left:4px solid #E040FB;background:linear-gradient(135deg,#FDF4FF,#F3E5F5)">
+<h4>🎓 ${ua.univ_name} ${ua.major_name} — 입시 분석</h4>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0">
+<div style="padding:12px;background:white;border-radius:10px;text-align:center">
+<div style="font-size:10px;color:var(--g4);font-weight:700">전형</div>
+<div style="font-size:12px;font-weight:800;color:#E040FB;margin-top:4px">${ua.admission_type||'-'}</div>
+</div>
+<div style="padding:12px;background:white;border-radius:10px;text-align:center">
+<div style="font-size:10px;color:var(--g4);font-weight:700">합격 내신대</div>
+<div style="font-size:12px;font-weight:800;color:#3182F6;margin-top:4px">${ua.avg_grade||'-'}</div>
+</div>
+<div style="padding:12px;background:white;border-radius:10px;text-align:center">
+<div style="font-size:10px;color:var(--g4);font-weight:700">경쟁률</div>
+<div style="font-size:12px;font-weight:800;color:#FF6B6B;margin-top:4px">${ua.competition_rate||'-'}</div>
+</div>
+</div>
+<div style="padding:12px;background:white;border-radius:10px;margin:8px 0">
+<div style="font-size:11px;font-weight:700;color:#E040FB;margin-bottom:6px">🏫 인재상</div>
+<p style="font-size:12px;line-height:1.7">${ua.talent_profile||''}</p>
+${(ua.key_competencies||[]).length?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${ua.key_competencies.map(k=>`<span style="padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;background:#F3E5F5;color:#E040FB">${k}</span>`).join('')}</div>`:''}
+</div>
+<div style="padding:12px;background:white;border-radius:10px;margin:8px 0">
+<div style="font-size:11px;font-weight:700;color:#3182F6;margin-bottom:6px">📊 적합도 분석</div>
+<p style="font-size:12px;line-height:1.8">${ua.fit_analysis||''}</p>
+</div>
+<div style="padding:12px;background:white;border-radius:10px;margin:8px 0">
+<div style="font-size:11px;font-weight:700;color:#00C471;margin-bottom:6px">🎯 합격 전략</div>
+<p style="font-size:12px;line-height:1.8">${ua.strategy||''}</p>
+</div>
+${(ua.risk_factors||[]).length?`<div style="padding:12px;background:#FFF5F5;border-radius:10px;margin:8px 0">
+<div style="font-size:11px;font-weight:700;color:#FF6B6B;margin-bottom:6px">⚠️ 리스크 요인</div>
+${ua.risk_factors.map(s=>`<p style="font-size:12px;line-height:1.7;margin:2px 0">• ${s}</p>`).join('')}
+</div>`:''}
+${(ua.alternative_majors||[]).length?`<div style="padding:8px 12px;background:white;border-radius:8px;margin-top:8px;font-size:11px">💡 <strong>대안 학과:</strong> ${ua.alternative_majors.join(', ')}</div>`:''}
+</div>`})()}
+
+${co.curriculum_summary?`<div class="rb" style="border-left:4px solid #FF9F43;background:linear-gradient(135deg,#FFFBF0,#FFF3E0)">
+<h4>📋 교과 + 생기부 총정리</h4>
+<p style="font-size:13px;line-height:1.9">${co.curriculum_summary}</p>
+</div>`:''}
+
+<div class="rb" style="border-left:4px solid #3182F6"><h4>💬 상담 포인트</h4>
+${coPoints.map(s=>`<div style="margin:8px 0;padding:12px 16px;background:#FAFCFF;border-radius:10px;font-size:13px;line-height:1.8">• ${s}</div>`).join('')}</div>
+<div class="rb" style="border-left:4px solid #7B61FF"><h4>❓ 질문 예시</h4>
+${(co.questions||[]).map(s=>`<div style="margin:8px 0;padding:12px 16px;background:#FCFAFF;border-radius:10px;font-size:13px;line-height:1.8;font-style:italic">"${s}"</div>`).join('')}</div>
+<div class="rb" style="border-left:4px solid #22B8CF"><h4>👨‍👩‍👧 학부모 전달사항</h4>
+${coParent.map(s=>`<div style="margin:8px 0;padding:12px 16px;background:#F0FCFE;border-radius:10px;font-size:13px;line-height:1.8">• ${s}</div>`).join('')}</div>
+${(co.recommended_activities||[]).length?`<div class="rb" style="border-left:4px solid #00C471"><h4>🚀 추천 활동</h4>${co.recommended_activities.map(s=>`<div style="margin:8px 0;padding:12px 16px;background:#E8FAF0;border-radius:10px;font-size:13px;line-height:1.8">✦ ${s}</div>`).join('')}</div>`:''}`;
+
 // 빈 섹션 감지
 const missing=[];
 const jh=r.jarhaeng||{};
@@ -1261,16 +2167,40 @@ if(!coPoints.length)missing.push('상담');
 if(missing.length){
 const warn=document.createElement('div');
 warn.style.cssText='background:var(--orange-bg);border:1.5px solid var(--orange);border-radius:12px;padding:14px 18px;margin:10px 0;font-size:13px;color:var(--g1)';
-warn.innerHTML=`<strong style="color:var(--orange)">⚠️ 일부 섹션이 비어있습니다:</strong> ${missing.join(', ')}<br><span style="font-size:12px;color:var(--g3)">AI 응답이 토큰 한도로 잘렸을 수 있습니다. 재분석하면 완전한 결과를 얻을 수 있습니다.</span>`;
+warn.innerHTML=`<strong style="color:var(--orange)">⚠️ 일부 섹션 비어있음:</strong> ${missing.join(', ')}<br><span style="font-size:12px;color:var(--g3)">재분석하면 완전한 결과를 얻을 수 있습니다.</span>`;
 document.getElementById('tc-ov').prepend(warn);
 }
 st('ov')}
 
-function rJH(jh){const gradeClr=(g)=>({S:'var(--blue)',A:'var(--green)',B:'var(--orange)',C:'var(--coral)'}[g]||'var(--g3)');const gradeBg=(g)=>({S:'var(--blue-bg)',A:'var(--green-bg)',B:'var(--orange-bg)',C:'var(--coral-bg)'}[g]||'var(--g7)');return[{k:'jayul',l:'자율활동',b:1500},{k:'jinro',l:'진로활동',b:2100},{k:'dongari',l:'동아리활동',b:1500},{k:'hangbal',l:'행동특성및종합의견',b:1500}].map(a=>{
+function rJH(jh){const gradeClr=GRADE_CLR;const gradeBg=GRADE_BG;return[{k:'jayul',l:'자율활동',b:1500,e:'📋'},{k:'jinro',l:'진로활동',b:2100,e:'🎯'},{k:'hangbal',l:'행동특성및종합의견',b:1500,e:'💬'}].map(a=>{
 const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{},b1=bl(o1.text||''),b2=bl(o2.text||''),gr=d.grade||'';
-return`<div class="rb"><h4>${a.l} <span class="badge b-gy">${a.b}B</span>${gr?` <span class="badge" style="background:${gradeBg(gr)};color:${gradeClr(gr)}">${gr}등급</span>`:''}</h4><p style="margin-bottom:12px">${d.evaluation||''}</p>
-<div class="opt"><div class="oh"><span class="badge b-bl">안전형(A)</span> ${o1.title||''}</div><div class="ob">${o1.text||''}</div><div class="of"><span>✓ ${o1.focus||''}</span><span>→ ${o1.supplement||''}</span><span>${b1}/${a.b}B</span></div></div>
-<div class="opt"><div class="oh"><span class="badge b-pu">도전형(S)</span> ${o2.title||''}</div><div class="ob">${o2.text||''}</div><div class="of"><span>✓ ${o2.focus||''}</span><span>→ ${o2.supplement||''}</span><span>${b2}/${a.b}B</span></div></div>${a.k==='hangbal'?'<div style="margin-top:8px;padding:8px 12px;background:var(--orange-bg);border-radius:8px;font-size:11px;color:var(--orange);font-weight:600">⚠️ 3학년 행발은 학종 수시에서 미반영됩니다 (1~2학년만 대학 제공). 정시 학생부반영 대학(서울대 등)에서는 활용 가능.</div>':''}</div>`}).join('')}
+const hasElements=d.s_elements||d.a_elements||d.b_elements||d.c_elements;
+return`<div class="rb" style="border-left:4px solid ${gradeClr(gr)||'var(--g5)'}">
+<h4>${a.e} ${a.l} <span class="badge" style="background:${gradeBg(gr)};color:${gradeClr(gr)};font-size:13px;padding:4px 12px">${gr||'?'}등급</span> <span class="badge b-gy">${a.b}B</span></h4>
+<p style="margin:10px 0;line-height:1.85;font-size:13px;color:var(--g1)">${d.evaluation||''}</p>
+${hasElements?`<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:12px 0">
+${[{g:'S',c:'var(--blue)',bg:'var(--blue-bg)'},{g:'A',c:'var(--green)',bg:'var(--green-bg)'},{g:'B',c:'var(--orange)',bg:'var(--orange-bg)'},{g:'C',c:'var(--coral)',bg:'var(--coral-bg)'}].map(x=>`<div style="text-align:center;padding:10px;background:${x.bg};border-radius:8px"><div style="font-size:18px;font-weight:900;color:${x.c}">${x.g}</div><div style="font-size:9px;font-weight:700;color:${x.c}">${x.g}등급</div></div>`).join('')}
+</div>
+${d.s_elements?`<div style="padding:8px 12px;background:var(--blue-bg);border-radius:8px;margin:4px 0;font-size:11px;line-height:1.7"><strong style="color:var(--blue)">S등급:</strong> ${d.s_elements}</div>`:''}
+${d.a_elements?`<div style="padding:8px 12px;background:var(--green-bg);border-radius:8px;margin:4px 0;font-size:11px;line-height:1.7"><strong style="color:var(--green)">A등급:</strong> ${d.a_elements}</div>`:''}
+${d.b_elements?`<div style="padding:8px 12px;background:var(--orange-bg);border-radius:8px;margin:4px 0;font-size:11px;line-height:1.7"><strong style="color:var(--orange)">B등급:</strong> ${d.b_elements}</div>`:''}
+${d.c_elements?`<div style="padding:8px 12px;background:var(--coral-bg);border-radius:8px;margin:4px 0;font-size:11px;line-height:1.7"><strong style="color:var(--coral)">C등급:</strong> ${d.c_elements}</div>`:''}
+`:''}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+<div style="background:#FAFCFF;border-radius:12px;padding:16px;border:1.5px solid #3182F633">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="badge b-bl" style="font-size:12px;padding:4px 14px">안전형(A)</span><span style="font-size:11px;color:var(--g3);font-weight:600">${b1}/${a.b}B</span></div>
+<div style="font-weight:700;font-size:13px;color:var(--g1);margin-bottom:8px">${o1.title||''}</div>
+<div style="font-size:12px;line-height:1.8;color:var(--g1)">${o1.text||''}</div>
+<div style="margin-top:10px;padding:8px 12px;background:white;border-radius:8px;font-size:11px;line-height:1.6;color:var(--g2)">✓ <strong>핵심:</strong> ${o1.focus||''}<br>→ <strong>보완:</strong> ${o1.supplement||''}</div>
+</div>
+<div style="background:#FCFAFF;border-radius:12px;padding:16px;border:1.5px solid #7B61FF33">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="badge b-pu" style="font-size:12px;padding:4px 14px">도전형(S)</span><span style="font-size:11px;color:var(--g3);font-weight:600">${b2}/${a.b}B</span></div>
+<div style="font-weight:700;font-size:13px;color:var(--g1);margin-bottom:8px">${o2.title||''}</div>
+<div style="font-size:12px;line-height:1.8;color:var(--g1)">${o2.text||''}</div>
+<div style="margin-top:10px;padding:8px 12px;background:white;border-radius:8px;font-size:11px;line-height:1.6;color:var(--g2)">✓ <strong>핵심:</strong> ${o2.focus||''}<br>→ <strong>보완:</strong> ${o2.supplement||''}</div>
+</div>
+</div>
+${a.k==='hangbal'?'<div style="margin-top:10px;padding:10px 14px;background:var(--orange-bg);border-radius:10px;font-size:11px;color:var(--orange);font-weight:600">⚠️ 3학년 행발은 학종 수시 미반영 (1~2학년만 대학 제공)</div>':''}</div>`}).join('')}
 
 function bl(s){return new Blob([s||'']).size}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -1328,7 +2258,7 @@ const compLabels={academic:'학업역량',career:'진로역량',community:'공�
 const compColors={academic:'#3182F6',career:'#7B61FF',community:'#00C471'};
 const gpa=ov.gpa||0;
 const gpaClr=gpa>=4.0?'#3182F6':gpa>=3.5?'#22B8CF':gpa>=3.0?'#FF9F43':'#FF6B6B';
-const grClr=(g)=>({S:'#3182F6',A:'#00C471',B:'#FF9F43',C:'#FF6B6B'}[g]||'#8B95A1');
+const grClr=(g)=>({"S+":'#FFB800',S:'#3182F6',A:'#00C471',B:'#FF9F43',C:'#FF6B6B'}[g]||'#8B95A1');
 let compHtml='';
 ['academic','career','community'].forEach(k=>{
 const c=cp[k]||{};
@@ -1349,7 +2279,7 @@ jhHtml+=`<div class="section"><h3>${a.l} <span class="byte-tag">${a.lm}B</span>$
 <div class="opt-meta">✓ ${o1.focus||''} · → ${o1.supplement||''}</div></div>
 <div class="opt-box"><div class="opt-hdr"><span class="opt-badge purple">도전형(S)</span> ${o2.title||''} <span class="byte-count ${b2>a.lm?'over':''}">${b2}/${a.lm}B</span></div>
 <div class="opt-body">${o2.text||''}</div>
-<div class="opt-meta">✓ ${o2.focus||''} · → ${o2.supplement||''}</div></div></div>${a.k==='hangbal'?'<p style="font-size:11px;color:#FF9F43;margin-top:8px;font-weight:600">⚠️ 3학년 행발: 학종 수시 미반영 (1~2학년만 제공). 정시 학생부반영 대학에서 활용 가능.</p>':''}</div>`;
+<div class="opt-meta">✓ ${o2.focus||''} · → ${o2.supplement||''}</div></div></div>${a.k==='hangbal'?'<p style="font-size:11px;color:#FF9F43;margin-top:8px;font-weight:600">⚠️ 3학년 행발: 학종 수시 미반영 (1~2학년만 제공).</p>':''}</div>`;
 });
 let seHtml=(se.subjects||[]).map(s=>`<div class="setuk-card"><div class="setuk-name">${s.name||''}</div>
 <div class="setuk-theme">📌 ${s.theme||''}</div><div class="setuk-reason">${s.reason||''}</div>
@@ -1399,9 +2329,9 @@ ${sa.analysis?`<h2>📘 교과 세특 분석</h2>
 function dlPDF(){if(!cur)return;
 const w=window.open('','_blank');
 const m=cur._m||{};
-w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${m.nm||''} 생기부 성장분석 보고서</title>
+w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${m.nm||''} 생기부 전략 분석 보고서</title>
 ${getPDFStyles()}</head><body>
-<div class="cover"><h1>📊 생기부 성장분석 보고서</h1><div class="sub">AI 기반 학생부 종합 분석 리포트</div></div>
+<div class="cover"><h1>📊 생기부 전략 분석 보고서</h1><div class="sub">AI 기반 학생부 종합 분석 리포트</div></div>
 ${buildPDFContent(cur)}
 </body></html>`);
 w.document.close();setTimeout(()=>w.print(),800)}
@@ -1434,13 +2364,40 @@ const areas=[{k:'jayul',l:'자율활동',lm:1500,clr:'4472C4'},{k:'jinro',l:'진
 
 // ===== 시트1: 요약카드 =====
 const s0=[];
-s0.push(['📊 생기부 성장분석 요약 카드','','','','','','','','','']);
+s0.push(['📊 세공사 — 생기부 전략 분석 요약 카드','','','','','','','','','']);
 s0.push([]);
 s0.push(['학년',m.sid?m.sid[0]:'','반',m.sid?m.sid.substring(1,3):'','번호',m.sid?m.sid.substring(3,5):'','성명',m.nm,'희망진로',m.cr]);
 s0.push([]);
-s0.push(['종합 평점 (5.0)',ov.gpa||0,'',ov.tier||'']);
+s0.push(['생기부 평점',ov.gpa_gb||ov._gbGpa||0,'','']);
+s0.push(['종합 평점 (내신 반영)',ov.gpa||0,'',ov.tier||'']);
+s0.push(['내신 (전체교과)',ov.naesinAll||'-','','']);
+s0.push(['내신 (국영수사)',ov.naesinMSS||'-','','']);
+s0.push(['내신 (국영수과)',ov.naesinMSN||'-','','']);
+s0.push(['적용 기준',ov.naesinType||'전체교과','','']);
 s0.push(['평점 근거',ov.gpa_brief||'']);
 s0.push([]);
+// 내신 추이
+const _gt=r.student_info?.grade_trend||[];
+if(_gt.length&&_gt.some(s=>s.all>0)){
+s0.push(['◆ 내신 등급 추이','','','','']);
+s0.push(['학기','전체교과','국영수사','국영수과','주요과목']);
+_gt.forEach(s=>{
+const ks=(s.key_subjects||[]).map(k=>k.name+':'+k.grade).join(', ');
+s0.push([s.semester,s.all||'',s.mss||'',s.msn||'',ks]);
+});
+s0.push([]);
+}
+// rating_matrix
+const _rm=r.rating_matrix;
+if(_rm){
+s0.push(['Rating Matrix','자율','진로','교과세특','동아리']);
+['academic','career','community'].forEach(cap=>{
+const lb={academic:'📚 학업',career:'🎯 진로',community:'🤝 공동체'};
+const row=_rm[cap]||{};
+s0.push([lb[cap],row.jayul||'B',row.jinro||'B',row.subject||'B',row.club||'B']);
+});
+s0.push([]);
+}
 s0.push(['역량','점수','평가 요약']);
 s0.push(['📚 학업역량',sc.academic||0,sb.academic||'']);
 s0.push(['🎯 진로역량',sc.career||0,sb.career||'']);
@@ -1464,6 +2421,17 @@ s0.push(['B등급 요소',sa.b_elements||'']);
 s0.push(['C등급 요소',sa.c_elements||'']);
 s0.push(['세특 우수 과목',(sa.strong_subjects||[]).join(', ')]);
 s0.push(['보완 필요 과목',(sa.weak_subjects||[]).join(', ')]);
+s0.push([]);
+// v5.2: 영역별 등급 분석
+s0.push(['◆ 영역별 등급 분석','','','']);
+areas.forEach(a=>{
+const d=jh[a.k]||{};
+s0.push([a.l,d.grade||'','평가: '+(d.evaluation||'')]);
+if(d.s_elements)s0.push(['','S등급 요소',d.s_elements]);
+if(d.a_elements)s0.push(['','A등급 요소',d.a_elements]);
+if(d.b_elements)s0.push(['','B등급 요소',d.b_elements]);
+if(d.c_elements)s0.push(['','C등급 요소',d.c_elements]);
+});
 
 const ws0=XLSX.utils.aoa_to_sheet(s0);
 ws0['!cols']=[{wch:16},{wch:10},{wch:50},{wch:30}];
@@ -1486,7 +2454,7 @@ XLSX.utils.book_append_sheet(wb,ws0,'요약카드');
 
 // ===== 시트2: 기재예시 (핵심!) =====
 const s1=[];
-s1.push(['생기부 성장분석 - 개인별 기재 예시 및 교사 기입란','','','','','','','']);
+s1.push(['세공사 — 개인별 기재 예시 및 교사 기입란','','','','','','','']);
 s1.push([]);
 s1.push(['학년',m.sid?m.sid[0]:'','반',m.sid?m.sid.substring(1,3):'','번호',m.sid?m.sid.substring(3,5):'','성명',m.nm]);
 s1.push([]);
@@ -1535,6 +2503,35 @@ setRowSt(ws1,10,9,XS.note);
 setRowSt(ws1,11,9,XS.note);
 XLSX.utils.book_append_sheet(wb,ws1,'기재예시');
 
+// ===== 시트2.5(v5.0): 최종 기록 (교사 직접 입력) =====
+const sFin=[];
+sFin.push(['생기부 최종 기록 — '+m.nm,'','','','']);
+sFin.push([]);
+sFin.push(['영역','제한','✏️ 최종 기록 (교사 직접 작성)','Byte','상태']);
+const _finAreas=[{l:'자율활동',lm:1500,clr:'3182F6'},{l:'진로활동',lm:2100,clr:'7B61FF'},{l:'동아리활동',lm:1500,clr:'00C471'},{l:'행동특성및종합의견',lm:1500,clr:'FF6B6B'}];
+_finAreas.forEach(a=>{
+sFin.push([a.l,a.lm+'B','',0,'미작성']);
+});
+sFin.push([]);
+sFin.push(['💡 안내: AI 초안(기재예시 시트)을 참고하여 최종본을 이 시트에 작성하세요.','','','','']);
+sFin.push(['⚠️ 이 시트의 내용이 전체 엑셀 다운로드 시 기재일람에 반영됩니다.','','','','']);
+const wsFin=XLSX.utils.aoa_to_sheet(sFin);
+wsFin['!cols']=[{wch:18},{wch:7},{wch:65},{wch:6},{wch:8}];
+wsFin['!merges']=[{s:{r:0,c:0},e:{r:0,c:4}}];
+wsFin['!rows']=[{hpt:36},{hpt:6},{hpt:28},{hpt:220},{hpt:240},{hpt:220},{hpt:220},{hpt:6},{hpt:24},{hpt:24}];
+setRowSt(wsFin,0,5,XS.title);
+setRowSt(wsFin,2,5,XS.hdr);
+apS(wsFin,XLSX.utils.encode_cell({r:2,c:2}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'FF6B6B'}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+_finAreas.forEach((a,i)=>{
+const row=3+i;
+apS(wsFin,XLSX.utils.encode_cell({r:row,c:0}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:a.clr}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+apS(wsFin,XLSX.utils.encode_cell({r:row,c:1}),XS.bodyC);
+apS(wsFin,XLSX.utils.encode_cell({r:row,c:2}),XS.teacher);
+apS(wsFin,XLSX.utils.encode_cell({r:row,c:3}),{font:{sz:9},alignment:{horizontal:'center',vertical:'center'}});
+apS(wsFin,XLSX.utils.encode_cell({r:row,c:4}),XS.bodyC);
+});
+XLSX.utils.book_append_sheet(wb,wsFin,'최종기록');
+
 // ===== 시트3: 활동방향 =====
 const s3=[];
 s3.push(['3학년 활동 방향 - '+m.nm,'','','']);
@@ -1556,6 +2553,24 @@ s3.push([]);
 const coPoints=co.points||co.talk_points||[];
 const coParent=co.parent||co.parent_points||[];
 s3.push(['◆ 상담 가이드','','','']);
+// 대학 입시 분석
+const _ua=co.univ_analysis||{};
+if(_ua.univ_name){
+s3.push(['◆ 입시 분석: '+_ua.univ_name+' '+(_ua.major_name||''),'','','']);
+s3.push(['전형',_ua.admission_type||'','합격 내신대',_ua.avg_grade||'']);
+s3.push(['경쟁률',_ua.competition_rate||'','인재상',_ua.talent_profile||'']);
+s3.push(['핵심 역량',(_ua.key_competencies||[]).join(', '),'','']);
+s3.push(['적합도 분석',_ua.fit_analysis||'','','']);
+s3.push(['합격 전략',_ua.strategy||'','','']);
+if((_ua.risk_factors||[]).length)s3.push(['리스크',_ua.risk_factors.join(' / '),'','']);
+if((_ua.alternative_majors||[]).length)s3.push(['대안 학과',_ua.alternative_majors.join(', '),'','']);
+s3.push([]);
+}
+if(co.curriculum_summary){
+s3.push(['◆ 교과+생기부 총정리','','','']);
+s3.push([co.curriculum_summary,'','','']);
+s3.push([]);
+}
 s3.push(['상담 포인트','','','']);
 coPoints.forEach(s=>s3.push(['• '+s,'','','']));
 s3.push([]);
@@ -1577,25 +2592,25 @@ XLSX.utils.book_append_sheet(wb,ws3,'활동방향');
 
 // ===== 시트4: 역량분석 =====
 const s4=[];
-s4.push(['3대 역량 성장 분석 - '+m.nm,'','','','']);
+s4.push(['3대 역량 성장 분석 - '+m.nm,'','','','','']);
 s4.push([]);
-s4.push(['역량','1학년','2학년','성장 분석','점수']);
+s4.push(['역량','1학년','2학년','성장 분석','3학년 집중','점수']);
 const cp=ov.competencies||{};
 [{k:'academic',l:'📚 학업',clr:'4472C4'},{k:'career',l:'🎯 진로',clr:'5B9BD5'},{k:'community',l:'🤝 공동체',clr:'70AD47'}].forEach(x=>{
 const c=cp[x.k]||{};
-s4.push([x.l,c.grade1||'',c.grade2||'',c.growth||'',sc[x.k]||'']);
+s4.push([x.l,c.grade1||'',c.grade2||'',c.growth||'',c.grade3_focus||'',sc[x.k]||'']);
 });
 const ws4=XLSX.utils.aoa_to_sheet(s4);
-ws4['!cols']=[{wch:12},{wch:40},{wch:40},{wch:30},{wch:8}];
-ws4['!merges']=[{s:{r:0,c:0},e:{r:0,c:4}}];
+ws4['!cols']=[{wch:12},{wch:40},{wch:40},{wch:30},{wch:30},{wch:8}];
+ws4['!merges']=[{s:{r:0,c:0},e:{r:0,c:5}}];
 ws4['!rows']=[{hpt:36},{hpt:6},{hpt:28},{hpt:140},{hpt:140},{hpt:140}];
-setRowSt(ws4,0,5,XS.title);
-setRowSt(ws4,2,5,XS.hdr);
+setRowSt(ws4,0,6,XS.title);
+setRowSt(ws4,2,6,XS.hdr);
 [{k:'academic',clr:'4472C4'},{k:'career',clr:'5B9BD5'},{k:'community',clr:'70AD47'}].forEach((x,i)=>{
 const row=3+i;
 apS(ws4,XLSX.utils.encode_cell({r:row,c:0}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:x.clr}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
-[1,2,3].forEach(c=>apS(ws4,XLSX.utils.encode_cell({r:row,c}),XS.body));
-apS(ws4,XLSX.utils.encode_cell({r:row,c:4}),XS.score);
+[1,2,3,4].forEach(c=>apS(ws4,XLSX.utils.encode_cell({r:row,c}),XS.body));
+apS(ws4,XLSX.utils.encode_cell({r:row,c:5}),XS.score);
 });
 XLSX.utils.book_append_sheet(wb,ws4,'역량분석');
 
@@ -1613,7 +2628,8 @@ for(let r=3;r<tnData.length;r++)apS(wsTN,XLSX.utils.encode_cell({r,c:0}),XS.body
 XLSX.utils.book_append_sheet(wb,wsTN,'교사메모');
 }
 
-XLSX.writeFile(wb,`생기부_${m.sid}_${m.nm}.xlsx`)}
+const _ntl=ov.naesinType||'';
+XLSX.writeFile(wb,`세공사_${m.nm}${_ntl?'_'+_ntl:''}.xlsx`)}
 
 function dlAll(){if(!Object.keys(stu).length){alert('분석된 학생이 없습니다');return}
 const wb=XLSX.utils.book_new();
@@ -1621,37 +2637,37 @@ const allStu=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
 
 // ===== 시트1: 학급 대시보드 =====
 const sd=[];
-sd.push(['📊 학급 생기부 분석 대시보드','','','','','','','','','']);
+sd.push(['📊 세공사 — 학급 전략 분석 대시보드','','','','','','','','','']);
 sd.push([]);
-sd.push(['번호','이름','진로','종합평점','학업','진로','공동체','교과등급','키워드','강점 요약']);
+sd.push(['번호','이름','진로','내신','생기부평점','종합평점','티어','학업','진로','공동체','교과등급','키워드']);
 const _ts=classInfo.totalStudents||30;
 for(let i=1;i<=_ts;i++){
 const num=String(i).padStart(2,'0');
 const found=allStu.find(s=>s.sid&&s.sid.endsWith(num));
 if(found&&found.result&&!found.result._err){
 const fo=found.result.overview||{},fs=fo.scores||{},fsa=found.result.subject_analysis||{};
-sd.push([num,found.name||'',found.career||'',fo.gpa||'',fs.academic||'',fs.career||'',fs.community||'',fsa.overall_grade||'',(fo.keywords||[]).map(k=>'#'+k).join(' '),(fo.strengths||[])[0]||'']);
-}else{sd.push([num,'','','','','','','','',''])}
+sd.push([num,found.name||'',found.career||'',found.naesin||'',fo.gpa_gb||fo._gbGpa||'',fo.gpa||'',fo.tier||'',fs.academic||'',fs.career||'',fs.community||'',fsa.overall_grade||'',(fo.keywords||[]).map(k=>'#'+k).join(' ')]);
+}else{sd.push([num,'','','','','','','','','','',''])}
 }
 const wsd=XLSX.utils.aoa_to_sheet(sd);
-wsd['!cols']=[{wch:6},{wch:8},{wch:12},{wch:8},{wch:6},{wch:6},{wch:6},{wch:6},{wch:25},{wch:45}];
-wsd['!merges']=[{s:{r:0,c:0},e:{r:0,c:9}}];
-setRowSt(wsd,0,10,XS.title);
-setRowSt(wsd,2,10,XS.hdr);
+wsd['!cols']=[{wch:6},{wch:8},{wch:12},{wch:5},{wch:8},{wch:8},{wch:22},{wch:6},{wch:6},{wch:6},{wch:6},{wch:25}];
+wsd['!merges']=[{s:{r:0,c:0},e:{r:0,c:11}}];
+setRowSt(wsd,0,12,XS.title);
+setRowSt(wsd,2,12,XS.hdr);
 for(let i=3;i<3+_ts;i++){
 apS(wsd,XLSX.utils.encode_cell({r:i,c:0}),XS.bodyC);
 apS(wsd,XLSX.utils.encode_cell({r:i,c:1}),{font:{bold:true,sz:10,color:{rgb:'333D4B'}},alignment:{horizontal:'center',vertical:'center'}});
-apS(wsd,XLSX.utils.encode_cell({r:i,c:3}),{font:{bold:true,sz:12,color:{rgb:'1B5BD6'}},alignment:{horizontal:'center',vertical:'center'}});
-for(let c=4;c<=6;c++)apS(wsd,XLSX.utils.encode_cell({r:i,c}),XS.score);
-apS(wsd,XLSX.utils.encode_cell({r:i,c:7}),XS.bodyC);
-apS(wsd,XLSX.utils.encode_cell({r:i,c:8}),XS.chip);
-apS(wsd,XLSX.utils.encode_cell({r:i,c:9}),XS.body);
+apS(wsd,XLSX.utils.encode_cell({r:i,c:4}),{font:{bold:true,sz:11,color:{rgb:'22B8CF'}},alignment:{horizontal:'center',vertical:'center'}});
+apS(wsd,XLSX.utils.encode_cell({r:i,c:5}),{font:{bold:true,sz:12,color:{rgb:'1B5BD6'}},alignment:{horizontal:'center',vertical:'center'}});
+for(let c=7;c<=9;c++)apS(wsd,XLSX.utils.encode_cell({r:i,c}),XS.score);
+apS(wsd,XLSX.utils.encode_cell({r:i,c:10}),XS.bodyC);
+apS(wsd,XLSX.utils.encode_cell({r:i,c:11}),XS.chip);
 }
 XLSX.utils.book_append_sheet(wb,wsd,'학급대시보드');
 
 // ===== 시트2: 기재 일람표 =====
 const s1=[];
-s1.push(['생기부 전체 학생 기재 일람표','','','','','','','','','','']);
+s1.push(['세공사 — 전체 학생 기재 일람표','','','','','','','','','','']);
 s1.push(['번호','이름','진로','자율활동 (1500B)','B','진로활동 (2100B)','B','동아리활동 (1500B)','B','행발 (1500B)','B']);
 for(let i=1;i<=_ts;i++){
 const num=String(i).padStart(2,'0');
@@ -1681,7 +2697,7 @@ const areasDef=[{k:'jayul',l:'자율활동',lm:1500,clr:'4472C4'},{k:'jinro',l:'
 allStu.forEach(s=>{
 if(!s.result||s.result._err)return;
 const rr=s.result,jh=rr.jarhaeng||{};
-const d=[['생기부 개인 상담 기록 - '+s.sid+' '+s.name+(rr.overview?.gpa?' (평점:'+rr.overview.gpa+')':''),'','','','','','','',''],
+const d=[['세공사 — 개인 상담 기록 - '+s.sid+' '+s.name+(rr.overview?.gpa?' (평점:'+rr.overview.gpa+')':''),'','','','','','','',''],
 [],
 ['영역','등급','제한','안전형(A)','Byte','도전형(S)','Byte','✏️ 교사 기입란','Byte']];
 areasDef.forEach(a=>{
@@ -1722,7 +2738,9 @@ const sheetName=(s.sid+'_'+s.name).substring(0,31);
 XLSX.utils.book_append_sheet(wb,ws,sheetName);
 });
 
-XLSX.writeFile(wb,'생기부_전체.xlsx')}
+const _nt2=document.getElementById('sNaesinType')?.value||'all';
+const _ntl2={all:'전체교과',mss:'국영수사',msn:'국영수과',best:'최유리'}[_nt2]||'';
+XLSX.writeFile(wb,`세공사_${classInfo.grade||3}학년${classInfo.cls||''}반${_ntl2?'_'+_ntl2:''}.xlsx`)}
 
 function rStu(){const l=document.getElementById('stuL'),e=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
 const okCount=e.filter(s=>s.result&&!s.result._err).length;
@@ -1742,7 +2760,8 @@ function delStudent(sid){if(!confirm((stu[sid]?.name||sid)+' 학생 데이터를
 
 function next(){document.getElementById('resS').style.display='none';
 ['tc-ov','tc-jh','tc-se','tc-cl','tc-co'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=''});
-cur=null;['sName','sCareer','sClub','memo'].forEach(id=>document.getElementById(id).value='');
+cur=null;['sName','sCareer','sClub','memo','sNaesinAll','sNaesinMSS','sNaesinMSN','sUniv','sMajor'].forEach(id=>document.getElementById(id).value='');
+document.getElementById('sNaesinType').value='all';
 pdf='';const d=document.getElementById('dz');d.classList.remove('done');d.querySelector('.dz-i').textContent='📁';
 d.querySelector('.dz-m').textContent='PDF 파일 선택';d.querySelector('.dz-s').textContent='1, 2학년 생기부 포함';
 document.getElementById('fI').classList.add('hidden');document.getElementById('fi').value='';
