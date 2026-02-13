@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>세공사 v5.2 — 생기부 전략 분석</title>
+<title>세공사 v5.3 — 생기부 전략 분석</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
@@ -179,7 +179,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 <div class="hdr">
 <h1>📊 세공사 — 생기부 전략 분석</h1>
-<div class="hdr-badge"><span class="dot"></span>v5.2</div>
+<div class="hdr-badge"><span class="dot"></span>v5.3</div>
 </div>
 
 <!-- Flow Steps -->
@@ -220,6 +220,20 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 </div>
 <input type="file" id="fiMulti" class="file-input" accept=".pdf" multiple/>
 <div id="fI" class="hidden f-info"></div>
+<div id="univDropZone" style="margin-top:12px;padding:10px 14px;background:linear-gradient(135deg,#F3E5F5,#F0EDFF);border-radius:10px;border:1.5px dashed #E040FB55;cursor:pointer;transition:border-color .2s,background .2s" ondragover="event.preventDefault();this.style.borderColor='#E040FB';this.style.background='#F3E5F5'" ondragleave="this.style.borderColor='#E040FB55';this.style.background='linear-gradient(135deg,#F3E5F5,#F0EDFF)'" ondrop="event.preventDefault();this.style.borderColor='#E040FB55';this.style.background='linear-gradient(135deg,#F3E5F5,#F0EDFF)';handleUnivDrop(event)">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+<span style="font-size:14px">🎓</span>
+<span style="font-size:12px;font-weight:700;color:#E040FB">대학 전형 자료 (선택)</span>
+<span style="font-size:10px;color:var(--g3);font-weight:500">— 드래그 또는 클릭</span>
+</div>
+<div style="display:flex;gap:6px">
+<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();document.getElementById('fiUniv').click()" style="flex:1;border:1.5px solid #E040FB55;color:#E040FB;font-size:11px;padding:6px 10px">📄 전형 PDF 선택</button>
+<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();clearUnivPdf()" style="font-size:11px;padding:6px 8px;color:var(--g3)">✕ 제거</button>
+</div>
+<input type="file" id="fiUniv" class="file-input" accept=".pdf"/>
+<div id="univPdfInfo" style="margin-top:6px;font-size:11px;color:#E040FB;font-weight:600;display:none"></div>
+<div style="font-size:9px;color:var(--g4);margin-top:4px">미첨부 시 AI가 실시간 검색으로 전형 정보를 분석합니다</div>
+</div>
 </div>
 
 </div>
@@ -377,6 +391,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 <script>
 let pdf='',key='',pri=['학업','진로','공동체'],selKW=[],stu={},cur=null,classInfo={};
+let univPdf=''; // 대학 전형 PDF 텍스트
 let batchQueue=[],isBatchRunning=false;
 const KW=['자기주도학습','비판적사고','데이터분석','리더십','협업','문제해결','발표력','봉사활동','융합사고','창의성','의사소통','글로벌역량','디지털리터러시','연구역량','진로탐색','멘토링','프로젝트기획','독서활동'];
 
@@ -824,6 +839,32 @@ dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag')})
 dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
 dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');e.dataTransfer.files[0]&&hf(e.dataTransfer.files[0])});
 fi.addEventListener('change',e=>e.target.files[0]&&hf(e.target.files[0]));
+
+// 대학 전형 PDF 처리
+document.getElementById('fiUniv').addEventListener('change',async e=>{
+const f=e.target.files[0];if(!f)return;
+if(f.type!=='application/pdf'){alert('PDF만 가능합니다');return}
+await processUnivPdf(f);
+});
+async function processUnivPdf(f){
+const info=document.getElementById('univPdfInfo');
+info.style.display='block';info.textContent='📄 추출 중...';
+try{
+const b=await f.arrayBuffer();const p=await pdfjsLib.getDocument({data:b}).promise;let t='';
+for(let i=1;i<=p.numPages;i++){const pg=await p.getPage(i);const tc=await pg.getTextContent();t+=tc.items.map(x=>x.str).join(' ')+'\n'}
+univPdf=t;
+info.textContent=`✅ ${f.name} (${p.numPages}p · ${t.length.toLocaleString()}자)`;
+document.getElementById('univDropZone').style.borderColor='#E040FB';
+}catch(e){info.textContent='❌ '+e.message;univPdf=''}
+}
+function clearUnivPdf(){univPdf='';document.getElementById('fiUniv').value='';
+const info=document.getElementById('univPdfInfo');info.style.display='none';info.textContent=''}
+async function handleUnivDrop(e){
+const f=e.dataTransfer?.files?.[0];
+if(!f)return;
+if(f.type!=='application/pdf'){alert('PDF만 가능합니다');return}
+await processUnivPdf(f);
+}
 
 async function hf(f){
 if(f.type!=='application/pdf'){alert('PDF만 가능합니다');return}
@@ -1368,6 +1409,15 @@ return`당신은 대한민국 고등학교 학교생활기록부(생기부) 전�
 [학생 정보]
 - 이름: ${nm} | 진로: ${cr} | 동아리: ${cl}
 ${_univ||_major?`- 희망 대학/전공: ${_univ||'미정'} ${_major||'미정'}
+${univPdf?`  ✅ 대학 전형 자료가 첨부되었습니다. 아래 전형 데이터를 반드시 활용하여 정확한 입시 분석을 수행하세요.
+  ⚠️ 첨부 전형 자료의 내용(전형명, 모집인원, 전형방법, 인재상, 평가기준, 합격자 등급대 등)을 univ_analysis에 정확히 반영하세요.`
+:`  ⚠️ 전형 자료 미첨부. 당신이 알고 있는 최신 입시 정보를 최대한 활용하여 분석하세요.
+  아래 내용을 가능한 정확히 파악하여 univ_analysis에 반영:
+  - 이 대학의 학생부종합전형명, 전형방법, 모집인원
+  - 지원 자격(지역인재 등), 최근 경쟁률
+  - 합격자 평균 내신 등급대
+  - 이 대학이 중시하는 인재상, 핵심 평가 역량
+  - 이 학과의 교과 연계 특성`}
   ⚠️ 대학별 평가 특성 반영 필수:
   - 이 대학의 학생부종합전형에서 중시하는 인재상·핵심역량을 파악하여 전체 분석에 반영
   - 해당 학과의 교과 연계를 파악하여 세특/기재예시 방향 설정
@@ -1537,7 +1587,14 @@ ${pdf.length>45000?pdf.substring(0,45000)+'\n[⚠ 원문 일부 생략]':pdf}
 - rating_matrix 등급은 반드시 냉정하게. B등급이 기본이고 S+는 매우 드묾.
 
 [JSON 구조]
-{"student_info":{"name":"","grade":"","class_num":"","student_num":"","career_hope":"","club":"","naesin_all":0,"naesin_mss":0,"naesin_msn":0,"grade_trend":[{"semester":"1-1","all":0,"mss":0,"msn":0,"key_subjects":[{"name":"","grade":0}]},{"semester":"1-2","all":0,"mss":0,"msn":0,"key_subjects":[]},{"semester":"2-1","all":0,"mss":0,"msn":0,"key_subjects":[]},{"semester":"2-2","all":0,"mss":0,"msn":0,"key_subjects":[]}]},"rating_matrix":{"academic":{"jayul":"B","jinro":"B","subject":"B","club":"B"},"career":{"jayul":"B","jinro":"B","subject":"B","club":"B"},"community":{"jayul":"B","jinro":"B","subject":"B","club":"B"}},"overview":{"summary":"","change_analysis":"","grade3_direction":"","strengths":["","",""],"improvements":["",""],"gpa":0,"gpa_brief":"","tier":"","scores":{"academic":0,"career":0,"community":0},"score_brief":{"academic":"","career":"","community":""},"competencies":{"academic":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"career":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"community":{"grade1":"","grade2":"","growth":"","grade3_focus":""}},"keywords":[]},"subject_analysis":{"overall_grade":"","overall_score":0.0,"s_elements":"","a_elements":"","b_elements":"","c_elements":"","analysis":"","subject_cards":[{"name":"","grade":"","grade_num":"","summary":"","highlight":""}],"strong_subjects":[],"weak_subjects":[]},"jarhaeng":{"jayul":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"jinro":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"dongari":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"hangbal":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}}},"setuk":{"direction":"","subjects":[{"name":"","theme":"","reason":"","keywords":[]}]},"club":{"name":"","overview":"","goal":"","projects":[{"title":"","concept":"","steps":[],"record_points":""}],"quarterly":[{"quarter":"1분기(3~5월)","focus":"","activities":"","record":""},{"quarter":"2분기(6~8월)","focus":"","activities":"","record":""},{"quarter":"3분기(9~11월)","focus":"","activities":"","record":""}]},"counsel":{"points":[],"grade_analysis":[],"univ_analysis":{},"curriculum_summary":"","questions":[],"parent":[]}}`}
+{"student_info":{"name":"","grade":"","class_num":"","student_num":"","career_hope":"","club":"","naesin_all":0,"naesin_mss":0,"naesin_msn":0,"grade_trend":[{"semester":"1-1","all":0,"mss":0,"msn":0,"key_subjects":[{"name":"","grade":0}]},{"semester":"1-2","all":0,"mss":0,"msn":0,"key_subjects":[]},{"semester":"2-1","all":0,"mss":0,"msn":0,"key_subjects":[]},{"semester":"2-2","all":0,"mss":0,"msn":0,"key_subjects":[]}]},"rating_matrix":{"academic":{"jayul":"B","jinro":"B","subject":"B","club":"B"},"career":{"jayul":"B","jinro":"B","subject":"B","club":"B"},"community":{"jayul":"B","jinro":"B","subject":"B","club":"B"}},"overview":{"summary":"","change_analysis":"","grade3_direction":"","strengths":["","",""],"improvements":["",""],"gpa":0,"gpa_brief":"","tier":"","scores":{"academic":0,"career":0,"community":0},"score_brief":{"academic":"","career":"","community":""},"competencies":{"academic":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"career":{"grade1":"","grade2":"","growth":"","grade3_focus":""},"community":{"grade1":"","grade2":"","growth":"","grade3_focus":""}},"keywords":[]},"subject_analysis":{"overall_grade":"","overall_score":0.0,"s_elements":"","a_elements":"","b_elements":"","c_elements":"","analysis":"","subject_cards":[{"name":"","grade":"","grade_num":"","summary":"","highlight":""}],"strong_subjects":[],"weak_subjects":[]},"jarhaeng":{"jayul":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"jinro":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"dongari":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}},"hangbal":{"grade":"","evaluation":"","s_elements":"","a_elements":"","b_elements":"","c_elements":"","option1":{"title":"","text":"","focus":"","supplement":""},"option2":{"title":"","text":"","focus":"","supplement":""}}},"setuk":{"direction":"","subjects":[{"name":"","theme":"","reason":"","keywords":[]}]},"club":{"name":"","overview":"","goal":"","projects":[{"title":"","concept":"","steps":[],"record_points":""}],"quarterly":[{"quarter":"1분기(3~5월)","focus":"","activities":"","record":""},{"quarter":"2분기(6~8월)","focus":"","activities":"","record":""},{"quarter":"3분기(9~11월)","focus":"","activities":"","record":""}]},"counsel":{"points":[],"grade_analysis":[],"univ_analysis":{},"curriculum_summary":"","questions":[],"parent":[]}}
+
+[생기부 데이터]
+${pdf}
+${univPdf?`
+[대학 전형 자료 — 첨부됨]
+⚠️ 아래 전형 데이터를 정밀하게 읽고 univ_analysis에 반드시 반영하세요!
+${univPdf.substring(0,8000)}`:''}`}
 
 // === v5.0: 전역 등급 색상 함수 (S+ 지원) ===
 const GRADE_CLR=(g)=>({"S+":'var(--gold)',S:'var(--blue)',A:'var(--green)',B:'var(--orange)',C:'var(--coral)'}[g]||'var(--g3)');
@@ -1725,14 +1782,26 @@ return{_m:makeMeta(),_raw:tx,_err:true};
 function drawGradeTrend(gt){
 const cvs=document.getElementById('gradeTrendChart');
 if(!cvs||!gt||!gt.length)return;
+
+// HiDPI 대응
+const dpr=window.devicePixelRatio||1;
+const cssW=Math.min(cvs.parentElement?.offsetWidth||600,600);
+const cssH=180;
+cvs.width=cssW*dpr;cvs.height=cssH*dpr;
+cvs.style.width=cssW+'px';cvs.style.height=cssH+'px';
 const ctx=cvs.getContext('2d');
-const W=cvs.width,H=cvs.height;
-const pad={t:30,r:30,b:35,l:45};
+ctx.scale(dpr,dpr);
+
+const W=cssW,H=cssH;
+const pad={t:24,r:24,b:30,l:42};
 const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
 
 ctx.clearRect(0,0,W,H);
 
-// 데이터 준비
+// 배경
+ctx.fillStyle='#FAFBFC';
+ctx.beginPath();ctx.roundRect?ctx.roundRect(0,0,W,H,8):ctx.rect(0,0,W,H);ctx.fill();
+
 const labels=gt.map(s=>s.semester);
 const series=[
 {key:'all',label:'전체교과',color:'#3182F6',data:gt.map(s=>s.all||0)},
@@ -1742,7 +1811,6 @@ const series=[
 
 if(!series.length)return;
 
-// Y축: 등급 (1=최상위, 9=최하위) → 위가 1, 아래가 9
 const allVals=series.flatMap(s=>s.data).filter(v=>v>0);
 const minG=Math.max(1,Math.floor(Math.min(...allVals))-0.5);
 const maxG=Math.min(9,Math.ceil(Math.max(...allVals))+0.5);
@@ -1756,35 +1824,41 @@ ctx.strokeStyle='#E5E8EB';ctx.lineWidth=0.5;
 for(let g=Math.ceil(minG);g<=Math.floor(maxG);g++){
 const y=toY(g);
 ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
-ctx.fillStyle='#8B95A1';ctx.font='11px -apple-system,sans-serif';ctx.textAlign='right';
-ctx.fillText(g+'등급',pad.l-6,y+4);
+ctx.fillStyle='#8B95A1';ctx.font='500 10px "Noto Sans KR",-apple-system,sans-serif';ctx.textAlign='right';
+ctx.fillText(g+'등급',pad.l-6,y+3);
 }
 
-// X축 라벨
-ctx.fillStyle='#4E5968';ctx.font='bold 11px -apple-system,sans-serif';ctx.textAlign='center';
-labels.forEach((l,i)=>{ctx.fillText(l,toX(i),H-pad.b+20)});
+// X축
+ctx.fillStyle='#4E5968';ctx.font='600 10px "Noto Sans KR",-apple-system,sans-serif';ctx.textAlign='center';
+labels.forEach((l,i)=>{ctx.fillText(l,toX(i),H-pad.b+16)});
 
-// 선 그리기
+// 선 + 점
 series.forEach(s=>{
 const pts=s.data.map((v,i)=>({x:toX(i),y:toY(v),v})).filter(p=>p.v>0);
 if(pts.length<2)return;
 
+// 영역 채우기 (반투명)
+ctx.fillStyle=s.color+'12';
+ctx.beginPath();ctx.moveTo(pts[0].x,H-pad.b);
+pts.forEach(p=>ctx.lineTo(p.x,p.y));
+ctx.lineTo(pts[pts.length-1].x,H-pad.b);ctx.closePath();ctx.fill();
+
 // 선
-ctx.strokeStyle=s.color;ctx.lineWidth=2.5;ctx.lineJoin='round';
+ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.lineJoin='round';ctx.lineCap='round';
 ctx.beginPath();pts.forEach((p,i)=>{i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y)});ctx.stroke();
 
 // 점 + 값
 pts.forEach(p=>{
-ctx.fillStyle='white';ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fill();
-ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.stroke();
-ctx.fillStyle=s.color;ctx.font='bold 10px -apple-system,sans-serif';ctx.textAlign='center';
-ctx.fillText(p.v.toFixed(1),p.x,p.y-10);
+ctx.fillStyle='white';ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill();
+ctx.strokeStyle=s.color;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.stroke();
+ctx.fillStyle=s.color;ctx.font='700 9px "Noto Sans KR",-apple-system,sans-serif';ctx.textAlign='center';
+ctx.fillText(p.v.toFixed(1),p.x,p.y-8);
 });
 });
 
 // 범례
 const leg=document.getElementById('gradeTrendLegend');
-if(leg)leg.innerHTML=series.map(s=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:3px;background:${s.color};border-radius:2px"></span><span style="color:${s.color};font-weight:600">${s.label}</span></span>`).join('');
+if(leg)leg.innerHTML=series.map(s=>`<span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px"><span style="width:16px;height:2px;background:${s.color};border-radius:1px"></span><span style="font-size:11px;color:${s.color};font-weight:600">${s.label}</span></span>`).join('');
 
 // 주요 과목 상세
 const det=document.getElementById('gradeTrendDetail');
@@ -1865,8 +1939,8 @@ return`<div style="margin-bottom:8px">
 </div>
 </div>
 </div>
-<div style="margin-bottom:16px">
-<div onclick="this.querySelector('.guide-body').style.display=this.querySelector('.guide-body').style.display==='none'?'block':'none';this.querySelector('.guide-arrow').textContent=this.querySelector('.guide-body').style.display==='none'?'▶':'▼'" style="cursor:pointer;padding:12px 16px;background:white;border-radius:12px;border:1.5px solid #E5E8EB;display:flex;align-items:center;gap:8px">
+<div style="margin-bottom:16px" onclick="const b=this.querySelector('.guide-body'),a=this.querySelector('.guide-arrow');if(b.style.display==='none'){b.style.display='block';a.textContent='▼'}else{b.style.display='none';a.textContent='▶'}">
+<div style="cursor:pointer;padding:12px 16px;background:white;border-radius:12px;border:1.5px solid #E5E8EB;display:flex;align-items:center;gap:8px">
 <span style="font-size:14px">📖</span>
 <span style="font-size:13px;font-weight:700;color:var(--g1)">평가 기준 안내</span>
 <span class="guide-arrow" style="font-size:10px;color:var(--g4);margin-left:auto">▶</span>
@@ -1893,14 +1967,15 @@ ${[{g:'S+',s:'5.0',c:'var(--gold)',bg:'var(--gold-bg)'},{g:'S',s:'4.5',c:'var(--
 <p style="font-size:10px;color:var(--g2);line-height:1.6"><strong>생기부 평점</strong> = Rating Matrix 가중합산 (활동 기록만)<br><strong>종합 평점</strong> = 생기부(60%) + 내신(40%)<br>내신이 좋으면 종합 평점이 올라가고, 나쁘면 내려감.</p>
 </div>
 <div style="padding:12px;background:#FFF8F0;border-radius:10px">
-<div style="font-size:11px;font-weight:800;color:#FF9F43;margin-bottom:8px">🏆 티어 기준</div>
-<div style="font-size:10px;color:var(--g2);line-height:1.7">
-4.5+ 최상위권 (서울 상위 10개교)<br>
-4.0+ 인서울 상위 (서울 중상위권)<br>
-3.5+ 지거국 상위 (거점국립대)<br>
-3.0+ 중위권 (지방 국립/사립)<br>
-3.0↓ 하위권
-</div>
+<div style="font-size:11px;font-weight:800;color:#FF9F43;margin-bottom:8px">🏆 점수별 지원 가능 대학</div>
+<table style="width:100%;font-size:9.5px;border-collapse:collapse;line-height:1.5">
+<tr style="background:#FF9F4315"><td style="padding:3px 6px;font-weight:800;color:#3182F6;white-space:nowrap">4.5+</td><td style="padding:3px 6px;font-weight:700">S등급</td><td style="padding:3px 6px">연세·고려·성균관·서강·한양 등 서울 상위 10개교</td></tr>
+<tr><td style="padding:3px 6px;font-weight:800;color:#22B8CF">4.0+</td><td style="padding:3px 6px;font-weight:700">A등급</td><td style="padding:3px 6px">중앙·경희·한국외대·서울시립·건국 등 인서울 중상위</td></tr>
+<tr style="background:#FF9F4310"><td style="padding:3px 6px;font-weight:800;color:#FF9F43">3.5+</td><td style="padding:3px 6px;font-weight:700">B+</td><td style="padding:3px 6px">경북대·부산대·전남대 등 거점국립대 / 인서울 중위권</td></tr>
+<tr><td style="padding:3px 6px;font-weight:800;color:#FF6B6B">3.0+</td><td style="padding:3px 6px;font-weight:700">B</td><td style="padding:3px 6px">충남대·전북대·가천대·단국대 등 지방국립/수도권 사립</td></tr>
+<tr style="background:#FF9F4310"><td style="padding:3px 6px;font-weight:800;color:var(--g3)">3.0↓</td><td style="padding:3px 6px;font-weight:700">C</td><td style="padding:3px 6px">지방 사립대 / 전문대</td></tr>
+</table>
+<p style="font-size:8.5px;color:var(--g4);margin-top:4px">※ 내신·전형·학과에 따라 다르므로 참고용</p>
 </div>
 </div>
 
@@ -1923,10 +1998,17 @@ return`<td style="background:${gradeBg(g)};color:${gradeClr(g)};font-weight:900;
 }).join('')}<td style="font-weight:900;font-size:16px;color:${scoreClr};background:${scoreClr}11;padding:14px 8px">${capScore.toFixed(1)}</td></tr>`}).join('')}
 </tbody></table>
 <div style="text-align:right;margin-top:8px;font-size:12px"><strong>생기부 평점: </strong><span style="font-size:16px;font-weight:900;color:${gbGpaClr}">${gbGpa>0?gbGpa.toFixed(1):'-'}</span><span style="font-size:11px;color:var(--g3)"> / 5.0</span></div>
+<div style="display:flex;gap:0;margin-top:10px;border-radius:8px;overflow:hidden;font-size:9px;text-align:center;border:1px solid var(--g6)">
+<div style="flex:1;padding:6px 4px;background:#EBF4FF"><div style="font-weight:900;color:#3182F6">4.5+</div><div style="color:#3182F6;font-weight:600;margin-top:1px">S</div><div style="color:var(--g2);margin-top:2px">서울 상위10</div></div>
+<div style="flex:1;padding:6px 4px;background:#E8FAF0"><div style="font-weight:900;color:#00C471">4.0+</div><div style="color:#00C471;font-weight:600;margin-top:1px">A</div><div style="color:var(--g2);margin-top:2px">인서울 중상위</div></div>
+<div style="flex:1;padding:6px 4px;background:#FFF5EB"><div style="font-weight:900;color:#FF9F43">3.5+</div><div style="color:#FF9F43;font-weight:600;margin-top:1px">B+</div><div style="color:var(--g2);margin-top:2px">거점국립대</div></div>
+<div style="flex:1;padding:6px 4px;background:#FFF0F0"><div style="font-weight:900;color:#FF6B6B">3.0+</div><div style="color:#FF6B6B;font-weight:600;margin-top:1px">B</div><div style="color:var(--g2);margin-top:2px">지방국립·수도권</div></div>
+<div style="flex:1;padding:6px 4px;background:var(--g7)"><div style="font-weight:900;color:var(--g3)">3.0↓</div><div style="color:var(--g3);font-weight:600;margin-top:1px">C</div><div style="color:var(--g2);margin-top:2px">지방사립</div></div>
+</div>
 </div>`:''}
 <div class="rb" id="gradeTrendBox" style="display:none">
 <h4>📈 내신 등급 추이</h4>
-<canvas id="gradeTrendChart" width="680" height="260" style="width:100%;max-height:260px"></canvas>
+<canvas id="gradeTrendChart" style="display:block;max-width:600px;margin:0 auto"></canvas>
 <div id="gradeTrendLegend" style="display:flex;gap:16px;justify-content:center;margin-top:8px;font-size:11px"></div>
 <div id="gradeTrendDetail" style="margin-top:10px"></div>
 </div>
@@ -2327,40 +2409,119 @@ ${sa.analysis?`<h2>📘 교과 세특 분석</h2>
 }
 
 function dlPDF(){if(!cur)return;
-const w=window.open('','_blank');
 const m=cur._m||{};
-w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${m.nm||''} 생기부 전략 분석 보고서</title>
-${getPDFStyles()}</head><body>
-<div class="cover"><h1>📊 생기부 전략 분석 보고서</h1><div class="sub">AI 기반 학생부 종합 분석 리포트</div></div>
-${buildPDFContent(cur)}
-</body></html>`);
-w.document.close();setTimeout(()=>w.print(),800)}
+// 모든 탭 콘텐츠를 순서대로 수집
+const tabs=['tc-ov','tc-jh','tc-se','tc-cl','tc-co'];
+const tabNames=['📊 종합','📝 자율·진로','📘 교과세특','🏫 동아리','💬 상담'];
+let content='';
+tabs.forEach((id,i)=>{
+const el=document.getElementById(id);
+if(!el||!el.innerHTML.trim())return;
+content+=`<div class="pdf-section"><h2 class="pdf-tab-title">${tabNames[i]}</h2>${el.innerHTML}</div>`;
+});
 
-// === 엑셀 스타일 헬퍼 ===
+// 현재 페이지의 CSS를 그대로 가져옴
+const styles=Array.from(document.styleSheets).map(ss=>{
+try{return Array.from(ss.cssRules).map(r=>r.cssText).join('\n')}catch(e){return''}
+}).join('\n');
+
+const w=window.open('','_blank');
+w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>${m.nm||''} 세공사 — 생기부 전략 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+${styles}
+/* PDF 전용 오버라이드 */
+*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+@page{size:A4;margin:12mm 10mm 12mm 10mm}
+body{background:#fff!important;padding:0!important;max-width:190mm;margin:0 auto;font-family:'Noto Sans KR',-apple-system,sans-serif;font-size:11px}
+:root{--bg:#fff;--white:#FFF;--black:#191F28;--g1:#333D4B;--g2:#4E5968;--g3:#8B95A1;--g4:#B0B8C1;--g5:#D1D6DB;--g6:#E5E8EB;--g7:#F2F4F6;
+--blue:#3182F6;--blue-bg:#EBF4FF;--coral:#FF6B6B;--coral-bg:#FFF0F0;--green:#00C471;--green-bg:#E8FAF0;--purple:#7B61FF;--purple-bg:#F0EDFF;--orange:#FF9F43;--orange-bg:#FFF5EB;--teal:#22B8CF;--teal-bg:#E3FAFC;--gold:#FFB800;--gold-bg:#FFF8E1;
+--sh:none;--sh2:none;--r:12px;--rm:10px;--rs:8px;--rx:6px}
+.pdf-cover{text-align:center;padding:24px 0 20px;border-bottom:2px solid var(--blue);margin-bottom:16px}
+.pdf-cover h1{font-size:22px;font-weight:900;color:var(--blue)}
+.pdf-cover .sub{font-size:12px;color:var(--g3);margin-top:4px}
+.pdf-cover .info{font-size:13px;font-weight:700;color:var(--g1);margin-top:8px}
+.pdf-section{margin-bottom:8px}
+.pdf-tab-title{font-size:15px;font-weight:900;color:var(--blue);padding:8px 0 6px;margin:16px 0 8px;border-bottom:2px solid var(--blue)}
+.pdf-footer{text-align:center;font-size:9px;color:var(--g4);margin-top:20px;padding-top:10px;border-top:1px solid var(--g6)}
+.rb{page-break-inside:avoid;margin-bottom:8px;padding:12px 14px}
+.rb h4{font-size:13px}
+.rb p{font-size:11px}
+.badge{font-size:10px!important;padding:2px 8px!important}
+.tbl{font-size:10px}
+.tbl th,.tbl td{padding:6px 8px}
+.guide-body{display:none!important}
+canvas,img{max-width:100%!important}
+@media print{
+.pdf-section{page-break-inside:avoid}
+.pdf-tab-title{page-break-after:avoid}
+.rb{page-break-inside:avoid}
+table{page-break-inside:avoid}
+}
+</style></head><body>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 12px;border-bottom:2px solid #3182F6;margin-bottom:12px">
+<div>
+<div style="font-size:18px;font-weight:900;color:#3182F6">📊 세공사 — 생기부 전략 분석</div>
+<div style="font-size:10px;color:#8B95A1;margin-top:2px">AI 기반 학생부 종합 분석 리포트</div>
+</div>
+<div style="text-align:right">
+<div style="font-size:13px;font-weight:800;color:#191F28">${m.sid||''} ${m.nm||''}</div>
+<div style="font-size:10px;color:#4E5968;margin-top:2px">${m.cr?'희망진로: '+m.cr:''}${m.univ?' · '+m.univ:''}${m.major?' '+m.major:''}</div>
+</div>
+</div>
+${content}
+<div class="pdf-footer">세공사 v5.3 · AI Powered · ${new Date().toLocaleDateString('ko-KR')}</div>
+</body></html>`);
+w.document.close();
+
+// 내신 추이 그래프 재그리기 (Canvas는 innerHTML로 복사 안 됨)
+setTimeout(()=>{
+const gt=cur.student_info?.grade_trend||[];
+if(gt.length>0&&gt.some(s=>s.all>0)){
+const cvs=w.document.getElementById('gradeTrendChart');
+if(cvs){
+// 원본 캔버스의 이미지를 img로 교체
+const origCvs=document.getElementById('gradeTrendChart');
+if(origCvs){
+const img=w.document.createElement('img');
+img.src=origCvs.toDataURL('image/png');
+img.style.cssText='width:100%;max-height:260px';
+cvs.replaceWith(img);
+}
+}
+}
+setTimeout(()=>w.print(),500);
+},300);
+}
+
+// === 엑셀 스타일 헬퍼 (v5.3: 교과세특 전문가 스타일 참고) ===
 const XS={
-title:{font:{bold:true,sz:16,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'1B5BD6'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'medium',color:{rgb:'0F3A8C'}}}},
-hdr:{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'4472C4'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'2F5597'}}}},
-hdrSub:{font:{bold:true,sz:10,color:{rgb:'1F3864'}},fill:{fgColor:{rgb:'D6E4F0'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'8DB4E2'}}}},
-label:{font:{bold:true,sz:11,color:{rgb:'1F3864'}},fill:{fgColor:{rgb:'E9EFF7'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{right:{style:'thin',color:{rgb:'B4C6E7'}},bottom:{style:'thin',color:{rgb:'D6E4F0'}}}},
-body:{font:{sz:10,color:{rgb:'333D4B'}},alignment:{horizontal:'left',vertical:'top',wrapText:true},border:{bottom:{style:'hair',color:{rgb:'E5E8EB'}},right:{style:'hair',color:{rgb:'E5E8EB'}}}},
-bodyC:{font:{sz:10,color:{rgb:'333D4B'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'hair',color:{rgb:'E5E8EB'}}}},
-teacher:{font:{sz:10,color:{rgb:'1B5BD6'}},fill:{fgColor:{rgb:'F5F8FF'}},alignment:{horizontal:'left',vertical:'top',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'B4C6E7'}},right:{style:'thin',color:{rgb:'B4C6E7'}},left:{style:'thin',color:{rgb:'B4C6E7'}}}},
-byte:{font:{sz:9,color:{rgb:'8B95A1'}},alignment:{horizontal:'center',vertical:'center'}},
-byteOver:{font:{sz:9,bold:true,color:{rgb:'FF0000'}},alignment:{horizontal:'center',vertical:'center'}},
-info:{font:{bold:true,sz:11,color:{rgb:'1F3864'}},fill:{fgColor:{rgb:'F2F7FC'}},alignment:{vertical:'center',wrapText:true}},
-infoVal:{font:{bold:true,sz:11,color:{rgb:'FF0000'}},fill:{fgColor:{rgb:'F2F7FC'}},alignment:{vertical:'center'}},
-section:{font:{bold:true,sz:12,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'2F5597'}},alignment:{horizontal:'left',vertical:'center'},border:{bottom:{style:'medium',color:{rgb:'1F3864'}}}},
-score:{font:{bold:true,sz:14,color:{rgb:'1B5BD6'}},alignment:{horizontal:'center',vertical:'center'}},
-chip:{font:{bold:true,sz:10,color:{rgb:'3182F6'}},fill:{fgColor:{rgb:'EBF4FF'}},alignment:{horizontal:'left',vertical:'center',wrapText:true}},
-note:{font:{sz:9,italic:true,color:{rgb:'8B95A1'}},fill:{fgColor:{rgb:'FAFAFA'}},alignment:{horizontal:'left',vertical:'center',wrapText:true}},
+title:{font:{name:'맑은 고딕',bold:true,sz:16,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'002060'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'medium',color:{rgb:'002060'}}}},
+hdr:{font:{name:'맑은 고딕',bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'002060'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'002060'}}}},
+hdrSub:{font:{name:'맑은 고딕',bold:true,sz:10,color:{rgb:'002060'}},fill:{fgColor:{rgb:'D6E4F0'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'8DB4E2'}}}},
+label:{font:{name:'맑은 고딕',bold:true,sz:11,color:{rgb:'002060'}},fill:{fgColor:{rgb:'D6E4F0'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{right:{style:'thin',color:{rgb:'8DB4E2'}},bottom:{style:'thin',color:{rgb:'D6E4F0'}}}},
+body:{font:{name:'맑은 고딕',sz:10,color:{rgb:'000000'}},alignment:{horizontal:'left',vertical:'top',wrapText:true},border:{bottom:{style:'hair',color:{rgb:'D6E4F0'}},right:{style:'hair',color:{rgb:'D6E4F0'}}}},
+bodyC:{font:{name:'맑은 고딕',sz:10,color:{rgb:'000000'}},alignment:{horizontal:'center',vertical:'center',wrapText:true},border:{bottom:{style:'hair',color:{rgb:'D6E4F0'}}}},
+teacher:{font:{name:'맑은 고딕',sz:10,color:{rgb:'0070C0'}},fill:{fgColor:{rgb:'FFFFFF'}},alignment:{horizontal:'left',vertical:'top',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'8DB4E2'}},right:{style:'thin',color:{rgb:'8DB4E2'}},left:{style:'thin',color:{rgb:'8DB4E2'}},top:{style:'thin',color:{rgb:'8DB4E2'}}}},
+byte:{font:{name:'맑은 고딕',sz:9,color:{rgb:'000000'}},alignment:{horizontal:'center',vertical:'center'}},
+byteOver:{font:{name:'맑은 고딕',sz:9,bold:true,color:{rgb:'FF0000'}},alignment:{horizontal:'center',vertical:'center'}},
+info:{font:{name:'맑은 고딕',bold:true,sz:11,color:{rgb:'002060'}},fill:{fgColor:{rgb:'FFFFFFE1'}},alignment:{vertical:'center',wrapText:true}},
+infoVal:{font:{name:'맑은 고딕',bold:true,sz:11,color:{rgb:'FF0000'}},fill:{fgColor:{rgb:'FFFFFFE1'}},alignment:{vertical:'center'}},
+section:{font:{name:'맑은 고딕',bold:true,sz:12,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'002060'}},alignment:{horizontal:'left',vertical:'center'},border:{bottom:{style:'medium',color:{rgb:'002060'}}}},
+score:{font:{name:'맑은 고딕',bold:true,sz:14,color:{rgb:'0070C0'}},alignment:{horizontal:'center',vertical:'center'}},
+chip:{font:{name:'맑은 고딕',bold:true,sz:10,color:{rgb:'0070C0'}},fill:{fgColor:{rgb:'D6E4F0'}},alignment:{horizontal:'left',vertical:'center',wrapText:true}},
+note:{font:{name:'맑은 고딕',sz:9,italic:true,color:{rgb:'808080'}},fill:{fgColor:{rgb:'F2F2F2'}},alignment:{horizontal:'left',vertical:'center',wrapText:true}},
+guide:{font:{name:'맑은 고딕',sz:9,color:{rgb:'FF0000'}},alignment:{horizontal:'left',vertical:'center',wrapText:true}},
 };
 function apS(ws,ref,st){if(!ws[ref])ws[ref]={v:'',t:'s'};ws[ref].s=st;}
+function apSKeep(ws,ref,st){if(ws[ref]){ws[ref].s=st}else{ws[ref]={v:'',t:'s',s:st}}}
 function setSt(ws,row,cols,style){cols.forEach(c=>{const ref=XLSX.utils.encode_cell({r:row,c});apS(ws,ref,style)})}
 function setRowSt(ws,row,numCols,style){for(let c=0;c<numCols;c++){const ref=XLSX.utils.encode_cell({r:row,c});apS(ws,ref,style)}}
 
 function dlXL(){if(!cur||cur._err)return;const r=cur,m=r._m,jh=r.jarhaeng||{},ov=r.overview||{},sc=ov.scores||{},sb=ov.score_brief||{},se=r.setuk||{},cl=r.club||{},co=r.counsel||{},sa=r.subject_analysis||{};
 const wb=XLSX.utils.book_new();
-const areas=[{k:'jayul',l:'자율활동',lm:1500,clr:'4472C4'},{k:'jinro',l:'진로활동',lm:2100,clr:'5B9BD5'},{k:'dongari',l:'동아리활동',lm:1500,clr:'70AD47'},{k:'hangbal',l:'행동특성및종합의견',lm:1500,clr:'ED7D31'}];
+const areas=[{k:'jayul',l:'자율활동',lm:1500,clr:'002060'},{k:'jinro',l:'진로활동',lm:2100,clr:'0070C0'},{k:'dongari',l:'동아리활동',lm:1500,clr:'00B050'},{k:'hangbal',l:'행동특성및종합의견',lm:1500,clr:'FF0000'}];
 
 // ===== 시트1: 요약카드 =====
 const s0=[];
@@ -2422,7 +2583,7 @@ s0.push(['C등급 요소',sa.c_elements||'']);
 s0.push(['세특 우수 과목',(sa.strong_subjects||[]).join(', ')]);
 s0.push(['보완 필요 과목',(sa.weak_subjects||[]).join(', ')]);
 s0.push([]);
-// v5.2: 영역별 등급 분석
+// v5.3: 영역별 등급 분석
 s0.push(['◆ 영역별 등급 분석','','','']);
 areas.forEach(a=>{
 const d=jh[a.k]||{};
@@ -2434,8 +2595,8 @@ if(d.c_elements)s0.push(['','C등급 요소',d.c_elements]);
 });
 
 const ws0=XLSX.utils.aoa_to_sheet(s0);
-ws0['!cols']=[{wch:16},{wch:10},{wch:50},{wch:30}];
-ws0['!merges']=[{s:{r:0,c:0},e:{r:0,c:3}}];
+ws0['!cols']=[{wch:20},{wch:12},{wch:55},{wch:35},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12}];
+ws0['!merges']=[{s:{r:0,c:0},e:{r:0,c:10}}];
 // 스타일 적용
 setRowSt(ws0,0,4,XS.title);
 setRowSt(ws0,2,11,XS.info);
@@ -2462,16 +2623,25 @@ s1.push(['영역','등급','제한','안전형(A) 기재예시','Byte','도전�
 areas.forEach(a=>{
 const d=jh[a.k]||{},o1=d.option1||{},o2=d.option2||{};
 const t1=o1.text||'',t2=o2.text||'';
-s1.push([a.l,d.grade||'',a.lm+'B',t1,bl(t1),t2,bl(t2),'',0]);
+s1.push([a.l,d.grade||'',a.lm+'B',t1,bl(t1),t2,bl(t2),'',null]); // Byte열은 null → 수식으로 대체
 });
 s1.push([]);
-s1.push(['💡 안내: 안전형(A)은 현실적 기재, 도전형(S)은 심화 탐구 기재입니다. 오른쪽 교사 기입란에 직접 작성하세요.','','','','','','','','']);
-s1.push(['⚠️ 3학년 활동이므로 기재예시는 조건부 제안(~할 경우, ~한다면) 형식입니다. 활동 완료 후 완료형으로 수정하세요.','','','','','','','','']);
+s1.push(['💡 안내: 안전형(A)은 현실적 기재, 도전형(S)은 심화 탐구 기재입니다. 교사 기입란에 직접 작성하면 Byte가 자동 계산됩니다.','','','','','','','','']);
+s1.push(['⚠️ 교사 기입란에 작성한 내용은 최종기록 시트에 자동 연동됩니다.','','','','','','','','']);
 
 const ws1=XLSX.utils.aoa_to_sheet(s1);
-ws1['!cols']=[{wch:16},{wch:5},{wch:7},{wch:52},{wch:6},{wch:52},{wch:6},{wch:52},{wch:6}];
+ws1['!cols']=[{wch:14},{wch:5},{wch:7},{wch:55},{wch:7},{wch:55},{wch:7},{wch:55},{wch:7}];
 ws1['!merges']=[{s:{r:0,c:0},e:{r:0,c:8}},{s:{r:10,c:0},e:{r:10,c:8}},{s:{r:11,c:0},e:{r:11,c:8}}];
-ws1['!rows']=[{hpt:36},{hpt:6},{hpt:26},{hpt:6},{hpt:28},{hpt:200},{hpt:220},{hpt:200},{hpt:200},{hpt:6},{hpt:24},{hpt:24}];
+ws1['!rows']=[{hpt:30},{hpt:6},{hpt:26},{hpt:6},{hpt:30},{hpt:120},{hpt:140},{hpt:120},{hpt:120},{hpt:6},{hpt:20},{hpt:20}];
+
+// 교사 기입란 Byte 자동 계산 (나이스 바이트 공식) + 스타일
+for(let i=0;i<4;i++){
+const row=5+i;
+const byteRef=XLSX.utils.encode_cell({r:row,c:8});
+const hRef='H'+(row+1);
+// 나이스 공식: (LENB-LEN)*3 + (LEN*2-LENB) = 한글3바이트+영문1바이트
+ws1[byteRef]={t:'n',f:`(LENB(${hRef})-LEN(${hRef}))*3+(LEN(${hRef})*2-LENB(${hRef}))`,v:0,s:XS.byte};
+}
 
 // 스타일
 setRowSt(ws1,0,9,XS.title);
@@ -2482,7 +2652,7 @@ apS(ws1,XLSX.utils.encode_cell({r:2,c:5}),XS.infoVal);
 apS(ws1,XLSX.utils.encode_cell({r:2,c:8}),XS.infoVal);
 setRowSt(ws1,4,9,XS.hdr);
 // 교사 기입란 헤더는 특별 색
-apS(ws1,XLSX.utils.encode_cell({r:4,c:7}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'FF6B6B'}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+apS(ws1,XLSX.utils.encode_cell({r:4,c:7}),{font:{name:'맑은 고딕',bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'FF0000'}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
 
 // 데이터행 스타일
 areas.forEach((a,i)=>{
@@ -2497,38 +2667,43 @@ apS(ws1,XLSX.utils.encode_cell({r:row,c:5}),XS.body);
 const b2=bl(jh[a.k]?.option2?.text||'');
 apS(ws1,XLSX.utils.encode_cell({r:row,c:6}),b2>a.lm?XS.byteOver:XS.byte);
 apS(ws1,XLSX.utils.encode_cell({r:row,c:7}),XS.teacher);
-apS(ws1,XLSX.utils.encode_cell({r:row,c:8}),XS.byte);
+apSKeep(ws1,XLSX.utils.encode_cell({r:row,c:8}),XS.byte); // 수식 보존!
 });
-setRowSt(ws1,10,9,XS.note);
-setRowSt(ws1,11,9,XS.note);
+setRowSt(ws1,10,9,XS.guide);
+setRowSt(ws1,11,9,XS.guide);
 XLSX.utils.book_append_sheet(wb,ws1,'기재예시');
 
-// ===== 시트2.5(v5.0): 최종 기록 (교사 직접 입력) =====
+// ===== 시트2.5(v5.3): 최종 기록 (기재예시 교사 기입란 자동 연동) =====
 const sFin=[];
 sFin.push(['생기부 최종 기록 — '+m.nm,'','','','']);
 sFin.push([]);
-sFin.push(['영역','제한','✏️ 최종 기록 (교사 직접 작성)','Byte','상태']);
-const _finAreas=[{l:'자율활동',lm:1500,clr:'3182F6'},{l:'진로활동',lm:2100,clr:'7B61FF'},{l:'동아리활동',lm:1500,clr:'00C471'},{l:'행동특성및종합의견',lm:1500,clr:'FF6B6B'}];
+sFin.push(['영역','제한','✏️ 최종 기록 (기재예시에서 자동 연동 → 수정 가능)','Byte','상태']);
+const _finAreas=[{l:'자율활동',lm:1500,clr:'002060',srcRow:6},{l:'진로활동',lm:2100,clr:'0070C0',srcRow:7},{l:'동아리활동',lm:1500,clr:'00B050',srcRow:8},{l:'행동특성및종합의견',lm:1500,clr:'FF0000',srcRow:9}];
 _finAreas.forEach(a=>{
-sFin.push([a.l,a.lm+'B','',0,'미작성']);
+sFin.push([a.l,a.lm+'B','',null,null]); // Byte/상태 = 수식으로 대체
 });
 sFin.push([]);
-sFin.push(['💡 안내: AI 초안(기재예시 시트)을 참고하여 최종본을 이 시트에 작성하세요.','','','','']);
-sFin.push(['⚠️ 이 시트의 내용이 전체 엑셀 다운로드 시 기재일람에 반영됩니다.','','','','']);
+sFin.push(['💡 기재예시 시트의 교사 기입란 내용이 자동으로 불러와집니다. 이 시트에서 직접 수정도 가능합니다.','','','','']);
+sFin.push(['⚠️ 전체 엑셀 다운로드 시 기재일람에는 이 시트의 내용이 반영됩니다.','','','','']);
 const wsFin=XLSX.utils.aoa_to_sheet(sFin);
-wsFin['!cols']=[{wch:18},{wch:7},{wch:65},{wch:6},{wch:8}];
+wsFin['!cols']=[{wch:16},{wch:7},{wch:70},{wch:7},{wch:10}];
 wsFin['!merges']=[{s:{r:0,c:0},e:{r:0,c:4}}];
-wsFin['!rows']=[{hpt:36},{hpt:6},{hpt:28},{hpt:220},{hpt:240},{hpt:220},{hpt:220},{hpt:6},{hpt:24},{hpt:24}];
+wsFin['!rows']=[{hpt:30},{hpt:6},{hpt:30},{hpt:140},{hpt:160},{hpt:140},{hpt:140},{hpt:6},{hpt:20},{hpt:20}];
 setRowSt(wsFin,0,5,XS.title);
 setRowSt(wsFin,2,5,XS.hdr);
-apS(wsFin,XLSX.utils.encode_cell({r:2,c:2}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'FF6B6B'}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+apS(wsFin,XLSX.utils.encode_cell({r:2,c:2}),{font:{name:'맑은 고딕',bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'FF0000'}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
 _finAreas.forEach((a,i)=>{
 const row=3+i;
+const excelRow=row+1;
+const cRef='C'+excelRow;
 apS(wsFin,XLSX.utils.encode_cell({r:row,c:0}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:a.clr}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
 apS(wsFin,XLSX.utils.encode_cell({r:row,c:1}),XS.bodyC);
-apS(wsFin,XLSX.utils.encode_cell({r:row,c:2}),XS.teacher);
-apS(wsFin,XLSX.utils.encode_cell({r:row,c:3}),{font:{sz:9},alignment:{horizontal:'center',vertical:'center'}});
-apS(wsFin,XLSX.utils.encode_cell({r:row,c:4}),XS.bodyC);
+// C열: 기재예시 시트 H열 참조
+wsFin[XLSX.utils.encode_cell({r:row,c:2})]={t:'s',f:"'기재예시'!H"+a.srcRow,v:'',s:XS.teacher};
+// D열: 나이스 바이트 공식
+wsFin[XLSX.utils.encode_cell({r:row,c:3})]={t:'n',f:`(LENB(${cRef})-LEN(${cRef}))*3+(LEN(${cRef})*2-LENB(${cRef}))`,v:0,s:XS.byte};
+// E열: 상태
+wsFin[XLSX.utils.encode_cell({r:row,c:4})]={t:'s',f:`IF(LEN(${cRef})>0,"✅ 작성완료","⬜ 미작성")`,v:'⬜ 미작성',s:XS.bodyC};
 });
 XLSX.utils.book_append_sheet(wb,wsFin,'최종기록');
 
@@ -2581,7 +2756,7 @@ s3.push(['학부모 전달사항','','','']);
 coParent.forEach(s=>s3.push(['• '+s,'','','']));
 
 const ws3=XLSX.utils.aoa_to_sheet(s3);
-ws3['!cols']=[{wch:16},{wch:35},{wch:40},{wch:20}];
+ws3['!cols']=[{wch:18},{wch:40},{wch:45},{wch:25}];
 ws3['!merges']=[{s:{r:0,c:0},e:{r:0,c:3}}];
 // 스타일
 setRowSt(ws3,0,4,XS.title);
@@ -2590,27 +2765,45 @@ const seHdrRow=5;
 setRowSt(ws3,seHdrRow,4,XS.hdrSub);
 XLSX.utils.book_append_sheet(wb,ws3,'활동방향');
 
-// ===== 시트4: 역량분석 =====
+// ===== 시트4: 역량분석 (가독성 개선) =====
 const s4=[];
-s4.push(['3대 역량 성장 분석 - '+m.nm,'','','','','']);
+s4.push(['3대 역량 종합 진단 - '+m.nm,'','','','','']);
 s4.push([]);
-s4.push(['역량','1학년','2학년','성장 분석','3학년 집중','점수']);
+// 상단 요약
+s4.push(['역량','등급','점수','핵심 변화','3학년 집중 방향','']);
 const cp=ov.competencies||{};
-[{k:'academic',l:'📚 학업',clr:'4472C4'},{k:'career',l:'🎯 진로',clr:'5B9BD5'},{k:'community',l:'🤝 공동체',clr:'70AD47'}].forEach(x=>{
-const c=cp[x.k]||{};
-s4.push([x.l,c.grade1||'',c.grade2||'',c.growth||'',c.grade3_focus||'',sc[x.k]||'']);
+const _capG=(v)=>v>=4.5?'S':v>=4.0?'A':v>=3.0?'B':v>=2.0?'C':'D';
+[{k:'academic',l:'📚 학업',clr:'002060'},{k:'career',l:'🎯 진로',clr:'0070C0'},{k:'community',l:'🤝 공동체',clr:'00B050'}].forEach(x=>{
+const c=cp[x.k]||{};const v=sc[x.k]||0;
+s4.push([x.l,_capG(v),v,c.growth||'',c.grade3_focus||'','']);
 });
+s4.push([]);
+// 학년별 상세 (별도 표)
+s4.push(['◆ 학년별 상세','','','','','']);
+s4.push(['역량','1학년 요약','2학년 요약','','','']);
+[{k:'academic',l:'학업'},{k:'career',l:'진로'},{k:'community',l:'공동체'}].forEach(x=>{
+const c=cp[x.k]||{};
+s4.push([x.l,c.grade1||'',c.grade2||'','','','']);
+});
+
 const ws4=XLSX.utils.aoa_to_sheet(s4);
-ws4['!cols']=[{wch:12},{wch:40},{wch:40},{wch:30},{wch:30},{wch:8}];
-ws4['!merges']=[{s:{r:0,c:0},e:{r:0,c:5}}];
-ws4['!rows']=[{hpt:36},{hpt:6},{hpt:28},{hpt:140},{hpt:140},{hpt:140}];
+ws4['!cols']=[{wch:12},{wch:8},{wch:6},{wch:35},{wch:35},{wch:5}];
+ws4['!merges']=[{s:{r:0,c:0},e:{r:0,c:5}},{s:{r:7,c:0},e:{r:7,c:5}}];
+ws4['!rows']=[{hpt:36},{hpt:6},{hpt:28},{hpt:50},{hpt:50},{hpt:50},{hpt:6},{hpt:28},{hpt:28},{hpt:100},{hpt:100},{hpt:100}];
 setRowSt(ws4,0,6,XS.title);
 setRowSt(ws4,2,6,XS.hdr);
-[{k:'academic',clr:'4472C4'},{k:'career',clr:'5B9BD5'},{k:'community',clr:'70AD47'}].forEach((x,i)=>{
+setRowSt(ws4,7,6,XS.section);
+setRowSt(ws4,8,6,XS.hdrSub);
+[{clr:'002060'},{clr:'0070C0'},{clr:'00B050'}].forEach((x,i)=>{
 const row=3+i;
 apS(ws4,XLSX.utils.encode_cell({r:row,c:0}),{font:{bold:true,sz:11,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:x.clr}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
-[1,2,3,4].forEach(c=>apS(ws4,XLSX.utils.encode_cell({r:row,c}),XS.body));
-apS(ws4,XLSX.utils.encode_cell({r:row,c:5}),XS.score);
+apS(ws4,XLSX.utils.encode_cell({r:row,c:1}),{font:{bold:true,sz:14,color:{rgb:x.clr}},alignment:{horizontal:'center',vertical:'center'}});
+apS(ws4,XLSX.utils.encode_cell({r:row,c:2}),XS.score);
+[3,4].forEach(c=>apS(ws4,XLSX.utils.encode_cell({r:row,c}),XS.body));
+// 학년별 상세
+const dRow=9+i;
+apS(ws4,XLSX.utils.encode_cell({r:dRow,c:0}),{font:{bold:true,sz:10,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:x.clr}},alignment:{horizontal:'center',vertical:'center',wrapText:true}});
+[1,2].forEach(c=>apS(ws4,XLSX.utils.encode_cell({r:dRow,c}),XS.body));
 });
 XLSX.utils.book_append_sheet(wb,ws4,'역량분석');
 
@@ -2629,7 +2822,7 @@ XLSX.utils.book_append_sheet(wb,wsTN,'교사메모');
 }
 
 const _ntl=ov.naesinType||'';
-XLSX.writeFile(wb,`세공사_${m.nm}${_ntl?'_'+_ntl:''}.xlsx`)}
+XLSX.writeFile(wb,`세공사_${m.nm}${_ntl?'_'+_ntl:''}.xlsx`,{bookType:'xlsx'})}
 
 function dlAll(){if(!Object.keys(stu).length){alert('분석된 학생이 없습니다');return}
 const wb=XLSX.utils.book_new();
@@ -2740,7 +2933,7 @@ XLSX.utils.book_append_sheet(wb,ws,sheetName);
 
 const _nt2=document.getElementById('sNaesinType')?.value||'all';
 const _ntl2={all:'전체교과',mss:'국영수사',msn:'국영수과',best:'최유리'}[_nt2]||'';
-XLSX.writeFile(wb,`세공사_${classInfo.grade||3}학년${classInfo.cls||''}반${_ntl2?'_'+_ntl2:''}.xlsx`)}
+XLSX.writeFile(wb,`세공사_${classInfo.grade||3}학년${classInfo.cls||''}반${_ntl2?'_'+_ntl2:''}.xlsx`,{bookType:'xlsx'})}
 
 function rStu(){const l=document.getElementById('stuL'),e=Object.values(stu).sort((a,b)=>a.sid.localeCompare(b.sid));
 const okCount=e.filter(s=>s.result&&!s.result._err).length;
